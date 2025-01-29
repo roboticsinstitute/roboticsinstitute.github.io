@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intro to Robots | The Robotics Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            background-color: #faf9f6;  /* Warm cream color */
+            color: #292929;
+            line-height: 1.6;
+        }
+
+        .nav-bar {
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .nav-bar a {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            color: #292929;
+            text-decoration: none;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 80px auto 0;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-title {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            color: #292929;
+        }
+
+        .article-meta {
+            color: #757575;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #292929;
+        }
+
+        .article-content p {
+            margin-bottom: 3rem;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem;
+            font-weight: 500;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            font-weight: 500;
+        }
+
+        /* Media elements styling */
+        .media-container {
+            margin: 2rem 0;
+            width: 100%;
+        }
+
+        .media-container img {
+            width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .media-container video {
+            width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .caption {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        /* Code block styling */
+        pre {
+            background-color: #151A1F;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .article-container {
+                padding: 1.5rem;
+            }
+
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-content {
+                font-size: 1rem;
+            }
+        }
+
+        /* Revert to simpler grid layout and adjust image sizes */
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3.5rem 0 0.5rem;
+            background-color: transparent;
+        }
+
+        .image-item {
+            background-color: transparent;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* Specific style for hands in pocket image */
+        .image-item:nth-child(2) img {
+            width: auto;
+            max-width: 100%;
+            height: 350px;
+            object-fit: scale-down;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .short-caption {
+            font-size: 0.9rem;
+            color: #757575;
+            text-align: center;
+            margin: 0.25rem 0 0;
+        }
+
+        .extended-caption {
+            font-size: 0.95rem;
+            color: #757575;
+            text-align: justify;
+            margin: 0.5rem auto 2rem;
+            line-height: 1.6;
+            max-width: 90%;
+            padding: 0 2rem;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .image-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        .image-text-container {
+            display: flex;
+            gap: 2rem;
+            margin: 3.5rem 0;
+            align-items: center;
+        }
+
+        .image-text-container.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .image-side {
+            flex: 1;
+        }
+
+        .text-side {
+            flex: 1;
+            font-size: 0.95rem;
+            color: #757575;
+            line-height: 1.6;
+        }
+
+        .side-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .image-text-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .image-text-container.reverse {
+                flex-direction: column;
+            }
+        }
+
+        .discipline-section {
+            margin: 4rem 0;
+            padding: 2rem;
+            border-radius: 12px;
+            background-color: #f8f9fa;
+            transition: transform 0.2s ease;
+        }
+
+        .discipline-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .discipline-icon {
+            text-align: center;
+            margin: 0 0 2.5rem;
+        }
+        
+        .discipline-icon img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+
+        .discipline-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin: 1rem 0;
+            color: #1a1a1a;
+        }
+
+        .discipline-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="../landing_page.html">← Back to Home</a>
+    </nav>  
+
+    <article class="article-container">
+        <header class="article-header">
+            <h1 class="article-title">Intro to Robots</h1>
+            <div class="article-meta">
+                Written by Nathan Daniel • Last updated Jan 2025
+            </div>
+        </header>
+
+        <div class="article-content">
+            <!-- Example content structure -->
+            <p>
+                Before we begin we should define exactly what a robot is. The official definition is <i>any device that carries out tasks semi or fully autonomously</i>. So by definition, an air conditioning unit is technically a robot, which might seem absurd if you compare it to something like Boston Dynamics humanoid, Atlas, which fits its more classical picture. However as you'll come to see, a lot of what can be applied to simpler devices and systems can be used to explain robots!
+            </p>
+
+            <p>
+                A more apt description would be that a robot is a physical device (or entity) that moves throughout the world and helps humans to more efficiently perform a task, or perform a task that a human couldn't on its own. 
+            </p>
+
+            <div class="image-grid">
+                <div class="image-item">
+                    <img src="../imgs/lesson_1_robotarm.jpg" alt="Industrial Robot Arm">
+                    <p class="short-caption">Industrial robot arm can effortlessly lift the massive chassis of a car</p>
+                </div>
+                <div class="image-item">
+                    <img src="../imgs/lesson_1_handsinpocket.webp" alt="Human Hand Task">
+                    <p class="short-caption">You can easily reach into your pocket and find your wallet amongst other items</p>
+                </div>
+            </div>
+            <p class="extended-caption">
+                <i>Did you know? Moravec's Paradox states that what is easy for a human to accomplish is difficult for a robot, and vice versa. 
+                For instance, it would be extremely easy for you to reach into your pockets and pull out your wallet 
+                adrift between other items like your phone or keys, but that seemingly simple task is currently beyond 
+                the current abilities of even the most advanced robotic/AI systems. Contrarily, a giant robotic arm 
+                in an automobile factory can effortlessly pick up the chassis of an entire car and move it to a 
+                different assembly line, which is something that would require multiple humans and most definitely 
+                induce cardiac arrest in an OSHA rep.</i>
+            </p>
+
+            <p>
+                Now that we know what a robot is, where are they? Currently, robots can be found in industrial automation, healthcare, agriculture, and are expected to infiltrate other areas as well sooner or later (good thing you're getting involved with robots now, when they eventually gain sentience and rebel you might be spared if you already have a positive relationship with them).
+            </p>
+
+            <!-- First image and description -->
+            <div class="image-text-container">
+                <div class="image-side">
+                    <img src="../imgs/lesson_1_surgicalrobot.webp" alt="Surgical Robot" class="side-image">
+                </div>
+                <div class="text-side">
+                    <p>The Da Vinci surgical system revolutionized minimally invasive surgery. 
+                    By translating a surgeon's hand movements into smaller, precise movements of tiny instruments inside the patient's body, 
+                    it enables complex procedures to be performed through just a few small incisions.</p>
+                </div>
+            </div>
+
+            <!-- Second image and description -->
+            <div class="image-text-container reverse">
+                <div class="image-side">
+                    <img src="../imgs/lesson_1_farming.jpg" alt="Farming Robot" class="side-image">
+                </div>
+                <div class="text-side">
+                    <p>AgriRobot's autonomous farming system represents a breakthrough in precision agriculture. 
+                        Using advanced computer vision and AI, these robots can navigate through crop rows independently, 
+                        performing targeted tasks like weeding and crop monitoring.</p>
+                </div>
+            </div>
+
+            <p> 
+                Despite the widespread appeal, there aren't that many robotics companies, at least compared to the number of AI B2B SaaS startups, but the number of businesses and industries adopting automation is rising exponentially. Some prominent robotics companies include Boston Dynamics (of humanoid and doge robot notoriety), iRobot (Roomba), and Waymo (autonomous cars are in fact a type of robot!). 
+
+            </p>
+            
+            <p>
+                So what do people who work with robots actually do? The actual answer to that question is a bit complex - there really aren't that many people who are full-on 'robotics' engineers or roboticists, and for a good reason. Robotics is a vast field and the combination of multiple traditional engineering disciplines, and it's important to keep in mind that robots aren't built by a single person - they are the product of hundreds or thousands of people working together simultaneously. That shouldn't scare you - as I'm trying to get across in this series, you don't need to be the smartest person to work with robots; if you have great communication skills and know some fundamentals, you'll be fine!
+            </p>
+
+            <p>
+                Back to the different areas of robotics. Most would argue that the field is split into 3 major disciplines - mechanical, electrical, and software, though many roles in robotics might engage with more than one.
+            </p>
+
+            <div class="discipline-section">
+                <div class="discipline-icon">
+                    <img src="../imgs/lesson_1_mechanical.png" alt="Mechanical Engineering Icon">
+                </div>
+                <div class="discipline-content">
+                    <p>
+                        The mechanical side involves the physical structures and mechanisms that enable robots to interact with the environment. Much of this involves things called actuators. An <b>actuator</b> is a device that converts energy into physical motion, basically the part that moves (the muscles of the robot). The most common form of actuator would be any type of electric motor. For instance, motors on a drone spin really fast so that the propellers rotate fast enough to achieve lift. Mechanical engineers might spend their time designing the physical structure of the robot, as well as the pieces that engage with the actuators/motors to bring everything together.
+                    </p>
+                </div>
+            </div>
+
+            <div class="discipline-section">
+                <div class="discipline-icon">
+                    <img src="../imgs/lesson_1_software.png" alt="Software Engineering Icon">
+                </div>
+                <div class="discipline-content">
+                    <p>
+                        Software entails writing code to perceive, plan, and execute tasks autonomously or under human guidance - essentially the logic the robot uses to do stuff. This may seem straightforward, but scope of it is vast - one software engineer might work on high-level planning algorithms to tell a robot to "do this when you see this", while another might work on low-level 'firmware' to ensure the hardware and software coordinate with one another optimally. These levels are what's called the 'software stack', or a layered framework of software components to enable a robot to 'think'.
+                    </p>
+                </div>
+            </div>
+
+            <div class="discipline-section">
+                <div class="discipline-icon">
+                    <img src="../imgs/lesson_1_electrical.png" alt="Electrical Engineering Icon">
+                </div>
+                <div class="discipline-content">
+                    <p>
+                        Electrical bridges the gap between the mechanical and software components of robotics, acting as the nervous system that powers and connects everything. Electrical engineers ensure the robot's sensors, actuators, and control systems are all properly powered and communicate effectively. This involves designing circuits to distribute power from batteries or other energy sources, wiring sensors so they can send data to the robot's "brain," and ensuring motors receive the precise signals they need to move. Back in our drone example, the electrical components control the speed of the motors based on input from the software, allowing the drone to lift off and stay stable. Working on the electrical side means managing the flow of power and information, ensuring the hardware and software can function together seamlessly.
+                    </p>
+                </div>
+            </div>
+
+            <p>
+                From basic automated devices like a toaster to advanced humanoid robots, the same fundamental principles apply—mechanical, electrical, and software systems working together in harmony to bring a robot to life. As you'll learn throughout this series, understanding how these systems interact is not only essential for mastering the technical aspects of robotics but also for effectively collaborating with others in the field.
+            </p>
+
+            <!-- Example of how to add an image -->
+            <div class="media-container">
+                <img src="../path/to/image.jpg" alt="Description of image">
+                <p class="caption">Caption for the image goes here</p>
+            </div>
+
+            <h2>Section Heading</h2>
+            <p>
+                Section content goes here...
+            </p>
+
+            <!-- Example of how to add a video -->
+            <div class="media-container">
+                <video controls>
+                    <source src="../path/to/video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p class="caption">Caption for the video goes here</p>
+            </div>
+
+            <!-- Example of how to add code -->
+            <pre><code>
+// Example code block
+function example() {
+    console.log("Hello, Robots!");
+}
+            </code></pre>
+        </div>
+    </article>
+</body>
+</html> 

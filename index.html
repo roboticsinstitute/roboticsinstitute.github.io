@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Robotics Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0D0F;
+        }
+        .landing-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+        }
+        .landing-image {
+            width: 45%;
+            height: auto;
+            object-fit: contain;
+            margin-left: 0;
+            margin-right: 5%;
+        }
+        .content {
+            color: white;
+            padding: 2rem;
+            max-width: 45%;
+            text-align: left;
+        }
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+        }
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #ffffff;
+            font-weight: 300;
+            letter-spacing: -0.01em;
+            opacity: 0.9;
+        }
+        .cta-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .cta-button:hover {
+            background-color: transparent;
+            border-color: #007bff;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .landing-container {
+                flex-direction: column;
+                padding: 2rem;
+                text-align: center;
+            }
+            .landing-image {
+                width: 80%;
+                margin: 2rem auto;
+                order: 2;
+            }
+            .content {
+                order: 1;
+                padding: 1rem;
+                text-align: center;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+            .cta-button {
+                padding: 0.8rem 1.6rem;
+                font-size: 1.1rem;
+            }
+        }
+        .lessons-section {
+            padding: 4rem 5%;
+            background-color: #0A0D0F;
+        }
+        
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .lesson-card {
+            background-color: #151A1F;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            height: 160px;
+        }
+        
+        .lesson-card:hover {
+            transform: translateY(-4px);
+            background-color: #1e3a8a;
+        }
+        
+        .lesson-thumbnail {
+            width: 160px;
+            height: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        
+        .lesson-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+        
+        .lesson-title {
+            color: #ffffff;
+            font-size: 1.3rem;
+            margin: 0;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+        
+        .lesson-description {
+            color: #ffffff;
+            opacity: 0.9;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        @media (max-width: 768px) {
+            .lessons-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            .lesson-card {
+                height: 140px;
+            }
+            .lesson-thumbnail {
+                width: 140px;
+            }
+            .lesson-content {
+                padding: 1rem;
+            }
+            .lesson-title {
+                font-size: 1.1rem;
+            }
+            .lesson-description {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="landing-container">
+        <div class="content">
+            <h1>Welcome to<br>the Robotics Institute</h1>
+            <p>becoming a roboticist shouldn't be hard - it should be fun. learn the fundamentals without any of the bullshit a traditional education would include, like violently long math proofs, technical jargon, or homework. we'll keep it real by using plain English, define unfamiliar technical terms, and sprinkle in memes to make learning about robots as exciting as it should be </p>
+        </div>
+        <img src="imgs/landing_pic.png" alt="Modern robotic equipment illustration" class="landing-image">
+    </div>
+    
+    <section class="lessons-section">
+        <div class="lessons-grid">
+            <a href="lessons/lesson_1_intro-to-robotics.html" class="lesson-card">
+                <img src="imgs/thumbnail_1.avif" alt="Introduction to Robotics" class="lesson-thumbnail">
+                <div class="lesson-content">
+                    <h2 class="lesson-title">intro to robots</h2>
+                    <p class="lesson-description">understand what a robot is and what a robotics engineer might do on a day to day</p>
+                </div>
+            </a>
+
+            <a href="lessons/lesson_2_the-basic-loop.html" class="lesson-card">
+                <img src="imgs/thumbnail_2.jpg" alt="Actuators and Motors" class="lesson-thumbnail">
+                <div class="lesson-content">
+                    <h2 class="lesson-title">the basic loop</h2>
+                    <p class="lesson-description">learn the basic process that enables a robot to move and interact with the world </p>
+                </div>
+            </a>
+        </div>
+    </section>
+</body>
+</html>
