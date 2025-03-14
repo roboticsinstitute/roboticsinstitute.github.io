@@ -70,11 +70,28 @@
         .article-content p {
             margin-bottom: 3rem;
         }
+
+        .media-container {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .media-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .caption {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #757575;
+        }
     </style>
 </head>
 <body>
     <nav class="nav-bar">
-        <a href="../landing_page.html">← Back to Home</a>
+        <a href="../index.html">← Back to Home</a>
     </nav>
 
     <article class="article-container">
@@ -87,9 +104,57 @@
 
         <div class="article-content">
             <p>
-                Content coming soon...
+                While cool videos of robots doing parkour and solving Rubix cubes might make them seem intelligent, in reality they’re just big dumb slabs of hardware (a pile of rocks) that’s completely incapable of thinking for itself unless you carefully define every step of the process. Unlike humans, who can use critical thinking and problem-solving skills to adapt, robots rely entirely on sets of instructions to interpret their environment and act accordingly. Without explicit instructions, a robot won't know what to do, no matter how advanced it appears.
+            </p>
+
+            <p>
+                Because of this, we really have to “algorithm-ize” the thought process behind problem solving, otherwise we’d have to tediously arrange a set of actions to respond to a given input (which could be done for smaller, simpler pieces of technology that operate in less complicated environments). Most robots accomplish this by following a simple pattern to interact with the world. This loop, called the sense-think-act cycle, is what allows robots to function in dynamic environments. Here’s how it works:
+            </p>
+
+            <p>
+                <b>1. Sensing:</b> A sensor, or a device that measures physical quantities (like cameras for vision, microphones for sound, or gyroscopes for balance), detects information from the environment and sends a signal to the robot.<br><br>
+                <b>2. Thinking:</b> The robot's programming interprets that signal and makes a decision based on its code. This is where algorithms, AI, and control logic come into play—determining what action to take.<br><br>
+                <b>3. Acting:</b> An output signal is sent to an actuator (a motor, servo, piston) which moves a part of the robot to execute the decision.
+            </p>
+
+            <div class="media-container">
+                <img src="../imgs/lesson_2_sense_think_act_loop.png" alt="The Sense-Think-Act cycle diagram">
+                <p class="caption">This loop repeats continuously, allowing robots to react and adapt to their surroundings in real time. </p>
+            </div>
+        
+            <h2>The Human Parallel</h2>
+            <p>
+                This process may sound familiar because it’s essentially how we interact with the world. Our brains process sensory input—like sight, sound, and touch—then make decisions and send signals to our muscles to move. If you touch a hot stove, for instance, the nerves in your skin immediately send a pain signal to your brain, which processes it as “SOMETHING REALLY HOT AHHH” and instructs your hand to pull away. Robots kinda do the same thing, just with a different manner of brain and muscles.
+            </p>
+            
+            <h2>The Loop in Action</h2>
+            <p>
+                Let’s take a really simple robot vacuum as an example. The sensor used would be something called an infrared (IR) sensor that essentially shoots a beam of energy forward and measures the time it takes for that light to travel back. From that time and the strength of the beam of light, the distance to the nearest object can be calculated.
+
+            </p>
+
+            <p>
+                A really simple thought process can be followed: when the robot doesn’t detect anything within 10 centimeters in front of the vacuum, a signal is sent to the motors powering the wheels. However, when something is detected in that range, the robot will stop, turn right, and then continue the loop.
+
+            </p>
+
+            <div class="media-container">
+                <img src="../imgs/lesson_2roomba.gif" alt="A roomba">
+                <p class="caption">A roomba vacuuming a room with a unique dog sensor</p>
+            </div>
+
+            <p>
+                With this sense-think-act loop, you can basically get a very simple robot to cover your entire home given enough time (assuming there aren’t any stairs)! The same basic process applies to any robot, whether it’s a humanoid navigating obstacles, a robotic vacuum avoiding furniture, or a robotic arm assembling car parts - just with way more sensors, computers, and actuators.
+            </p>
+            
+            <h2>Why Does This Matter?</h2>
+
+            <p>Understanding this loop is fundamental to robotics. Whether you're designing an autonomous drone, programming a self-driving car, or even just playing with a hobby robot, the sense-think-act cycle is always at play. Mastering it allows engineers to build smarter, more capable machines that can interact with the world in increasingly human-like ways. If you’re curious, this overall loop that we’ve been talking about is more or less what the field of controls systems is about, which is something I’ll definitely be covering more in depth later in this course (with as little math as possible, of course).</p>
+
+            <p>So the next time you see a robot doing something really cool, just remember—it’s all just sensors, algorithms, and motors following the same loop over and over again - which is actually more impressive because it was probably put together by a team of grad students with a $17 budget.
             </p>
         </div>
+
+
     </article>
 </body>
-</html> 
