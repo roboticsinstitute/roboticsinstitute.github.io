@@ -3,89 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lesson Title | The Robotics Institute</title>
-    <!-- Copy all the styles from intro-to-robotics.html -->
+    <title>kinematics | The Robotics Institute</title>
     <style>
-        /* ... existing styles ... */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            background-color: #faf9f6;
+            color: #292929;
+            line-height: 1.6;
+        }
+
+        .nav-bar {
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .nav-bar a {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            color: #292929;
+            text-decoration: none;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 80px auto 0;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-title {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            color: #292929;
+        }
+
+        .article-meta {
+            color: #757575;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #292929;
+        }
+
+        .article-content p {
+            margin-bottom: 3rem;
+        }
+
+        .media-container {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .media-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .caption {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #757575;
+        }
     </style>
 </head>
 <body>
     <nav class="nav-bar">
-        <a href="../landing_page.html">← Back to Home</a>
+        <a href="../index.html">← Back to Home</a>
     </nav>
 
     <article class="article-container">
         <header class="article-header">
-            <h1 class="article-title">Lesson Title</h1>
+            <h1 class="article-title">Basic Kinematics</h1>
             <div class="article-meta">
                 Written by Nathan Daniel • Last updated Jan 2025
             </div>
         </header>
 
         <div class="article-content">
-            <!-- Regular paragraph -->
             <p>
-                Your paragraph text here...
+                Have you ever wondered how your brain knows precisely how to move your body to do things? Yeah, me either — that's what makes this stuff kinda hard (but we do get to use physics so that's nice). As mentioned in the last post, robots are still big dumb piles of rocks and we need to reverse-engineer how the thought process behind moving works.           
             </p>
 
-            <!-- Image grid with captions example -->
-            <div class="image-grid">
-                <div class="image-item">
-                    <img src="../imgs/image1.jpg" alt="Description">
-                    <p class="short-caption">Short caption for image 1</p>
-                </div>
-                <div class="image-item">
-                    <img src="../imgs/image2.jpg" alt="Description">
-                    <p class="short-caption">Short caption for image 2</p>
-                </div>
-            </div>
-            <p class="extended-caption">
-                <i>Extended caption or interesting fact about the images above...</i>
+            <p>
+                When you or I go to pick up a cup of water sitting on a table, you aren't calculating the exact angles your wrist, fingers, elbows, and shoulder need to form, combined with the length of each part of your arm and how fast they should move. Your brain just knows what to do — it's automatic. Now a lot of that is instinct from having been moving around, but you are also getting visual feedback from your eyes and tactile feedback from your hands. But for a robot that lacks both instinct and human senses, every one of those steps has to be carefully planned out.
             </p>
 
-            <!-- Side-by-side image and text -->
-            <div class="image-text-container">
-                <div class="image-side">
-                    <img src="../imgs/image.jpg" alt="Description" class="side-image">
+            <p>
+                Kinematics is a genre of physics about understanding motion — specifically, how parts of a robot move in relation to one another. In short, kinematics is math that tells a robot, "If I rotate this motor by 30 degrees, the arm will move to this exact point in space."
+            </p>
+
+            <h2>Forward Kinematics: From Joints to Position</h2>
+            <p>
+                From here on out, I'm going to use robotic arms as examples to explain this topic. I always wondered why robotic arms were the go-to example in college (especially since we rarely got to play with them), but honestly, they're a genuinely great way to demonstrate how kinematics works.
+            </p>
+            
+            <p style="margin-bottom: 1rem;">
+                First, a couple of definitions:
+            </p>
+            <ul style="margin-bottom: 3rem;">
+                <li><b>Joint:</b> This is where two links of the robot come together and rotate. If your arm were a robot arm, your shoulder and elbow would be considered joints (we'll ignore the wrist and hand for now).</li>
+                <li><b>Links:</b> These are the solid segments between joints — in your arm, your forearm and upper arm are the links.</li>
+                <li><b>End Effector:</b> This is whatever is attached to the end of the robot's arm. For you, that's your hand. For robot arms, this could be a gripper, a welding tool, or some other device — the whole point of a robot arm is usually to move a specialized tool to the right spot to complete a task.</li>
+            </ul>
+
+            <h2>Try It Yourself!</h2>
+            <p>
+                Here's a simple interactive tool where you can experiment with a 2-link robot arm. Try adjusting the link lengths and joint angles to see how the robot moves and where the end effector ends up!
+            </p>
+
+            <div class="robot-simulator" style="background-color: #f8f9fa; padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">
+                <div style="display: flex; gap: 2rem; margin-bottom: 2rem;">
+                    <div style="flex: 1;">
+                        <h3 style="margin-top: 0; margin-bottom: 1rem;">Link Lengths</h3>
+                        <div style="margin-bottom: 1rem;">
+                            <label for="link1-length">Link 1 Length (units):</label><br>
+                            <input type="number" id="link1-length" value="100" min="10" max="200" style="width: 100px; padding: 0.5rem;">
+                        </div>
+                        <div>
+                            <label for="link2-length">Link 2 Length (units):</label><br>
+                            <input type="number" id="link2-length" value="80" min="10" max="200" style="width: 100px; padding: 0.5rem;">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <h3 style="margin-top: 0; margin-bottom: 1rem;">Joint Angles</h3>
+                        <div style="margin-bottom: 1rem;">
+                            <label for="joint1-angle">Joint 1 Angle (degrees):</label><br>
+                            <input type="number" id="joint1-angle" value="45" min="-180" max="180" style="width: 100px; padding: 0.5rem;">
+                        </div>
+                        <div>
+                            <label for="joint2-angle">Joint 2 Angle (degrees):</label><br>
+                            <input type="number" id="joint2-angle" value="45" min="-180" max="180" style="width: 100px; padding: 0.5rem;">
+                        </div>
+                    </div>
                 </div>
-                <div class="text-side">
-                    <p>Description text here...</p>
+                
+                <canvas id="robotCanvas" width="400" height="400" style="background-color: white; border-radius: 8px;"></canvas>
+                
+                <div style="margin-top: 1rem;">
+                    <h3 style="margin-bottom: 0.5rem;">End Effector Position:</h3>
+                    <p id="endEffectorPosition" style="font-family: monospace; font-size: 1.1rem; margin: 0;">X: 0, Y: 0</p>
                 </div>
             </div>
 
-            <!-- Reverse side-by-side image and text -->
-            <div class="image-text-container reverse">
-                <div class="image-side">
-                    <img src="../imgs/image.jpg" alt="Description" class="side-image">
-                </div>
-                <div class="text-side">
-                    <p>Description text here...</p>
-                </div>
-            </div>
-
-            <!-- Media container for single images/videos -->
-            <div class="media-container">
-                <img src="../imgs/image.jpg" alt="Description">
-                <p class="caption">Caption for the image</p>
-            </div>
-
-            <!-- Video example -->
-            <div class="media-container">
-                <video controls>
-                    <source src="../path/to/video.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <p class="caption">Caption for the video</p>
-            </div>
-
-            <!-- Code block example -->
-            <pre><code>
-// Example code block
-function example() {
-    console.log("Hello, Robots!");
-}
-            </code></pre>
+            <script>
+                // Get canvas and context
+                const canvas = document.getElementById('robotCanvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Get input elements
+                const link1Length = document.getElementById('link1-length');
+                const link2Length = document.getElementById('link2-length');
+                const joint1Angle = document.getElementById('joint1-angle');
+                const joint2Angle = document.getElementById('joint2-angle');
+                const endEffectorPosition = document.getElementById('endEffectorPosition');
+                
+                // Function to convert degrees to radians
+                function toRadians(degrees) {
+                    return degrees * Math.PI / 180;
+                }
+                
+                // Function to draw the robot
+                function drawRobot() {
+                    // Clear canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Set origin to center of canvas
+                    const originX = canvas.width / 2;
+                    const originY = canvas.height / 2;
+                    
+                    // Get current values
+                    const l1 = parseFloat(link1Length.value);
+                    const l2 = parseFloat(link2Length.value);
+                    const theta1 = toRadians(parseFloat(joint1Angle.value));
+                    const theta2 = toRadians(parseFloat(joint2Angle.value));
+                    
+                    // Calculate joint positions
+                    const joint1X = originX;
+                    const joint1Y = originY;
+                    
+                    const joint2X = joint1X + l1 * Math.cos(theta1);
+                    const joint2Y = joint1Y - l1 * Math.sin(theta1);
+                    
+                    const endX = joint2X + l2 * Math.cos(theta1 + theta2);
+                    const endY = joint2Y - l2 * Math.sin(theta1 + theta2);
+                    
+                    // Draw base
+                    ctx.beginPath();
+                    ctx.arc(joint1X, joint1Y, 8, 0, 2 * Math.PI);
+                    ctx.fillStyle = '#1e3a8a';
+                    ctx.fill();
+                    
+                    // Draw link 1
+                    ctx.beginPath();
+                    ctx.moveTo(joint1X, joint1Y);
+                    ctx.lineTo(joint2X, joint2Y);
+                    ctx.strokeStyle = '#292929';
+                    ctx.lineWidth = 4;
+                    ctx.stroke();
+                    
+                    // Draw joint 2
+                    ctx.beginPath();
+                    ctx.arc(joint2X, joint2Y, 6, 0, 2 * Math.PI);
+                    ctx.fillStyle = '#1e3a8a';
+                    ctx.fill();
+                    
+                    // Draw link 2
+                    ctx.beginPath();
+                    ctx.moveTo(joint2X, joint2Y);
+                    ctx.lineTo(endX, endY);
+                    ctx.strokeStyle = '#292929';
+                    ctx.lineWidth = 4;
+                    ctx.stroke();
+                    
+                    // Draw end effector
+                    ctx.beginPath();
+                    ctx.arc(endX, endY, 4, 0, 2 * Math.PI);
+                    ctx.fillStyle = '#dc2626';
+                    ctx.fill();
+                    
+                    // Update end effector position display
+                    const relativeX = Math.round(endX - originX);
+                    const relativeY = Math.round(originY - endY);
+                    endEffectorPosition.textContent = `X: ${relativeX}, Y: ${relativeY}`;
+                }
+                
+                // Add event listeners to inputs
+                link1Length.addEventListener('input', drawRobot);
+                link2Length.addEventListener('input', drawRobot);
+                joint1Angle.addEventListener('input', drawRobot);
+                joint2Angle.addEventListener('input', drawRobot);
+                
+                // Initial draw
+                drawRobot();
+            </script>
         </div>
     </article>
 </body>
-</html> 
