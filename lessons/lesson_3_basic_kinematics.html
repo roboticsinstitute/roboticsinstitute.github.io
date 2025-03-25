@@ -104,39 +104,72 @@
 
         <div class="article-content">
             <p>
-                Have you ever wondered how your brain knows precisely how to move your body to do things? Yeah, me either — that's what makes this stuff kinda hard (but we do get to use physics so that's nice). As mentioned in the last post, robots are still big dumb piles of rocks and we need to reverse-engineer how the thought process behind moving works.           
+                Have you ever wondered what the exact angles your wrist, fingers, elbows, and shoulder need to form to pick up a glass of water optimally? Yeah, me neither (and I really hope you don't); your brain just knows what to do, it's automatic. A lot of that is from years of experience and instinct, but you are also getting visual feedback from your eyes and tactile feedback from your hands. For a robot, which lacks both human instinct and senses (again, a pile of rocks), every movement needs to be carefully planned out.           
             </p>
 
             <p>
-                When you or I go to pick up a cup of water sitting on a table, you aren't calculating the exact angles your wrist, fingers, elbows, and shoulder need to form, combined with the length of each part of your arm and how fast they should move. Your brain just knows what to do — it's automatic. Now a lot of that is instinct from having been moving around, but you are also getting visual feedback from your eyes and tactile feedback from your hands. But for a robot that lacks both instinct and human senses, every one of those steps has to be carefully planned out.
-            </p>
-
-            <p>
-                Kinematics is a genre of physics about understanding motion — specifically, how parts of a robot move in relation to one another. In short, kinematics is math that tells a robot, "If I rotate this motor by 30 degrees, the arm will move to this exact point in space."
+                Kinematics is the branch of physics regarding the motion of objects — and we get to use it to define how parts of a robot move in relation to one another. In short, kinematics is math that tells a robot, "If I rotate this motor by 30 degrees, the arm will move to this exact point in space."
             </p>
 
             <h2>Forward Kinematics: From Joints to Position</h2>
             <p>
-                From here on out, I'm going to use robotic arms as examples to explain this topic. I always wondered why robotic arms were the go-to example in college (especially since we rarely got to play with them), but honestly, they're a genuinely great way to demonstrate how kinematics works.
+                Let's pretend we live in a dystopian cyberpunk future - neon lights, sketchy alleway mechanics, and of course a horrific accident that costs you an arm. Unfortunately since money's tight you ended up with a pretty simple robot prosthetic replacement arm. No wrist rotation or fingers - just a budget friendly claw that can open and close.
+            </p>
+
+            <p> 
+                Still with me? Now how would we program that arm to pick up pesky cups of water sitting on tables?
             </p>
             
             <p style="margin-bottom: 1rem;">
-                First, a couple of definitions:
+                First, we need to define a few things
             </p>
             <ul style="margin-bottom: 3rem;">
-                <li><b>Joint:</b> This is where two links of the robot come together and rotate. If your arm were a robot arm, your shoulder and elbow would be considered joints (we'll ignore the wrist and hand for now).</li>
-                <li><b>Links:</b> These are the solid segments between joints — in your arm, your forearm and upper arm are the links.</li>
-                <li><b>End Effector:</b> This is whatever is attached to the end of the robot's arm. For you, that's your hand. For robot arms, this could be a gripper, a welding tool, or some other device — the whole point of a robot arm is usually to move a specialized tool to the right spot to complete a task.</li>
+                <li><b>Joint:</b> This is where two links of the robot come together and rotate. If your arm were a robot arm, your shoulder and elbow would be considered joints</li>
+                <li><b>Links:</b> These are the solid segments between joints — in your arm, your forearm and upper arm are the links</li>
+                <li><b>End Effector:</b> This is whatever is attached to the end of the robot's arm. For you, that's the gripper I mentioned. For other robot tools, this could be a suction cup, welding tool, or some other device — the whole point of a robot arm is usually to move a specialized tool to the right spot to complete a task</li>
             </ul>
+
+            <p> 
+                <b>Forward kinematics</b> is the process of calculating where a robot's end-effector will be given the angles of its joints and the size of the robot.
+            </p>
+
+            <p>
+                We would use forward kinematics to calculate the exact position of your "hand" based on the angles of those two joints. By using some trigonometry, you can predict exactly where that end-effector will end up.
+            </p>
+
+            <p>
+                For example, if:
+            </p>
+            <ul style="margin-bottom: 3rem;">
+                <li> Shoulder rotates 45 degrees</li>
+                <li>Elbow rotates 30 degrees</li>
+            </ul>
+            <p>
+                …forward kinematics would tell you your hand's position in space — perfect for planning precise movements like grabbing pesky cups of water sitting on counters. In fact, the equations for calculating the X and Y coordinates of your arm in space are:
+            </p>
+            <div class="media-container">
+                <img src="../imgs/lesson_3_forward_equations.JPG" alt="Inverse Kinematics">
+            </div>
+            <p>
+                where
+            </p>
+
+            <div class="media-container">
+                <img src="../imgs/lesson_3_forward_variables.JPG" alt="Inverse Kinematics">
+            </div>
+
+            <p>
+                The first part of the equation, <i>L₁cos(θ₁)</i> and <i>L₁sin(θ₁)</i> are pretty straightforward - they calculate the position of the end of Link 1. However since Link 2 is attached to the end of Link 1, we need to add both angles in the second part of the equation (<i>L₂cos(θ₁+θ₂)</i> and <i>L₂sin(θ₁+θ₂)</i>) to compensate for Link 1's position.
+            </p>
 
             <h2>Try It Yourself!</h2>
             <p>
-                Here's a simple interactive tool where you can experiment with a 2-link robot arm. Try adjusting the link lengths and joint angles to see how the robot moves and where the end effector ends up!
+                Here's an interactive tool where you can experiment with forward kinematics on a 2-link robot arm. Try adjusting the link lengths and joint angles to see how the robot moves!
             </p>
 
             <div class="robot-simulator" style="background-color: #f8f9fa; padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">
-                <div style="display: flex; gap: 2rem; margin-bottom: 2rem;">
-                    <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
+                    <div style="width: 45%;">
                         <h3 style="margin-top: 0; margin-bottom: 1rem;">Link Lengths</h3>
                         <div style="margin-bottom: 1rem;">
                             <label for="link1-length">Link 1 Length (units):</label><br>
@@ -147,117 +180,340 @@
                             <input type="number" id="link2-length" value="80" min="10" max="200" style="width: 100px; padding: 0.5rem;">
                         </div>
                     </div>
-                    <div style="flex: 1;">
-                        <h3 style="margin-top: 0; margin-bottom: 1rem;">Joint Angles</h3>
-                        <div style="margin-bottom: 1rem;">
+
+                    <div style="width: 45%;">
+                        <h3 style="margin-top: 0; margin-bottom: 1rem; text-align: right;">Joint Angles</h3>
+                        <div style="margin-bottom: 1rem; text-align: right;">
                             <label for="joint1-angle">Joint 1 Angle (degrees):</label><br>
                             <input type="number" id="joint1-angle" value="45" min="-180" max="180" style="width: 100px; padding: 0.5rem;">
                         </div>
-                        <div>
+                        <div style="text-align: right;">
                             <label for="joint2-angle">Joint 2 Angle (degrees):</label><br>
                             <input type="number" id="joint2-angle" value="45" min="-180" max="180" style="width: 100px; padding: 0.5rem;">
                         </div>
                     </div>
                 </div>
                 
-                <canvas id="robotCanvas" width="400" height="400" style="background-color: white; border-radius: 8px;"></canvas>
+                <div style="display: flex; justify-content: center; margin: 2rem 0;">
+                    <canvas id="robotCanvas" width="400" height="400" style="background-color: white; border-radius: 8px;"></canvas>
+                </div>
                 
                 <div style="margin-top: 1rem;">
-                    <h3 style="margin-bottom: 0.5rem;">End Effector Position:</h3>
+                    <h3 style="margin-bottom: 0.5rem;">Current Position:</h3>
                     <p id="endEffectorPosition" style="font-family: monospace; font-size: 1.1rem; margin: 0;">X: 0, Y: 0</p>
+                    <p id="currentAngles" style="font-family: monospace; font-size: 1.1rem; margin: 0.5rem 0;">θ₁: 45°, θ₂: 45°</p>
+                </div>
+            </div>
+
+            <h2>The Problem of Multiple Solutions</h2>
+
+            <p>
+                One tricky thing about inverse kinematics is that (like an SAT reading comprehension section) there are often multiple valid solutions. Imagine reaching for a cup of water — you could bend your elbow in two different ways (one normal, one awkward) and still get your hand to the cup.
+            </p>
+
+            <p>
+                Even worse, if you try to reach too far — say, if the cup's across the room — the math will straight-up tell you there's no solution.
+            </p>
+
+            <p>
+                Inverse kinematics is like reverse-engineering a robot's movements. Instead of blindly adjusting angles and hoping for the best, these equations give you a precise way to position your robot's arm exactly where you need it.
+            </p>
+            
+            <p>
+                While we skipped over some of the deeper math in the inverse kinematics section, that's because no two robots are exactly the same. Different types of joints, link lengths, and motor setups all change how those equations are built. Solving for the 'optimal' motion often involves juggling multiple variables — there's rarely a one-size-fits-all solution.
+            </p>
+
+            <p>
+                It's not as automatic as the way your brain controls your arm — but with a little math and some smart programming, you can make your robot just as precise.
+            </p>
+
+            <h2>Now You Try Inverse Kinematics!</h2>
+            <p>
+                In this tool, you can specify where you want the end effector to go, and the tool will calculate the required joint angles. Try clicking anywhere on the grid or entering coordinates directly. You can also toggle between different possible solutions!
+            </p>
+
+            <div class="robot-simulator" style="background-color: #f8f9fa; padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
+                    <div style="width: 45%;">
+                        <h3 style="margin-top: 0; margin-bottom: 1rem;">Link Lengths</h3>
+                        <div style="margin-bottom: 1rem;">
+                            <label for="ik-link1-length">Link 1 Length (units):</label><br>
+                            <input type="number" id="ik-link1-length" value="100" min="10" max="200" style="width: 100px; padding: 0.5rem;">
+                        </div>
+                        <div>
+                            <label for="ik-link2-length">Link 2 Length (units):</label><br>
+                            <input type="number" id="ik-link2-length" value="80" min="10" max="200" style="width: 100px; padding: 0.5rem;">
+                        </div>
+                    </div>
+
+                    <div style="width: 45%;">
+                        <h3 style="margin-top: 0; margin-bottom: 1rem; text-align: right;">Target Position</h3>
+                        <div style="margin-bottom: 1rem; text-align: right;">
+                            <label for="target-x">Target X:</label><br>
+                            <input type="number" id="target-x" value="100" style="width: 100px; padding: 0.5rem;">
+                        </div>
+                        <div style="text-align: right;">
+                            <label for="target-y">Target Y:</label><br>
+                            <input type="number" id="target-y" value="0" style="width: 100px; padding: 0.5rem;">
+                        </div>
+                        <div style="text-align: right; margin-top: 1rem;">
+                            <label>
+                                <input type="checkbox" id="show-alternate"> Show alternate solution
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: center; margin: 2rem 0;">
+                    <canvas id="ikRobotCanvas" width="400" height="400" style="background-color: white; border-radius: 8px; cursor: crosshair;"></canvas>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <h3 style="margin-bottom: 0.5rem;">Solution:</h3>
+                    <p id="ikAngles" style="font-family: monospace; font-size: 1.1rem; margin: 0;">θ₁: 45°, θ₂: 45°</p>
+                    <p id="ikStatus" style="color: #dc2626; margin: 0.5rem 0; display: none;">Point is outside reachable workspace</p>
                 </div>
             </div>
 
             <script>
-                // Get canvas and context
+                // Get canvas and context for forward kinematics
                 const canvas = document.getElementById('robotCanvas');
                 const ctx = canvas.getContext('2d');
                 
-                // Get input elements
+                // Get canvas and context for inverse kinematics
+                const ikCanvas = document.getElementById('ikRobotCanvas');
+                const ikCtx = ikCanvas.getContext('2d');
+                
+                // Get input elements for forward kinematics
                 const link1Length = document.getElementById('link1-length');
                 const link2Length = document.getElementById('link2-length');
                 const joint1Angle = document.getElementById('joint1-angle');
                 const joint2Angle = document.getElementById('joint2-angle');
                 const endEffectorPosition = document.getElementById('endEffectorPosition');
+                const currentAngles = document.getElementById('currentAngles');
+                
+                // Get input elements for inverse kinematics
+                const ikLink1Length = document.getElementById('ik-link1-length');
+                const ikLink2Length = document.getElementById('ik-link2-length');
+                const targetX = document.getElementById('target-x');
+                const targetY = document.getElementById('target-y');
+                const showAlternate = document.getElementById('show-alternate');
+                const ikAngles = document.getElementById('ikAngles');
+                const ikStatus = document.getElementById('ikStatus');
                 
                 // Function to convert degrees to radians
                 function toRadians(degrees) {
                     return degrees * Math.PI / 180;
                 }
                 
-                // Function to draw the robot
-                function drawRobot() {
-                    // Clear canvas
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // Function to convert radians to degrees
+                function toDegrees(radians) {
+                    return radians * 180 / Math.PI;
+                }
+                
+                // Function to calculate inverse kinematics
+                function calculateInverseKinematics(x, y, l1, l2) {
+                    const r = Math.sqrt(x * x + y * y);
+                    const D = (r * r - l1 * l1 - l2 * l2) / (2 * l1 * l2);
                     
-                    // Set origin to center of canvas
-                    const originX = canvas.width / 2;
-                    const originY = canvas.height / 2;
+                    // Check if point is reachable
+                    if (Math.abs(D) > 1) {
+                        return null;
+                    }
                     
-                    // Get current values
-                    const l1 = parseFloat(link1Length.value);
-                    const l2 = parseFloat(link2Length.value);
-                    const theta1 = toRadians(parseFloat(joint1Angle.value));
-                    const theta2 = toRadians(parseFloat(joint2Angle.value));
+                    // Calculate theta2 (two possible solutions)
+                    const theta2_1 = Math.atan2(Math.sqrt(1 - D * D), D);
+                    const theta2_2 = Math.atan2(-Math.sqrt(1 - D * D), D);
                     
+                    // Calculate theta1 for both solutions
+                    const theta1_1 = Math.atan2(y, x) - Math.atan2(l2 * Math.sin(theta2_1), l1 + l2 * Math.cos(theta2_1));
+                    const theta1_2 = Math.atan2(y, x) - Math.atan2(l2 * Math.sin(theta2_2), l1 + l2 * Math.cos(theta2_2));
+                    
+                    return {
+                        solution1: { theta1: theta1_1, theta2: theta2_1 },
+                        solution2: { theta1: theta1_2, theta2: theta2_2 }
+                    };
+                }
+                
+                // Function to draw robot arm
+                function drawRobotArm(ctx, originX, originY, l1, l2, theta1, theta2, style = 'primary') {
                     // Calculate joint positions
-                    const joint1X = originX;
-                    const joint1Y = originY;
-                    
-                    const joint2X = joint1X + l1 * Math.cos(theta1);
-                    const joint2Y = joint1Y - l1 * Math.sin(theta1);
-                    
+                    const joint2X = originX + l1 * Math.cos(theta1);
+                    const joint2Y = originY - l1 * Math.sin(theta1);
                     const endX = joint2X + l2 * Math.cos(theta1 + theta2);
                     const endY = joint2Y - l2 * Math.sin(theta1 + theta2);
                     
+                    // Set styles based on whether this is the primary or alternate solution
+                    const linkStyle = style === 'primary' ? '#292929' : '#94a3b8';
+                    const linkWidth = style === 'primary' ? 4 : 2;
+                    
                     // Draw base
                     ctx.beginPath();
-                    ctx.arc(joint1X, joint1Y, 8, 0, 2 * Math.PI);
+                    ctx.arc(originX, originY, 8, 0, 2 * Math.PI);
                     ctx.fillStyle = '#1e3a8a';
                     ctx.fill();
                     
                     // Draw link 1
                     ctx.beginPath();
-                    ctx.moveTo(joint1X, joint1Y);
+                    ctx.moveTo(originX, originY);
                     ctx.lineTo(joint2X, joint2Y);
-                    ctx.strokeStyle = '#292929';
-                    ctx.lineWidth = 4;
+                    ctx.strokeStyle = linkStyle;
+                    ctx.lineWidth = linkWidth;
                     ctx.stroke();
                     
                     // Draw joint 2
                     ctx.beginPath();
                     ctx.arc(joint2X, joint2Y, 6, 0, 2 * Math.PI);
-                    ctx.fillStyle = '#1e3a8a';
+                    ctx.fillStyle = '#dc2626';
                     ctx.fill();
                     
                     // Draw link 2
                     ctx.beginPath();
                     ctx.moveTo(joint2X, joint2Y);
                     ctx.lineTo(endX, endY);
-                    ctx.strokeStyle = '#292929';
-                    ctx.lineWidth = 4;
+                    ctx.strokeStyle = linkStyle;
+                    ctx.lineWidth = linkWidth;
                     ctx.stroke();
                     
                     // Draw end effector
                     ctx.beginPath();
                     ctx.arc(endX, endY, 4, 0, 2 * Math.PI);
-                    ctx.fillStyle = '#dc2626';
+                    ctx.fillStyle = '#16a34a';
                     ctx.fill();
                     
-                    // Update end effector position display
+                    return { endX, endY };
+                }
+                
+                // Function to draw grid
+                function drawGrid(ctx) {
+                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                    
+                    // Draw grid
+                    const gridSize = 20;
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#e5e7eb';
+                    ctx.lineWidth = 1;
+                    
+                    // Draw vertical lines
+                    for (let x = 0; x <= ctx.canvas.width; x += gridSize) {
+                        ctx.moveTo(x, 0);
+                        ctx.lineTo(x, ctx.canvas.height);
+                    }
+                    
+                    // Draw horizontal lines
+                    for (let y = 0; y <= ctx.canvas.height; y += gridSize) {
+                        ctx.moveTo(0, y);
+                        ctx.lineTo(ctx.canvas.width, y);
+                    }
+                    ctx.stroke();
+                    
+                    // Draw axes
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#94a3b8';
+                    ctx.lineWidth = 2;
+                    ctx.moveTo(ctx.canvas.width/2, 0);
+                    ctx.lineTo(ctx.canvas.width/2, ctx.canvas.height);
+                    ctx.moveTo(0, ctx.canvas.height/2);
+                    ctx.lineTo(ctx.canvas.width, ctx.canvas.height/2);
+                    ctx.stroke();
+                }
+                
+                // Function to draw forward kinematics visualization
+                function drawForwardKinematics() {
+                    drawGrid(ctx);
+                    
+                    const originX = canvas.width / 2;
+                    const originY = canvas.height / 2;
+                    
+                    const l1 = parseFloat(link1Length.value);
+                    const l2 = parseFloat(link2Length.value);
+                    const theta1 = toRadians(parseFloat(joint1Angle.value));
+                    const theta2 = toRadians(parseFloat(joint2Angle.value));
+                    
+                    const { endX, endY } = drawRobotArm(ctx, originX, originY, l1, l2, theta1, theta2);
+                    
+                    // Update displays
                     const relativeX = Math.round(endX - originX);
                     const relativeY = Math.round(originY - endY);
                     endEffectorPosition.textContent = `X: ${relativeX}, Y: ${relativeY}`;
+                    currentAngles.textContent = `θ₁: ${joint1Angle.value}°, θ₂: ${joint2Angle.value}°`;
                 }
                 
-                // Add event listeners to inputs
-                link1Length.addEventListener('input', drawRobot);
-                link2Length.addEventListener('input', drawRobot);
-                joint1Angle.addEventListener('input', drawRobot);
-                joint2Angle.addEventListener('input', drawRobot);
+                // Function to draw inverse kinematics visualization
+                function drawInverseKinematics() {
+                    drawGrid(ikCtx);
+                    
+                    const originX = ikCanvas.width / 2;
+                    const originY = ikCanvas.height / 2;
+                    
+                    const l1 = parseFloat(ikLink1Length.value);
+                    const l2 = parseFloat(ikLink2Length.value);
+                    const x = parseFloat(targetX.value);
+                    const y = parseFloat(targetY.value);
+                    
+                    // Draw target point
+                    ikCtx.beginPath();
+                    ikCtx.arc(originX + x, originY - y, 6, 0, 2 * Math.PI);
+                    ikCtx.fillStyle = '#16a34a';
+                    ikCtx.fill();
+                    
+                    // Calculate inverse kinematics
+                    const solutions = calculateInverseKinematics(x, y, l1, l2);
+                    
+                    if (solutions) {
+                        // Draw primary solution
+                        drawRobotArm(ikCtx, originX, originY, l1, l2, solutions.solution1.theta1, solutions.solution1.theta2);
+                        
+                        // Draw alternate solution if checkbox is checked
+                        if (showAlternate.checked) {
+                            drawRobotArm(ikCtx, originX, originY, l1, l2, solutions.solution2.theta1, solutions.solution2.theta2, 'alternate');
+                        }
+                        
+                        // Update angle display
+                        const theta1Deg = Math.round(toDegrees(solutions.solution1.theta1));
+                        const theta2Deg = Math.round(toDegrees(solutions.solution1.theta2));
+                        ikAngles.textContent = `θ₁: ${theta1Deg}°, θ₂: ${theta2Deg}°`;
+                        ikStatus.style.display = 'none';
+                    } else {
+                        ikStatus.style.display = 'block';
+                        ikAngles.textContent = 'No solution exists';
+                    }
+                }
                 
-                // Initial draw
-                drawRobot();
+                // Add event listeners for forward kinematics
+                link1Length.addEventListener('input', drawForwardKinematics);
+                link2Length.addEventListener('input', drawForwardKinematics);
+                joint1Angle.addEventListener('input', drawForwardKinematics);
+                joint2Angle.addEventListener('input', drawForwardKinematics);
+                
+                // Add event listeners for inverse kinematics
+                ikLink1Length.addEventListener('input', drawInverseKinematics);
+                ikLink2Length.addEventListener('input', drawInverseKinematics);
+                targetX.addEventListener('input', drawInverseKinematics);
+                targetY.addEventListener('input', drawInverseKinematics);
+                showAlternate.addEventListener('change', drawInverseKinematics);
+                
+                // Add click handler for inverse kinematics canvas
+                ikCanvas.addEventListener('click', function(event) {
+                    const rect = ikCanvas.getBoundingClientRect();
+                    const x = event.clientX - rect.left;
+                    const y = event.clientY - rect.top;
+                    
+                    // Convert to relative coordinates
+                    const relativeX = Math.round(x - ikCanvas.width/2);
+                    const relativeY = Math.round(ikCanvas.height/2 - y);
+                    
+                    // Update input fields
+                    targetX.value = relativeX;
+                    targetY.value = relativeY;
+                    
+                    // Redraw
+                    drawInverseKinematics();
+                });
+                
+                // Initial draws
+                drawForwardKinematics();
+                drawInverseKinematics();
             </script>
         </div>
     </article>
