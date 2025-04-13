@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motors | The Robotics Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            background-color: #faf9f6;
+            color: #292929;
+            line-height: 1.6;
+        }
+
+        .nav-bar {
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .nav-bar a {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            color: #292929;
+            text-decoration: none;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 80px auto 0;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-title {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            color: #292929;
+        }
+
+        .article-meta {
+            color: #757575;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #292929;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .media-container {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .media-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .caption {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #757575;
+        }
+
+        .extended-caption {
+            font-size: 0.95rem;
+            color: #757575;
+            text-align: justify;
+            margin: 0.5rem auto 2rem;
+            line-height: 1.6;
+            max-width: 90%;
+            padding: 0 2rem;
+            display: block;
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            color: #2b6cb0;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 300px;
+            background-color: #f8f9fa;
+            color: #292929;
+            text-align: left;
+            padding: 1rem;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -150px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #f8f9fa transparent transparent transparent;
+        }
+
+        .motor-comparison {
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .motor-comparison h3 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #292929;
+            font-size: 1.5rem;
+        }
+
+        .motor-comparison table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 0 auto;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .motor-comparison th,
+        .motor-comparison td {
+            padding: 1rem;
+            text-align: left;
+            border: none;
+        }
+
+        .motor-comparison th {
+            background-color: #2b6cb0;
+            color: white;
+            font-weight: 500;
+        }
+
+        .motor-comparison tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .motor-comparison tr:hover {
+            background-color: #edf2f7;
+        }
+
+        .motor-comparison td:first-child {
+            font-weight: 500;
+            color: #2b6cb0;
+        }
+
+        .checkmark {
+            color: #38a169;
+            font-weight: bold;
+        }
+
+        .cross {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .motor-comparison {
+                overflow-x: auto;
+                margin: 3rem -2rem;
+                padding: 0 2rem;
+            }
+            
+            .motor-comparison table {
+                min-width: 800px;
+            }
+        }
+
+        .table-comparison {
+            margin: 3rem 0;
+        }
+
+        .table-comparison h3 {
+            text-align: center;
+            margin: 2rem 0;
+            color: #292929;
+        }
+
+        /* Style 1: Modern Minimal */
+        .table-style-1 {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 0 auto 3rem;
+            font-size: 0.95rem;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .table-style-1 th,
+        .table-style-1 td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .table-style-1 th {
+            background-color: #f8f9fa;
+            font-weight: 500;
+            color: #292929;
+        }
+
+        .table-style-1 tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .table-style-1 .check {
+            color: #38a169;
+            font-weight: bold;
+        }
+
+        .table-style-1 .cross {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+
+        /* Style 2: Classic Grid */
+        .table-style-2 {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto 3rem;
+            font-size: 0.95rem;
+            border: 1px solid #e6e6e6;
+        }
+
+        .table-style-2 th,
+        .table-style-2 td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid #e6e6e6;
+        }
+
+        .table-style-2 th {
+            background-color: #2b6cb0;
+            color: white;
+            font-weight: 500;
+        }
+
+        .table-style-2 tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .table-style-2 .check {
+            color: #38a169;
+            font-weight: bold;
+        }
+
+        .table-style-2 .cross {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+
+        /* Style 3: Card-like (updated) */
+        .table-style-3 {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 1rem;
+            margin: 0 auto;
+            font-size: 0.95rem;
+        }
+
+        .table-style-3 th,
+        .table-style-3 td {
+            padding: 1.5rem;
+            text-align: left;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .table-style-3 th {
+            background-color: #4a5568;
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .table-style-3 tr:hover td {
+            background-color: #f8f9fa;
+        }
+
+        .table-style-3 .check {
+            color: #38a169;
+            font-weight: bold;
+        }
+
+        .table-style-3 .cross {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .motor-comparison {
+                margin: 3rem 0;
+                padding: 1rem;
+            }
+            
+            .table-style-3 {
+                min-width: 900px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="../index.html">← Back to Home</a>
+    </nav>
+
+    <article class="article-container">
+        <header class="article-header">
+            <h1 class="article-title">Motors & Actuators</h1>
+            <div class="article-meta">
+                Written by Nathan Daniel • Last updated Jan 2025
+            </div>
+        </header>
+
+        <div class="article-content">
+            <p>
+                We've talked a lot about robots moving around using kinematics — calculating joint angles, positions, and trajectories. But how does that actually translate to real life? How does a robot know it's rotated exactly 30 degrees, or moved its arm to just the right spot?
+            </p>
+            
+            <p>
+                That's where <b>actuators</b> and <b>encoders</b> come into play.
+            </p>
+            
+            <p>
+                <b>Actuators</b> — usually motors — are the muscles of a robot. They make things move by turning joints, spinning wheels, or sliding mechanisms in and out. <b>Encoders</b> are how the robot keeps track of that motion — they measure how far and how fast something has moved. (We'll get into those in the next lesson.)
+            </p>
+
+            <p class="extended-caption">
+                <i><b>Quick vocab lesson - </b> You'll see or hear the words motor and actuator used pretty interchangeably (especially on this site). Technically, a motor is just one type of actuator: it converts electrical energy into rotational motion. But actuators can also use compressed air (pneumatics), fluid (hydraulics), or even shape-memory materials. So every motor is an actuator, but not every actuator is a motor. If someone ever corrects you too seriously on that... feel free to tell them to go outside.</i>
+            </p>
+
+            <div class="media-container" style="display: flex; justify-content: space-between; gap: 2rem;">
+                <div style="flex: 1; min-height: 400px; display: flex; flex-direction: column;">
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                        <img src="../imgs/lesson_4_motor_spinning.webp" alt="Motor spinning" style="max-height: 300px; width: auto;">
+                    </div>
+                    <p class="caption" style="text-align: center; margin-top: 1rem;">Here we have a typical motor - you'd plug it into a power source and it uses electricity to spin!</p>
+                </div>
+                <div style="flex: 1; min-height: 400px; display: flex; flex-direction: column;">
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                        <img src="../imgs/lesson_4_hydraulic_actuator.webp" alt="Hydraulic actuator" style="max-height: 300px; width: auto;">
+                    </div>
+                    <p class="caption" style="text-align: center; margin-top: 1rem;">This is a hydraulic actuator - it's using the power of compressed gas in the chamber to spin (you can get way more power this way).</p>
+                </div>
+            </div>
+
+            <h2>Brushed DC Motors</h2>
+
+            <p>
+                Brushed motors spin by flipping the direction of electricity through a coil of wire — kind of like flipping a magnet back and forth really fast. Tiny metal parts called brushes press against the spinning part of the motor and help switch the flow of electricity at just the right time. This constant switching keeps the motor spinning.
+            </p>
+
+            <p>
+                It's a bit like giving someone a gentle push every time they come around on a merry-go-round — the brushes handle the "when" and "where" to push, making sure the motion continues smoothly.
+            </p>
+
+            <div class="media-container" style="text-align: center; margin: 2rem 0;">
+                <img src="../imgs/lesson_4_brushed_dc_motors.gif" alt="Brushed DC Motor Animation" style="max-width: 100%; max-height: 400px;">
+                <p class="caption">A brushed DC motor in action - notice how the brushes (in red) maintain contact with the spinning commutator</p>
+            </div>
+
+            <h3>Pros</h3>
+            <ul>
+                <li>Cheap and easy to control</li>
+                <li>Simple wiring and circuitry</li>
+                <li>Good for basic applications (e.g., wheels, fans, pumps)</li>
+            </ul>
+
+            <h3>Cons</h3>
+            <ul>
+                <li>Brushes wear out over time → less durable</li>
+                <li>Generates more electrical noise (sparking)</li>
+                <li>No built-in feedback (needs an encoder to be precise)</li>
+            </ul>
+
+            <h3>Where you'll see them</h3>
+            <p>
+                In toys, hobby robots, small RC cars — basically, anywhere low cost and simplicity matter more than precision.
+            </p>
+
+            <h2>Brushless DC Motors</h2>
+
+            <p>
+                Brushless motors do the same job as brushed ones — spinning something — but without any physical contact inside to switch the current. Instead of using brushes, they rely on electronics to control the motor.
+            </p>
+
+            <p>
+                A small circuit (called an ESC or motor controller) decides when to send current to the coils inside the motor. These coils are fixed in place, and the magnets spin around them. Sensors tell the controller the exact position of the spinning magnets, so it knows when to fire the coils in the right sequence to keep things turning smoothly.
+            </p>
+
+            <p>
+                It's like choreographing a dance — the controller knows exactly when to "step" to keep the motion flowing, and it does it all digitally, with no physical contact.
+            </p>
+
+            <div class="media-container" style="text-align: center; margin: 2rem 0;">
+                <img src="../imgs/lesson_4_brushless_dc_motor.webp" alt="Brushless DC Motor" style="max-width: 100%; max-height: 400px;">
+                <p class="caption">A brushless DC motor - notice how the coils are fixed in place while the magnets rotate around them</p>
+            </div>
+
+            <h3>Pros</h3>
+            <ul>
+                <li>Higher efficiency and power output</li>
+                <li>Longer lifespan (no friction from brushes)</li>
+                <li>Quieter and smoother operation</li>
+                <li>Can run at higher speeds</li>
+            </ul>
+
+            <h3>Cons</h3>
+            <ul>
+                <li>Needs a specialized motor controller</li>
+                <li>More expensive than brushed motors</li>
+            </ul>
+
+            <h3>Common use cases</h3>
+            <p>
+                Drones, electric vehicles, high-speed robotics, CNC machines
+            </p>
+
+            <h2>Stepper Motors</h2>
+
+            <p>
+                Stepper motors rotate in small, precise steps — like a clock ticking forward a fixed amount each time. Inside the motor are multiple coils (electromagnets) arranged in a circle. By turning these coils on and off in a specific order, the motor's center (the rotor) rotates a little bit at a time.
+            </p>
+
+            <p>
+                Each "step" is a tiny rotation — often something like 1.8° — and by counting those steps, you can control exactly how far the motor turns. No sensors needed, just careful counting.
+            </p>
+
+            <p>
+                Think of it like walking up stairs: one step at a time, always the same size, and always in the right direction — as long as you don't trip.
+            </p>
+
+            <p>
+                The key difference between stepper motors and brushless DC motors is how they move and how they're controlled. Stepper motors move in fixed, predictable steps and don't need position feedback — you just tell them how many steps to take. Brushless DC motors, on the other hand, spin continuously and use sensors to track their position in real time, making them better for high-speed, smooth motion.
+            </p>
+
+            <div class="media-container" style="text-align: center; margin: 2rem 0;">
+                <img src="../imgs/lesson_4_stepper_motor.gif" alt="Stepper Motor Animation" style="max-width: 100%; max-height: 400px;">
+                <p class="caption">A stepper motor in action - notice how it moves in distinct, precise steps</p>
+            </div>
+
+            <h3>Pros</h3>
+            <ul>
+                <li>Very precise position control without feedback (open-loop)</li>
+                <li>Easy to control position and speed</li>
+                <li>Great for repeatable movements</li>
+            </ul>
+
+            <h3>Cons</h3>
+            <ul>
+                <li>Can lose steps under load (no feedback)</li>
+                <li>Not very efficient; can get hot</li>
+                <li>Torque drops off at higher speeds</li>
+            </ul>
+
+            <h3>Common use cases</h3>
+            <p>
+                3D printers, laser cutters, camera sliders, pick-and-place arms
+            </p>
+
+            <h2>Servo Motors</h2>
+
+            <p>
+                A servo motor is basically a small DC motor that's been upgraded with a gear system, a position sensor, and its own built-in control circuit. You tell it what angle to go to (like "90 degrees"), and it figures out how to get there and stay there.
+            </p>
+
+            <p>
+                The position sensor (usually a potentiometer in hobby servos, or an encoder in industrial ones) constantly checks where the motor is and tells the control circuit if it needs to adjust. This feedback loop lets the servo move to — and hold — a specific angle, even if something tries to push it off target.
+            </p>
+
+            <p>
+                Most people are familiar with hobby servos — the small, rectangular ones you plug into an Arduino and control with a single wire. These are simple, affordable, and perfect for projects like robotic arms or RC car steering. But in industrial systems, servo motors can look more like fancy brushless motors with external controllers and high-resolution feedback. They're designed for much higher torque, speed, and precision — often paired with gearboxes and used in robotic arms, CNC machines, and automation lines.
+            </p>
+
+            <p>
+                It's kind of like comparing a toy drone to a commercial quadcopter — they work on the same idea, but one is designed for play, and the other is made to perform.
+            </p>
+
+            <div class="media-container" style="text-align: center; margin: 2rem 0;">
+                <img src="../imgs/lesson_4_servo_motor.gif" alt="Servo Motor" style="max-width: 100%; max-height: 400px;">
+                <p class="caption">Notice the square wave function (oscillating between 0 and +V) that controls the servo motor's position</p>
+            </div>
+
+            <h3>Pros</h3>
+            <ul>
+                <li>Simple angle control (usually 0–180°)</li>
+                <li>Easy to use with microcontrollers (just send an angle)</li>
+                <li>Self-contained with feedback loop</li>
+            </ul>
+
+            <h3>Cons</h3>
+            <ul>
+                <li>Limited range of motion</li>
+                <li>Typically not very powerful</li>
+                <li>Most are analog (lower <span class="tooltip">resolution<span class="tooltiptext">Resolution is a new (but important) vocab word - we'll explain this more in a future lesson! But for now, low resolution means that servo motors respond to position changes in rough steps, not fine-grained detail. So while they're great for basic positioning, they're not ideal for super-precise movements.</span></span>)</li>
+            </ul>
+
+            <h2>Harmonic Drive</h2>
+
+            <p>
+                A harmonic drive isn't a motor — it's a special type of gearbox often used with motors in precision robotics. Unlike regular gear systems, harmonic drives can deliver extremely accurate motion, very high gear reduction, and almost zero backlash (no wiggle or slop in movement).
+            </p>
+
+            <p>
+                Instead of using rigid gears, harmonic drives use a flexible metal component (called a flexspline) that deforms slightly to engage with gear teeth in a unique way. This allows for very smooth, precise rotation, even under heavy load.
+            </p>
+
+            <p>
+                It's like trading your standard bike gears for a high-end, zero-play gear system — every tiny movement counts, and nothing slips.
+            </p>
+
+            <p>
+                Harmonic drives are most often paired with brushless DC motors, frameless motors, or servo motors, especially in robotic arms, humanoid joints, and surgical or aerospace robotics.
+            </p>
+
+            <div class="media-container" style="text-align: center; margin: 2rem 0;">
+                <img src="../imgs/lesson_4_harmonic_drive.gif" alt="Harmonic Drive Animation" style="max-width: 100%; max-height: 400px;">
+                <p class="caption">A harmonic drive in action - notice how the flexible component (flexspline) interacts with the gear teeth</p>
+            </div>
+
+            <h3>Pros</h3>
+            <ul>
+                <li>Insanely accurate positioning (perfect for robot arms)</li>
+                <li>Compact and lightweight for the amount of torque they deliver</li>
+                <li>No backlash, which is ideal for surgical robots, space robots, or anything that needs pinpoint repeatability</li>
+            </ul>
+
+            <h3>Cons</h3>
+            <ul>
+                <li>Real expensive</li>
+                <li>Complex to manufacture and integrate</li>
+                <li>Slower rotational speeds (but high torque)</li>
+            </ul>
+
+            <h3>Common use cases</h3>
+            <p>
+                Industrial robotic arms, Space and satellite mechanisms, Surgical robots, Humanoid robots
+            </p>
+
+            <h2>Finding the Right Muscles for Your Robot</h2>
+
+            <p>
+                At this point, you've got a solid overview of how robots actually move. Whether it's spinning a wheel, rotating a joint, or sliding a gripper in a straight line, every motion comes from some kind of actuator.
+            </p>
+
+            <p>
+                From basic brushed motors and plug-and-play servos to ultra-precise systems harmonic drives, each has its own tradeoffs in terms of speed, torque, precision, complexity, and cost — which is why there's no "one-size-fits-all" motor in robotics. The right tool depends entirely on what your robot is trying to do.
+            </p>
+
+            <p>
+                If you're building your first project, start simple. A basic servo or stepper motor will take you a long way. As you move into more advanced builds — robotic arms, mobile platforms, or surgical-grade precision — you'll start seeing why the other options matter.
+            </p>
+
+            <p>
+                In the next lesson, we'll dig into encoders — the sensors that tell the robot what just happened after the motors start moving. Because even the strongest robot muscles aren't much use without the ability to feel or see how far they've gone.
+            </p>
+        </div>
+    </article>
+
+    <div class="motor-comparison">
+        <h3>Motor Breakdown</h3>
+        <table class="table-style-3">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Motion Type</th>
+                    <th>Feedback Required?</th>
+                    <th>Control Simplicity</th>
+                    <th>Precision</th>
+                    <th>Common Use Cases</th>
+                    <th>Good for Beginners?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Brushed DC</td>
+                    <td>Continuous spin</td>
+                    <td><span class="check">•</span> (for precision)</td>
+                    <td><span class="check">•</span> Very simple</td>
+                    <td>Low–Medium</td>
+                    <td>Wheels, fans, toys, simple motion</td>
+                    <td><span class="check">•</span> Yes — easiest to start with</td>
+                </tr>
+                <tr>
+                    <td>Brushless DC</td>
+                    <td>Continuous spin</td>
+                    <td><span class="check">•</span> (Hall sensors/etc.)</td>
+                    <td><span class="cross">×</span> Needs controller</td>
+                    <td>Medium–High</td>
+                    <td>Drones, e-bikes, high-speed robots</td>
+                    <td><span class="cross">×</span> Not without a built-in controller</td>
+                </tr>
+                <tr>
+                    <td>Stepper</td>
+                    <td>Stepped rotation</td>
+                    <td><span class="cross">×</span> (open-loop)</td>
+                    <td><span class="check">•</span> Simple</td>
+                    <td>High</td>
+                    <td>3D printers, CNC, precise positioning</td>
+                    <td><span class="check">•</span> Yes — great for precise motion</td>
+                </tr>
+                <tr>
+                    <td>Servo</td>
+                    <td>Angle positioning</td>
+                    <td><span class="check">•</span> Built-in</td>
+                    <td><span class="check">•</span> Very simple</td>
+                    <td>Medium</td>
+                    <td>RC robots, robotic arms, pan/tilt mounts</td>
+                    <td><span class="check">•</span> Yes — plug and play with Arduino!</td>
+                </tr>
+                <tr>
+                    <td>Linear Actuator</td>
+                    <td>Linear motion</td>
+                    <td>Depends on type</td>
+                    <td><span class="cross">×</span> More complex</td>
+                    <td>High</td>
+                    <td>Grippers, sliding platforms, lift systems</td>
+                    <td><span class="cross">×</span> Can be tricky mechanically</td>
+                </tr>
+                <tr>
+                    <td>Harmonic Drive</td>
+                    <td>Precision rotation (via gearbox)</td>
+                    <td>Depends on paired motor</td>
+                    <td><span class="cross">×</span> Complex integration</td>
+                    <td>Very High</td>
+                    <td>Industrial robots, surgical tools, aerospace</td>
+                    <td><span class="cross">×</span> Advanced — not a motor by itself</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html> 
