@@ -104,16 +104,21 @@
 
         <div class="article-content">
             <p>
-                Have you ever wondered what the exact angles your wrist, fingers, elbows, and shoulder need to form to pick up a glass of water optimally? Yeah, me neither (and I really hope you don't); your brain just knows what to do, it's automatic. A lot of that is from years of experience and instinct, but you are also getting visual feedback from your eyes and tactile feedback from your hands. For a robot, which lacks both human instinct and senses (again, a pile of rocks), every movement needs to be carefully planned out.           
+                Have you ever wondered what the exact angles your wrist, fingers, elbows, and shoulder need to form to pick up a glass of water optimally? Yeah, me neither - your brain just knows what to do, it's automatic (although thinking about that is a side-effect of graduate-level kinematics classes). A lot of that is from years of experience and instinct, but you are also getting visual feedback from your eyes and tactile feedback from your hands. For a robot, which lacks both human instinct and senses (again, it's basically a pile of rocks), every movement needs to be carefully planned out.           
             </p>
 
             <p>
                 Kinematics is the branch of physics regarding the motion of objects — and we get to use it to define how parts of a robot move in relation to one another. In short, kinematics is math that tells a robot, "If I rotate this motor by 30 degrees, the arm will move to this exact point in space."
             </p>
 
+            <div class="media-container">
+                <img src="../imgs/lesson_3_glass_on_table.webp" alt="glass of water" style="max-width: 80%;">
+                <p class="caption">A glass of water sitting on a table - the fearsome adversary of any robot arm</p>
+            </div>
+
             <h2>Forward Kinematics: From Joints to Position</h2>
             <p>
-                Let's pretend we live in a dystopian cyberpunk future - neon lights, sketchy alleway mechanics, and of course a horrific accident that costs you an arm. Unfortunately since money's tight you ended up with a pretty simple robot prosthetic replacement arm. No wrist rotation or fingers - just a budget friendly claw that can open and close.
+                Let's pretend we live in a dystopian cyberpunk future - neon lights, sketchy alleway mechanics, and of course a horrific factory accident that costs you an arm. Unfortunately since money's tight and universal healthcare still doesn't exist, you ended up with a pretty simple robot prosthetic replacement arm. No wrist rotation or fingers - just a budget friendly claw that can open and close.
             </p>
 
             <p> 
@@ -121,35 +126,30 @@
             </p>
             <div class="media-container" style="max-width: 400px; margin: 2rem auto;">
                 <img src="../imgs/lesson_3_arm.avif" alt="Inverse Kinematics">
-                <p class="caption">this is your arm now :/</p>
+                <p class="caption">Your new arm that'll get you back in the factory in no time</p>
             </div>
             
             <p style="margin-bottom: 1rem;">
                 First, we need to define a few things
             </p>
             <ul style="margin-bottom: 3rem;">
-                <li><b>Joint:</b> This is where two links of the robot come together and rotate. If your arm were a robot arm, your shoulder and elbow would be considered joints</li>
-                <li><b>Links:</b> These are the solid segments between joints — in your arm, your forearm and upper arm are the links</li>
-                <li><b>End Effector:</b> This is whatever is attached to the end of the robot's arm. For you, that's the gripper I mentioned. For other robot tools, this could be a suction cup, welding tool, or some other device — the whole point of a robot arm is usually to move a specialized tool to the right spot to complete a task</li>
+                <li>A <b>joint</b> is where two links of the robot come together and rotate. If your arm were a robot arm, your shoulder and elbow would be considered joints</li>
+                <li><b>Links</b> are the solid segments between joints — in your arm, your forearm and upper arm are the links</li>
+                <li>The <b>end-effector</b> is the tool attached to the end of the robot. For you, that's the gripper I mentioned. For other robots, this could be a suction cup, welding tool, or some other device — the whole point of a robot arm is usually to move a specialized tool to the right spot to complete a task</li>
             </ul>
+
+            <div class="media-container" style="max-width: 400px; margin: 2rem auto;">
+                <img src="../imgs/lesson_3_parts_of_a_robot.jpeg" alt="parts of a robot">
+                <p class="caption">Check out the links, joints, and end-effector of this robot arm - unlike your arm, this robot has 3 links and 3 joints</p>
+            </div>
 
             <p> 
-                <b>Forward kinematics</b> is the process of calculating where a robot's end-effector will be given the angles of its joints and the size of the robot.
+                <b>Forward kinematics</b> is the process of calculating where a robot's end-effector will be given the angles of its joints and the size of the robot. It's used to calculate the exact position of your "hand" based on the angles of the two joints and the lengths of the two links- perfect for planning precise movements like grabbing pesky cups of water sitting on tables.
             </p>
 
             <p>
-                We would use forward kinematics to calculate the exact position of your "hand" based on the angles of those two joints. By using some trigonometry, you can predict exactly where that end-effector will end up.
-            </p>
-
-            <p>
-                For example, if:
-            </p>
-            <ul style="margin-bottom: 3rem;">
-                <li> Shoulder rotates 45 degrees</li>
-                <li>Elbow rotates 30 degrees</li>
-            </ul>
-            <p>
-                …forward kinematics would tell you your hand's position in space — perfect for planning precise movements like grabbing pesky cups of water sitting on counters. In fact, the equations for calculating the X and Y coordinates of your arm in space are:
+                
+                By using some trigonometry, you can predict exactly where that end-effector will end up. In fact, the equations for calculating the X and Y coordinates of your arm in space are:
             </p>
             <div class="media-container">
                 <img src="../imgs/lesson_3_forward_equations.JPG" alt="Inverse Kinematics">
@@ -163,7 +163,7 @@
             </div>
 
             <p>
-                The first part of the equation, <i>L₁cos(θ₁)</i> and <i>L₁sin(θ₁)</i> are pretty straightforward - they calculate the position of the end of Link 1. However since Link 2 is attached to the end of Link 1, we need to add both angles in the second part of the equation (<i>L₂cos(θ₁+θ₂)</i> and <i>L₂sin(θ₁+θ₂)</i>) to compensate for Link 1's position.
+                The first part of the equation, <i>L₁cos(θ₁)</i> and <i>L₁sin(θ₁)</i> are pretty straightforward - they calculate the position of the end of Link 1. However since Link 2 is attached to the end of Link 1, we need to add both angles in the second part of the equation (<i>L₂cos(θ₁+θ₂)</i> and <i>L₂sin(θ₁+θ₂)</i>) to compensate for Link 1's position. If we had more than 2 links, we'd continue this pattern of adding the angles of the previous links to the current link's position.
             </p>
 
             <h2>Try It Yourself!</h2>
@@ -209,31 +209,26 @@
                 </div>
             </div>
 
-            <h2>The Problem of Multiple Solutions</h2>
+            <h2>The (annnoying) Problem of Multiple Solutions</h2>
 
             <p>
-                One tricky thing about inverse kinematics is that (like an SAT reading comprehension section) there are often multiple valid solutions. Imagine reaching for a cup of water — you could bend your elbow in two different ways (one normal, one awkward) and still get your hand to the cup.
+                One tricky thing about kinematics is that like an SAT reading comprehension section, there are often multiple valid solutions. Imagine reaching for a cup of water — you could bend your elbow in two different ways (one normal, one awkward) and still get your hand to the cup. Even worse, if you try to reach too far — say, if the cup's across the room — the math will straight-up tell you there's no solution.
+
             </p>
 
             <p>
-                Even worse, if you try to reach too far — say, if the cup's across the room — the math will straight-up tell you there's no solution.
+                <b>Inverse kinematics</b> is like reverse-engineering a robot's movements. Instead of plugging in the angles like we did in the forward kinematics section, we're going to plug in the desired position of the end-effector and solve for the angles. This is a lot more useful than forward kinematics (even though it's a lot more complicated) because now we can think of a place we want to move the robot and solve for the angles that fit that solution.
             </p>
 
             <p>
-                Inverse kinematics is like reverse-engineering a robot's movements. Instead of blindly adjusting angles and hoping for the best, these equations give you a precise way to position your robot's arm exactly where you need it.
+                The inverse kinematics equations for the same 2-link robot arm are:
             </p>
+            <div class="media-container">
+                <img src="../imgs/lesson_3_inverse_equations.JPG" alt="Inverse Kinematics">
+            </div>
             
             <p>
-                While we skipped over some of the deeper math in the inverse kinematics section, that's because no two robots are exactly the same. Different types of joints, link lengths, and motor setups all change how those equations are built. Solving for the 'optimal' motion often involves juggling multiple variables — there's rarely a one-size-fits-all solution.
-            </p>
-
-            <p>
-                It's not as automatic as the way your brain controls your arm — but with a little math and some smart programming, you can make your robot just as precise.
-            </p>
-
-            <h2>Now You Try Inverse Kinematics!</h2>
-            <p>
-                In this tool, you can specify where you want the end effector to go, and the tool will calculate the required joint angles. Try clicking anywhere on the grid or entering coordinates directly. You can also toggle between different possible solutions!
+                We skipped over some of the derivation of these equations here because it's pretty complicated, and since no two robots are exactly the same, the process for finding these equations is different for each robot. (but we will cover it in a future lesson). Instead, try out this tool below - set your robot's link lengths and then click anywhere on the grid to see the required joint angles to move the end-effector to that point (and while you're at it, check out the alternate solution to see another possible solution)
             </p>
 
             <div class="robot-simulator" style="background-color: #f8f9fa; padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">

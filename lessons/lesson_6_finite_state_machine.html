@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finite State Machines | The Robotics Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            background-color: #faf9f6;
+            color: #292929;
+            line-height: 1.6;
+        }
+
+        .nav-bar {
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .nav-bar a {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            color: #292929;
+            text-decoration: none;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 80px auto 0;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-title {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            color: #292929;
+        }
+
+        .article-meta {
+            color: #757575;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #292929;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .media-container {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .media-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .caption {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #757575;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+        }
+        .nav-button:hover {
+            background: rgba(255,255,255,1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .nav-button:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+        #prevBtn {
+            left: 1rem;
+        }
+        #nextBtn {
+            right: 1rem;
+        }
+        .fsm-container {
+            position: relative;
+            min-height: 300px;
+        }
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-message {
+            display: none;
+            padding: 1rem;
+            background: #fff3f3;
+            border: 1px solid #ffcdd2;
+            border-radius: 4px;
+            color: #d32f2f;
+            margin: 1rem 0;
+        }
+    </style>
+    <script>
+        // Immediately check if JavaScript is enabled
+        document.documentElement.classList.add('js-enabled');
+        
+        // Function to show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('jsError');
+            if (errorDiv) {
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = message;
+            }
+        }
+
+        // Function to hide loading overlay
+        function hideLoading() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded');
+            
+            // Hide loading overlay after a short delay to ensure everything is ready
+            setTimeout(hideLoading, 500);
+            
+            const fsmImages = [
+                '../imgs/fsm/fsm_1.jpg',
+                '../imgs/fsm/fsm_2.jpg',
+                '../imgs/fsm/fsm_3.jpg',
+                '../imgs/fsm/fsm_4.jpg',
+                '../imgs/fsm/fsm_5.jpg',
+                '../imgs/fsm/fsm_6.jpg',
+                '../imgs/fsm/fsm_7.jpg',
+                '../imgs/fsm/fsm_8.jpg',
+                '../imgs/fsm/fsm_9.jpg',
+                '../imgs/fsm/fsm_10.jpg'
+            ];
+
+            const stepDescriptions = [
+                'Let\'s begin by laying out all our states. Don\'t worry about the inputs and outputs for now. I usually like to go from left to right.',
+                'What I did here is add the output code for the initial state, S<sub>0</sub>. Since this state is waiting for the user to use the machine, all the outputs are off, which is indicated by all 0s in Gray Code.',
+                'Similarly to the previous state, I added the output code for S<sub>1</sub>, where the user has inserted money and is waiting for a selection. Thus, the two buttons are lit up, indicated by the two first bits of the Gray Code being 1.',
+                'Now comes the output code for S<sub>2</sub>, where Coke has been selected and is being dispensed. The Coke button is lit up, indicated by the third bit of the Gray Code being 1, and the Coke dispenser is on, so the fourth bit is also 1.',
+                'The last state, S<sub>3</sub>, is where Pepsi has been selected and is being dispensed. The Pepsi button is lit up, indicated by the third bit of the Gray Code being 1, and the Pepsi dispenser is on, so the fourth bit is also 1.',
+                'Ok we\'re now gonna start adding the triggers, or arrows that indicate transitions between states. But instead of starting with a trigger between two different states, we\'re gonna start with a trigger between a state and itself. This is called a "loop" and it indicates that the machine is waiting for something to happen. In this case, we added one to S<sub>0</sub> to indicate that the machine is waiting for the user to use it.',
+                'Each trigger has an input code, which is the Gray Code of the inputs that will cause the trigger to fire. In this case, we added an input code for that S<sub>0</sub> of 0XXX, meaning that so long the first input is off (meaning that money has not been paid), the trigger will keep the FSM in S<sub>0</sub>.',
+                'Step 7: Finally, we\'ll add the "Dispenser Sensor" input to detect when a drink has been dispensed.',
+                'Step 8: Now we\'ll start connecting the states with transitions. First, let\'s show how the machine moves from S<sub>0</sub> to S<sub>1</sub> when money is paid.',
+                'Step 9: Next, we\'ll add the transitions from S<sub>1</sub> to either S<sub>2</sub> or S<sub>3</sub> when a drink is selected.',
+                'Step 10: Finally, we\'ll add the transitions back to S<sub>0</sub> when the dispenser sensor detects that a drink has been dispensed.'
+            ];
+
+            let currentStep = 0;
+            const totalSteps = fsmImages.length;
+
+            function updateFSM() {
+                console.log('Updating FSM to step:', currentStep);
+                const fsmImage = document.getElementById('fsmImage');
+                const stepCounter = document.getElementById('stepCounter');
+                const stepDescription = document.getElementById('stepDescription');
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+
+                if (!fsmImage || !stepCounter || !stepDescription || !prevBtn || !nextBtn) {
+                    showError('Could not initialize the interactive tool. Please refresh the page.');
+                    return;
+                }
+
+                // Preload the next image
+                const nextImage = new Image();
+                nextImage.src = fsmImages[currentStep];
+                nextImage.onload = function() {
+                    fsmImage.src = fsmImages[currentStep];
+                    stepCounter.textContent = `Step ${currentStep + 1} of ${totalSteps}`;
+                    stepDescription.innerHTML = `<p style="margin: 0; color: #333;">${stepDescriptions[currentStep]}</p>`;
+                    
+                    prevBtn.style.opacity = currentStep === 0 ? '0.5' : '1';
+                    nextBtn.style.opacity = currentStep === totalSteps - 1 ? '0.5' : '1';
+                };
+                nextImage.onerror = function() {
+                    showError('Could not load the image. Please check your internet connection and refresh the page.');
+                };
+            }
+
+            function prevStep() {
+                console.log('Previous button clicked');
+                if (currentStep > 0) {
+                    currentStep--;
+                    updateFSM();
+                }
+            }
+
+            function nextStep() {
+                console.log('Next button clicked');
+                if (currentStep < totalSteps - 1) {
+                    currentStep++;
+                    updateFSM();
+                }
+            }
+
+            // Add event listeners
+            document.getElementById('prevBtn').addEventListener('click', prevStep);
+            document.getElementById('nextBtn').addEventListener('click', nextStep);
+
+            // Initialize
+            updateFSM();
+        });
+    </script>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="../index.html">← Back to Home</a>
+    </nav>
+
+    <article class="article-container">
+        <header class="article-header">
+            <h1 class="article-title">Finite State Machines</h1>
+            <div class="article-meta">
+                Written by Nathan Daniel • Last updated Jan 2025
+            </div>
+        </header>
+
+        <div class="article-content">
+            <p>
+                AI seems to be everywhere right now, driving cars, generating images, counting the number of s's in the word "strawberries". It's great for finding patterns in large datasets, but in robotics we don't really need that - in fact the only data robots use is a bunch of sensor readings. Not that it's easy or anything, it's a lot of sensors. Like a lot.
+            </p>
+
+            <div class="media-container">
+                <img src="../imgs/lesson_6_meme.png" alt="AI Meme" style="max-width: 60%; border-radius: 4px;">
+                <p class="caption">Don't worry, we'll get to AI in a few lessons. That B2B SaaS idea can wait.</p>
+            </div>
+
+            <p>
+                The next step in our "sense-think-act" education is structuring what we want the robot to do in a cohesive manner. That's where Finite State Machines (FSMs) come in. We basically break a robot's behavior into states (like "moving forward" or "turning") and define the triggers that cause it to switch between them (like "obstacle detected"). 
+
+            </p>
+            <div class="media-container">
+                <img src="../imgs/lesson_2_sense_think_act_loop.png" alt="Think Sense Act Loop" style="max-width: 60%; border-radius: 4px;">
+                <p class="caption">Recall the Think-Sense-Act loop from Lesson 2.</p>
+            </div>
+
+            <p>
+                A lot of the "thinking" we want robots to do to complete tasks like navigating around furniture, following a line, or opening a gripper — doesn't require machine learning or neural networks. Like most things in my life, it just needs ✨<b>structure</b>✨. That's where <b>Finite State Machines (FSMs)</b> come in.
+
+            </p>
+
+            <p>
+                An FSM doesn't learn or adapt — it just follows a set of clear rules. You break a robot's behavior into <b>states</b> (like "moving forward," "turning," or "charging") and then define <b>inputs</b> that trigger  switches between them. And depending on the state, there may be one or two <b>outputs</b> occurring before moving around to more states. FSMs don't make the robot "smart," but they <b>give structure to its decisions</b>, and that's often exactly what you need to build reliable, predictable behavior.
+
+            </p>
+
+            <p>
+                FSM's can be used for things other than robots too - let's use an example of how life used to be like for a software engineer before COVID.
+            </p>
+            <div class="media-container">
+                <img src="../imgs/lesson_6_fsm_simple.png" alt="simple fsm" style="max-width: 60%; border-radius: 4px;">
+            </div>
+
+            <p>
+                This example is pretty self explanatory - the states are WORK, HOME, and BED, and the triggers are the arrows in between the states. However this example is missing inputs and outputs.
+            </p>
+
+            <p>
+                Now let's do a slightly more complex FSM with something I'm calling the "Illusion of Free Will Vending Machine". The IoFWVM is a basic vending machine with two options (buttons), Coke or Pepsi. When it's waiting for the user to choose, both the Coke and Pepsi buttons are lit up, signaling that it's ready. The moment you press one - say, Coke - the machine will only have the Coke button lit up as it dispenses the beverage. The same would work in reverse if you selected Pepsi. After the drink has been dispensed, the vending machine resets itself. It also doesn't accept cash; it'll only accept a card so that there isn't any need to return change to the user. Also, no tipping.
+
+            </p>
+
+            <p>
+                Let's define the initial states before handling inputs and outputs.
+            </p>
+
+            <div style="margin: 2rem 0; overflow-x: auto;">
+                <h3 style="color: #5E35B1;">States of the IoFW Vending Machine</h3>
+                <table style="width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <thead>
+                        <tr>
+                            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e6e6e6; color: #5E35B1;">State</th>
+                            <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #e6e6e6; color: #5E35B1;">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;"><b>S<sub>0</sub> - Idle</b></td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;">The IoFW vending machine is patiently awaiting someone to use it. We'd call this state S<sub>0</sub>, the initial or default state.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;"><b>S<sub>1</sub> - Money Inserted + Waiting for Selection</b></td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;">Someone has inserted money into the vending machine, and it's now awaiting the choice of Pepsi or Coke with both buttons lit up.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;"><b>S<sub>2</sub> - Dispensing Coke</b></td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;">Coke was chosen, so it is in the process of dispensing a can of Coke as the Coke button stays lit.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem;"><b>S<sub>3</sub> - Dispensing Pepsi</b></td>
+                            <td style="padding: 1rem;">Pepsi was chosen, so it is in the process of dispensing a can of Pepsi as the Pepsi button stays lit.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>
+                Ok seems pretty easy so far. Now let's define our inputs. I'm gonna use something called Gray Code, which is a technique of indicating which inputs or outputs are on or off at any given moment. Every input is given a bit which can have 1 of 3 values: 0, which means it's off, 1, which means it's on, and X which means it doesn't matter whether it's on or off in the current situation. So if I have 5 inputs and I want to say that input 1 is on, input 5 is off, and the rest don't matter. The corresponding Gray Code would be: 1XXX0.
+            </p>
+
+            <p>
+                The vending machine has 4 inputs:
+            </p>
+
+            <div style="margin: 2rem 0; overflow-x: auto;">
+                <h3 style="color: #2E7D32;">Inputs of the IoFW Vending Machine</h3>
+                <table style="width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <thead>
+                        <tr>
+                            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e6e6e6; color: #2E7D32;">Input</th>
+                            <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #e6e6e6; color: #2E7D32;">Description</th>
+                            <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #e6e6e6; color: #2E7D32;">Gray Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;"><b>Money Paid</b></td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;">When this is on, it means that the user has paid for a drink. When off, it means it has not been paid.</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6; text-align: center;"><code>1XXX</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;"><b>Coke Selected</b></td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;">When this is on, it means the user has selected Coke.</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6; text-align: center;"><code>X1XX</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;"><b>Pepsi Selected</b></td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;">When this is on, it means the user has selected Pepsi.</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6; text-align: center;"><code>XX1X</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem;"><b>Dispenser Sensor</b></td>
+                            <td style="padding: 1rem;">Let's pretend we have a simple IR sensor at the bottom of the machine checking to see when a snack has dropped. When it's on, it means it's detected a snack that's fallen, and when it's off it means that no snack has fallen and isn't detected.</td>
+                            <td style="padding: 1rem; text-align: center;"><code>XXX1</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>
+                Now that we have our states and inputs, we can define the outputs. Outputs are the actions that the vending machine will take when it's in a certain state.
+            </p>
+
+            <div style="margin: 2rem 0; overflow-x: auto;">
+                <h3 style="color: #FF6464;">Outputs of the IoFW Vending Machine</h3>
+                <table style="width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <thead>
+                        <tr>
+                            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e6e6e6; color: #FF6464;">Output</th>
+                            <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #e6e6e6; color: #FF6464;">Description</th>
+                            <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #e6e6e6; color: #FF6464;">Gray Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;"><b>Coke LED</b></td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;">When on, the LED for the Coke button is on.</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6; text-align: center;"><code>1XXX</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;"><b>Pepsi LED</b></td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;">When on, the LED for the Pepsi button is on.</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6; text-align: center;"><code>X1XX</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;"><b>Coke Dispenser</b></td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6;">When this is on, a can of coke is being dispensed.</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #e6e6e6; text-align: center;"><code>XX1X</code></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem;"><b>Pepsi Dispenser</b></td>
+                            <td style="padding: 1rem;">When this is on, a can of pepsi is being dispensed.</td>
+                            <td style="padding: 1rem; text-align: center;"><code>XXX1</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                Alright, that was a lot of information in a short amount of time about a hypothetical vending machine. Let's actually build it out step by step using the interactive tool below.
+            </p>
+
+            <div style="margin: 4rem -2rem; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; background: #f8f9fa; padding: 3rem 0;">
+                <h2 style="color: #333; margin-bottom: 2rem; padding: 0 2rem; max-width: 1400px; margin-left: auto; margin-right: auto;">Building the Finite State Machine</h2>
+                
+                <div style="background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 3rem; margin-bottom: 2rem; max-width: 1400px; margin-left: auto; margin-right: auto;">
+                    <!-- Error Message -->
+                    <div id="jsError" class="error-message"></div>
+                    
+                    <!-- FSM Image Container -->
+                    <div class="fsm-container" style="min-height: 700px; display: flex; align-items: center; justify-content: center; position: relative;">
+                        <!-- Loading Overlay -->
+                        <div id="loadingOverlay" class="loading-overlay">
+                            <div class="loading-spinner"></div>
+                        </div>
+                        
+                        <!-- Step Counter -->
+                        <div style="position: absolute; top: 1.5rem; left: 1.5rem; z-index: 10;">
+                            <span id="stepCounter" style="background: rgba(240, 240, 240, 0.9); padding: 1rem 2rem; border-radius: 20px; font-size: 1.3rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Step 1 of 10</span>
+                        </div>
+                        
+                        <img id="fsmImage" src="../imgs/fsm/fsm_1.jpg" alt="FSM Step 1" style="width: 100%; height: auto; border-radius: 8px; max-height: 800px; object-fit: contain;">
+                        
+                        <!-- Navigation Buttons -->
+                        <button id="prevBtn" class="nav-button" style="width: 60px; height: 60px; font-size: 2rem; top: 40%;">←</button>
+                        <button id="nextBtn" class="nav-button" style="width: 60px; height: 60px; font-size: 2rem; top: 40%;">→</button>
+                    </div>
+
+                    <!-- Description -->
+                    <div id="stepDescription" style="background: #f8f9fa; padding: 2rem; border-radius: 8px; margin-top: 1rem; font-size: 1.2rem; line-height: 1.6; max-width: 1000px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <p style="margin: 0; color: #333;">
+                            Step 1: Let's begin by laying out all our states. Don't worry about the inputs and outputs for now.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </article>
+</body>
+</html> 

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encoders & Calibration | The Robotics Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            background-color: #faf9f6;
+            color: #292929;
+            line-height: 1.6;
+        }
+
+        .nav-bar {
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .nav-bar a {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            color: #292929;
+            text-decoration: none;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 80px auto 0;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-title {
+            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            color: #292929;
+        }
+
+        .article-meta {
+            color: #757575;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #292929;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .media-container {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .media-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .caption {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #757575;
+        }
+
+        .extended-caption {
+            font-size: 0.95rem;
+            color: #757575;
+            text-align: justify;
+            margin: 0.5rem auto 2rem;
+            line-height: 1.6;
+            max-width: 90%;
+            padding: 0 2rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="../index.html">← Back to Home</a>
+    </nav>
+
+    <article class="article-container">
+        <header class="article-header">
+            <h1 class="article-title">Encoders & Calibration</h1>
+            <div class="article-meta">
+                Written by Nathan Daniel • Last updated Jan 2025
+            </div>
+        </header>
+
+        <div class="article-content">
+            
+
+            <h2>Calibration (making yourself at home)</h2>
+
+            <p>
+                Imagine waking up in a pitch-black room with no idea of where you are. You can move your arms or legs, but without any perception, you don't know which way you're facing, how far you've moved, or where to go next. Instead you're stuck questioning which life choices ended you up in this situation.
+            </p>
+
+            <p>
+                That's exactly how a robot feels when it turns on (minus the existential crisis).
+            </p>
+
+            <p>
+                Before it can start moving around, it needs a reference point. Calibration is the process of helping the robot figure out where it is in the world so that every movement it makes afterward is based on something reliable.
+            </p>
+
+            <div class="media-container">
+                <img src="../imgs/lesson_5_3d_printer_calibrating.gif" alt="3D printer calibration" style="max-width: 100%; border-radius: 4px;">
+                <p class="caption">A 3D printer performing part of its calibration routine</p>
+            </div>
+
+            <p>
+                It's kind of like setting your GPS before heading out on a road trip. If you don't know where you are to begin with, it's hard to know where you're going. Calibration gives the robot a known reference point — usually called "home" — that all other movement is based on.
+            </p>
+
+            <h3>Calibration Strategies</h3>
+
+            <p>
+                Different robots use different calibration methods depending on their hardware and precision needs:
+            </p>
+
+            <ul style="margin-bottom: 3rem;">
+                <li><b>Limit switches:</b> One of the simplest but foolproof ways of calibrating is to have the robot move until it physically hits a switch, telling it "this is home”. Many 3D printers do this with their X and Y axes during calibration.</li>
+                <li><b>Markers:</b> The robot moves until a sensor detects a magnetic strip or reflective tag that marks a known alignment point.</li>
+                <li><b>Manually:</b> A human moves the robot to a known position and tells the software “this is zero.” This is actually sometimes used in robotic surgery, where surgical staff will first set up the robot next to a patient, then press a button to lock it as the origin</li>
+                <li><b>Self-calibration:</b> Higher-end robots may run a script at startup to find home on their own, using a combination of incremental and absolute encoder feedback and motor resistance. For instance, a robotic gripper might open and close until it senses resistance (like a table or object) or a spike in motor current, which it uses to detect the "fully closed" position without external sensors.
+                </li>
+            </ul>
+
+            <h3>Encoders: How Robots Track Movement</h3>
+
+            <p>
+                Motors make things robots move, but without sensors the robot has no clue how far, how fast, or even if it moved correctly. That's where encoders come in.
+            </p>
+
+            <p>ßß
+                Encoders are devices that measure motion (most commonly rotation) and convert it into data that the robot can use. With them, we can calculate all the fun things like distance, speed, and directionality.
+
+            </p>
+
+            <p>
+                Some encoders are super simple and just track basic movement. Others are more advanced and can give you the exact position of a motor shaft, even after a full power-down. In either case, encoders are a critical part of the think-sense-act loop as they help the robot compare what it wanted to do with what actually happened, and adjust accordingly.
+            </p>
+
+            <p>
+                Before diving into how encoders work, it's important to understand the two main ways they report information:
+            </p>
+
+            <h3>Incrementally </h3>
+
+            <p>
+                Incremental encoders tell you how much something has moved — not where it started. They work by generating pulses as the motor shaft spins. If it stops moving, it stops generating pulses. Count the pulses, and you can calculate distance, speed, and direction.
+            </p>
+
+            <p>
+                But they don't store position, so if the power cuts out or the robot restarts, you lose your place. You'll need to run a calibration sequence to reset the system.
+            </p>
+
+            <p>
+                Think of it like a stopwatch — great for measuring change, but it can't tell you what time it currently is.
+            </p>
+
+            <p>
+                So why use them?
+            </p>
+
+            <ul>
+                <li>They're cheaper and typically simpler</li>
+                <li>They often offer higher resolution (more pulses per rotation)</li>
+                <li>Perfect for systems that always start from a known position (like a 3D printer or CNC machine that homes on startup)</li>
+            </ul>
+
+            <h3>Absolutely</h3>
+
+            <p>
+                Absolute encoders tell you exactly where the motor is pointing or located, even after powering on. Every position gives off a unique signal, so the robot would know its orientation without needing to re-calibrate.
+            </p>
+
+            <p>
+                It's more like a compass — even if you turn it off and back on, it still knows you're facing northeast.
+            </p>
+
+            <p>
+                Great for:
+            </p>
+
+            <ul>
+                <li>Robots that need to remember their position between restarts</li>
+                <li>Systems that don't have homing routines or mechanical stops</li>
+                <li>High-precision tasks where reliability is critical</li>
+            </ul>
+
+            <p>
+                So if absolute encoders tell you exactly where you are on startup, why don't we just use them everytime? Wouldn't that remove the need for calibration?
+            </p>
+
+            <p>
+                Even with absolute encoders, calibration might be used to line up physical parts (like making sure a gripper is closed when the encoder says "0°"). Robots with complex linkages or long arms may need regular calibration to keep tiny mechanical errors from building up over time. It's usually a good idea to use a combination of incremental and absolute encoders in complex robots.
+            </p>
+
+            <p>
+                Now let's get into how different types of encoders actually function:
+            </p>
+
+            <h2>Optical Encoders</h2>
+
+            <p>
+                Optical encoders use a beam of light and a spinning disk with tiny holes or slits around the edge. As the disk rotates, the light shines through the holes and hits a sensor on the other side.
+            </p>
+
+            <p>
+                Every time a hole passes by, the sensor detects a flash of light — kind of like blinking. By counting these flashes (or pulses), the robot can tell how far something has rotated, and how fast it’s spinning.  The more holes on the disk, the more detailed the measurement — which means more precision!
+            </p>
+
+            <p>
+                In incremental optical encoders, the slits around the disk are evenly spaced. That means the encoder can count how many slits have passed — but it has no idea where it started when the robot powers on (remember you have to set a “home” position first and start counting from there) .In contrast, absolute optical encoders use a more complex disk pattern where the slits vary in position or width. This unique pattern allows the encoder to instantly recognize its position at startup — just by looking at which slits are visible (it’s kind of like barcodes for angles — each position gives a different pattern of light and dark, so the encoder knows exactly where it is without having to move).
+            </p>
+
+            <div class="media-container" style="text-align: center; margin: 2rem 0;">
+                <img src="../imgs/.gif" alt="Brushed DC Motor Animation" style="max-width: 100%; max-height: 400px;">
+                <p class="caption">An incremental optical encoderr</p>
+            </div>
+
+            <h3>Pros</h3>
+            <ul>
+                <li>Very high resolution — can detect tiny movements</li>
+                <li>Accurate and consistent in clean conditions</li>
+                <li>Commonly available as both incremental and absolute</li>
+            </ul>
+            
+            <h3>Cons</h3>
+            <ul>
+                <li>Sensitive to dust, dirt, and vibration — not ideal for messy environments</li>
+                <li>Can require careful alignment or shielding</li>
+                <li>Usually a bit bulkier than other types</li>
+            </ul>
+
+            <h3>Where you'll see them</h3>
+            <p>
+                CNC machines and laser cutters that need high precision, Camera gimbals, inspection arms, or any robot where smooth, accurate motion really matters            
+            </p>
+
+            <h2>Magnetic Encoders</h2>
+
+            <p>
+                Magnetic encoders use a small spinning magnet and a nearby sensor to track motion. As the magnet rotates, the magnetic field around it changes. Sensors (usually Hall effect sensors) detect those changes and use them to figure out how far or fast something has turned — or exactly what position it's in, depending on the type.  
+            </p>
+
+            <p>
+                In an incremental magnetic encoder, the sensor detects regular, repeating changes in the magnetic field as the magnet spins. These changes are used to generate pulses, and the encoder counts them to track changes in rotation. In an absolute magnetic encoder, the magnet is specially shaped (often with multiple poles or a unique magnetic pattern), and the sensor can detect its exact orientation right away. 
+            </p>
+
+            <p>
+                Unlike optical encoders, there’s no light, no tiny slits, and no worries about dust getting in the way — just a magnet and a sensor working together to read motion.
+            </p>
+            
+
+            <div class="media-container" style="text-align: center; margin: 2rem 0;">
+                <img src="../imgs/.gif" alt="Brushed DC Motor Animation" style="max-width: 100%; max-height: 400px;">
+                <p class="caption">Magnetic encoderr</p>
+            </div>
+
+            <h3>Pros</h3>
+            <ul>
+                <li>Very durable — no exposed parts or fragile components</li>
+                <li>Compact and easy to seal against dust, dirt, and moisture </li>
+                <li>Great for harsh or outdoor movements</li>
+            </ul>
+            
+            <h3>Cons</h3>
+            <ul>
+                <li>Cheaper versions have an average lower resolution than an optical competitor</li>
+                <li>Can be affected by external magnetic fields (not a super common issue, but remember - electric currents generate magnetic fields! that needs to be considered in complex robotic systems)</li>
+
+            </ul>
+
+            <h3>Where you'll see them</h3>
+            <p>
+                Robot joints, outdoor or industrial robots that operate in messy environments       
+            </p>
+            
+            <h2>Capacitive Encoders <i>(not super common, but growing) </i></h2>
+
+            <p>
+                Capacitive encoders track motion by measuring changes in capacitance — how well two surfaces can hold an electric charge. Inside the encoder, there’s a patterned disk that spins near a fixed surface. As the disk turns, the patterns on it cause tiny changes in the electric field between the two layers. 
+            </p>
+
+            <p>
+                The encoder reads those changes and uses them to figure out how far something has moved, similar to how optical or magnetic encoders work — but without relying on light or magnets.
+            </p>
+
+            <p>
+                In an incremental capacitive encoder, the spinning disk has a repeating pattern. As the pattern moves, the encoder measures regular changes in capacitance and counts them to track how far something has turned. With absolute capacitive encoders the pattern on the disk is more complex and varies around the full rotation. That unique pattern allows the encoder to instantly detect its exact position at startup, based on the specific capacitance reading at that point.
+            </p>
+            
+
+            <div class="media-container" style="text-align: center; margin: 2rem 0;">
+                <img src="../imgs/.gif" alt="Brushed DC Motor Animation" style="max-width: 100%; max-height: 400px;">
+                <p class="caption">Capacitive encoderr</p>
+            </div>
+
+            <h3>Pros</h3>
+            <ul>
+                <li>Very compact and lightweight</li>
+                <li>Resistant to electrical noise and interference (good for noisy circuits)</li>
+                <li>Sealed and protected against dust or moisture</li>
+            </ul>
+            
+            <h3>Cons</h3>
+            <ul>
+                <li>Not as common or widely supported in off-the-shelf robotics gear</li>
+                <li>Lower resolution in basic models compared to optical encoders</li>
+
+            </ul>
+
+            <h3>Where you'll see them</h3>
+            <p>
+                Lightweight systems where space and power are limited, portable or battery-powered robots, newer commercial servo motors with built-in capacitive feedback        
+            </p>
+
+            <h2>Why Calibration Actually Matters</h2>
+
+            <p>
+                At this point, you’ve probably gotten the idea: calibration isn’t just a setup step — it’s the foundation for everything a robot does after that.
+            </p>
+
+            <p>
+                Without it, even the most advanced sensors and encoders are basically guessing. A robot might think it’s moving 30 degrees, but if it started from the wrong place, that movement could put it in the wrong position — or worse, into something it shouldn’t be touching.
+            </p>
+
+            <h2>🔐 Calibration = Safety</h2>
+
+            <p>
+                In robots (and life), bad data = bad decisions. If a robot arm is even a few millimeters off, it could crash into a wall, miss its target, or worse — damage itself, the workspace, or someone nearby. Calibration ensures the robot always has an accurate understanding of where it is, so it can move safely and predictably.
+            </p>
+
+            <h2>🔁 Calibration = Repeatability</h2>
+
+            <p>
+                One of the biggest goals in robotics is to accomplish the same task over and over with consistent results. Calibration gives the robot a reliable starting point every time it boots up, which makes repeatability possible. This is especially important in things like manufacturing, 3D printing, or lab automation, where even small inconsistencies can lead to big problems.
+            </p>
+
+            <h2>🧰 Calibration = Easier Maintenance</h2>
+
+            <p>
+                Regular calibration can also help spot problems early. If a robot suddenly can’t reach its home position, or it hits a limit switch too early, it might mean something’s worn out or misaligned. In that way, calibration isn’t just about precision — it’s also like a built-in Dr's appointment for the robot’s mechanics.
+            </p>
+            
+            
+            <p>
+                Calibration gives your robot a reference, a routine, and a reality check. Whether you're building a hobby bot or working on a full industrial system, making sure your robot starts in the right place is one of the easiest ways to make sure it ends up in the right place too!
+            </p>
+        </div>
+    </article>
+</body>
+</html> 
