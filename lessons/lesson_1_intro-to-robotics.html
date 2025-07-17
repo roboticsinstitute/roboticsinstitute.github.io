@@ -9,7 +9,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: #faf9f6;  /* Warm cream color */
             color: #292929;
             line-height: 1.6;
@@ -27,7 +27,7 @@
         }
 
         .nav-bar a {
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             color: #292929;
             text-decoration: none;
             font-size: 1.1rem;
@@ -48,7 +48,7 @@
         }
 
         .article-title {
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             font-size: 2.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
@@ -280,45 +280,50 @@
 
         <div class="article-content">
             <h2>What's a Robot?</h2>
+
+            <div class="media-container">
+                <img src="../imgs/lesson_1_dancing.gif" alt="dancing robot">
+            </div>
+
             <p>
-                Before we begin we should define exactly what a robot is. The official definition is <i>any device that carries out tasks semi or fully autonomously</i>. So by definition, an air conditioning unit is technically a robot, which might seem absurd if you compare it to something like Boston Dynamics humanoid, Atlas, which fits its more classical picture. However as you'll come to see, a lot of what can be applied to simpler devices and systems can be used to explain robots!
+                In the comments section beneath every Boston Dynamics Youtube video, a common concern is that it's not long before the machines rise up against their human creators, but admittedly they do look pretty cool when they move around and stuff.
+            </p>
+            
+            <p>
+                Despite the widespread interest, there aren't that many companies building robots, at least compared to the number of B2B AI SaaS companies founded this quarter. To be fair, it's way harder to design, manufacture, and sell a robot than an app, but software can only take you so far when you need to solve problems in the real world.
+            </p>
+
+
+            <p>
+                With this website, I want to explain robotics in a way that makes sense if you've never touched a circuit board or written a line of code. There will be some math (sorry) and theory, but you don't need to be any sort of expert to get started. Robots aren't built by a single person - it takes teams of people with different skill sets working toward a shared goal. If you're curious, communicative, and willing to learn the fundamentals, there's a place for you in this field!
             </p>
 
             <p>
-                A more apt description would be that a robot is a physical device (or entity) that moves throughout the world and helps humans to more efficiently perform a task, or perform a task that a human couldn't on its own. 
+                Let's start with what a robot is. Robots are physical devices that move through the world and help humans perform tasks more efficiently or accomplish things we couldn't do alone. They're already used in industrial automation, healthcare, agriculture, and defense, and as the technology develops, they're expected to play a role in nearly every industry that involves interacting with the physical world.
+            </p>
+
+            <p> 
+                So why use robots at all? They're especially useful for tasks that are dangerous, repetitive, or physically demanding. While robots can be costly to build and maintain, their value comes from doing jobs that would otherwise be difficult or unsafe for humans. A good rule of thumb (known as Moravec’s Paradox) is that what’s easy for humans is hard for robots, and vice versa. You can grab your wallet amidst other items from your pocket without thinking, but even the most advanced robots and AI systems today would struggle with that. Meanwhile, an industrial robot can effortlesssly lift a car chassis, which would take multiple humans and most definitely induce cardiac arrest in an OSHA rep.
             </p>
 
             <div class="image-grid">
                 <div class="image-item">
                     <img src="../imgs/lesson_1_robotarm.jpg" alt="Industrial Robot Arm">
-                    <p class="short-caption">Industrial robot arm can effortlessly lift the massive chassis of a car</p>
+                    <p class="short-caption">Industrial robot arms can effortlessly lift the massive chassis of a car</p>
                 </div>
                 <div class="image-item">
                     <img src="../imgs/lesson_1_handsinpocket.webp" alt="Human Hand Task">
                     <p class="short-caption">You can easily reach into your pocket and find your wallet amongst other items</p>
                 </div>
             </div>
-            <p class="extended-caption">
-                <i>Moravec's Paradox states that what is easy for a human to accomplish is difficult for a robot, and vice versa. 
-                For instance, it would be extremely easy for you to reach into your pockets and pull out your wallet 
-                adrift between other items like your phone or keys without looking, but that seemingly simple task is currently beyond the current abilities of even the most advanced robotic/AI systems. Contrarily, a giant robotic arm in an automobile factory can effortlessly pick up the chassis of an entire car and move it to a 
-                different assembly line, which is something that would require multiple humans and most definitely 
-                induce cardiac arrest in an OSHA rep.</i>
-            </p>
-            <h2>Where's are Robots?</h2>
 
-            <p>
-                Now that we know what a robot is, where are they? Currently, robots can be found in industrial automation, healthcare, agriculture, and are expected to infiltrate other areas as well sooner or later (good thing you're getting involved with robots now, when they eventually gain sentience and rebel you might be spared if you already have a positive relationship with them).
-            </p>
-
-            <!-- First image and description -->
+            <h2>What kinds of robots are out there?</h2>
             <div class="image-text-container">
                 <div class="image-side">
                     <img src="../imgs/lesson_1_surgicalrobot.webp" alt="Surgical Robot" class="side-image">
                 </div>
                 <div class="text-side">
-                    <p>The Da Vinci surgical system revolutionized minimally invasive surgery. 
-                    By translating a surgeon's hand movements into smaller, precise movements of tiny instruments inside the patient's body, it enables complex procedures to be performed through just a few small incisions.</p>
+                    <p>The Da Vinci surgical system transformed how surgeons perform minimally invasive procedures. By translating a surgeon's hand movements into precise, tremor-filtered motions of tiny instruments, it enhances control, accuracy, and dexterity beyond what human hands can achieve alone. With surgical robots, complex operations are safer and less physically demanding for both patient and surgeon!</p>
                 </div>
             </div>
 
@@ -328,24 +333,25 @@
                     <img src="../imgs/lesson_1_farming.jpg" alt="Farming Robot" class="side-image">
                 </div>
                 <div class="text-side">
-                    <p>AgriRobot's autonomous farming system is a robot used for precision agriculture. 
-                        Using advanced computer vision and AI, these robots can navigate through crop rows independently, 
-                        performing targeted tasks like weeding and crop monitoring.</p>
+                    <p>AgriRobot's autonomous farming system is designed for precision agriculture. Using advanced computer vision and AI, these robots can independently navigate through crop rows, performing targeted tasks like weeding, seeding, and crop monitoring. By focusing on individual plants rather than entire fields, they help farmers reduce chemical use, improve yields, and save time in an industry facing rising labor shortages and increasing demand for sustainable practices.
+                    </p>
                 </div>
             </div>
-            <h2>Who are Robots?</h2>
 
-            <p> 
-                Despite the widespread appeal, there aren't that many tech companies that make robots (at least compared to the number of AI B2B SaaS startups), but the number of businesses and industries adopting automation is rising exponentially. Some prominent robotics companies include Boston Dynamics (of humanoid and dog robot notoriety), iRobot (Roomba), and Waymo (autonomous cars are in fact a type of robot!). 
+            <div class="image-text-container">
+                <div class="image-side">
+                    <img src="../imgs/lesson_1_waymo.jpeg" alt="Waymo" class="side-image">
+                </div>
+                <div class="text-side">
+                    <p>Autonomous vehicles like Waymo navigate the world without a human driver using sensors, machine learning, and detailed mapping. As a type of mobile robot, they represent one of the most advanced applications of robotics to reduce accidents, improve traffic efficiency, and reshape how we think about transportation. But there's Waymo work to be done in this field.
+                    </p>
+                </div>
+            </div>
 
-            </p>
-            
+            <h2>How can you work with robots?</h2>
+
             <p>
-                So what do people who work with robots actually do? The actual answer to that question is a bit complex - there really aren't that many people who are full-on 'robotics' engineers or roboticists, and for a good reason. Robotics is a vast field and the combination of multiple traditional engineering disciplines, and it's important to keep in mind that robots aren't built by a single person - they are the product of hundreds or thousands of people working together simultaneously. That shouldn't scare you - as I'm trying to get across in this series, you don't need to be the smartest person to work with robots; if you have great communication skills and know some fundamentals, you'll be fine!
-            </p>
-
-            <p>
-                Back to the different areas of robotics. Most would argue that the field is split into 3 major disciplines - mechanical, electrical, and software, though many roles in robotics might engage with more than one.
+                Robotics is split into 3 main disciplines - mechanical, software, and electrical. As a robotics engineer you'll likely need to interact with more than one. The better you understand each domain, the better you'll be at collaborating with teammates and designing systems that work together seamlessly.
             </p>
 
             <div class="discipline-section">
@@ -354,7 +360,7 @@
                 </div>
                 <div class="discipline-content">
                     <p>
-                        The mechanical side involves the physical structures and mechanisms that enable robots to interact with the environment. Much of this involves things called actuators. An <b>actuator</b> is a device that converts energy into physical motion, basically the part that moves (the muscles of the robot). The most common form of actuator would be any type of electric motor. For instance, motors on a drone spin really fast so that the propellers rotate fast enough to achieve lift. Mechanical engineers might spend their time designing the physical structure of the robot, as well as the pieces that engage with the actuators/motors to bring everything together.
+                        The mechanical side of robotics involves the physical pieces and mechanisms that move. Much of this involves things called actuators, which are devices that convert energy into physical motion. Essentially, they're the part of the robot that drives motion, or the 'muscles' of the robot. For example, the actuators of a drone are the electric motors that spin the propellers fast enough to achieve lift. Mechanical engineers spend a lot of time using 3D modeling software (CAD), prototyping, and iteratively improving on the design of the robot.
                     </p>
                 </div>
             </div>
@@ -365,7 +371,7 @@
                 </div>
                 <div class="discipline-content">
                     <p>
-                        Software entails writing code to perceive, plan, and execute tasks autonomously or under human guidance - essentially the logic the robot uses to do stuff. This may seem straightforward, but scope of it is vast - one software engineer might work on high-level planning algorithms to tell a robot to "do this when you see this", while another might work on low-level 'firmware' to ensure the hardware and software coordinate with one another optimally. These levels are what's called the 'software stack', or a layered framework of software components to enable a robot to 'think'.
+                        Software involves writing the code that helps a robot perceive, plan, and execute tasks, or the logic the robot uses to do stuff. One software engineer might work on high-level planning, like telling a robot "if you see this, do that," while another focuses on low-level firmware to ensure that the hardware and software work together smoothly. With a drone, the software would determine how the drone reacts to sensor input, stabilize itself in midair, and follow a flight path. These layers of control make up what's called the software stack: a layered framework that helps the robot process information and make decisions.
                     </p>
                 </div>
             </div>
@@ -376,14 +382,19 @@
                 </div>
                 <div class="discipline-content">
                     <p>
-                        Electrical bridges the gap between the mechanical and software components of robotics, acting as the nervous system that powers and connects everything. Electrical engineers ensure the robot's sensors, actuators, and control systems are all properly powered and communicate effectively. This involves designing circuits to distribute power from batteries or other energy sources, wiring sensors so they can send data to the robot's "brain," and ensuring motors receive the precise signals they need to move. Back in our drone example, the electrical components control the speed of the motors based on input from the software, allowing the drone to lift off and stay stable. Working on the electrical side means managing the flow of power and information, ensuring the hardware and software can function together seamlessly.
+                        Electrical bridges the gap between the mechanical and software components of robotics, acting as the nervous system that powers and connects everything. Electrical engineers ensure the robot's sensors, actuators, and control systems are all powered and communicating correctly. This involves designing circuits to distribute power from batteries or other energy sources, wiring sensors so they can send data to the robot's "brain," and ensuring motors receive the precise signals they need to move. Back in our drone example, the electrical components control the speed of the motors based on input from the software, allowing the drone to lift off and stay stable. Working on the electrical side means managing the flow of power and information, ensuring the hardware and software can function together seamlessly.
                     </p>
                 </div>
             </div>
 
             <p>
-                From basic automated devices like a toaster to advanced humanoid robots, the same fundamental principles apply—mechanical, electrical, and software systems working together in harmony to bring a robot to life. As you'll learn throughout this series, understanding how these systems interact is not only essential for mastering the technical aspects of robotics but also for effectively collaborating with others in the field.
+                By the way, you don't necessarily need to be on the technical side to get involved in robotics. The field is still relatively young and many of the best practices, standards, and ethical guidelines are still being sorted out. That means there's plenty of room for work in areas like law, policy, and ethics if that's where your interests lie.
             </p>
+
+            <p>
+                As hardware gets more capable and software grows more intelligent, robots are stepping out of labs and into the real world. This next chapter isn't just about building machines that move—it's about creating systems that work with us, learn from us, and adapt to the messy, unpredictable environments we live in. That's going to take engineers, artists, educators, and anyone curious enough to help shape the future. So if you're even a little intrigued, now's a great time to dive into robotics. Plus, when the robots do eventually achieve sentience and rebel, it wouldn't hurt to know how to turn them off.
+            </p>
+            
 
         </div>
     </article>

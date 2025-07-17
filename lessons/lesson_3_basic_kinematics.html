@@ -8,7 +8,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: #faf9f6;
             color: #292929;
             line-height: 1.6;
@@ -26,7 +26,7 @@
         }
 
         .nav-bar a {
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             color: #292929;
             text-decoration: none;
             font-size: 1.1rem;
@@ -47,7 +47,7 @@
         }
 
         .article-title {
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             font-size: 2.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
@@ -104,11 +104,11 @@
 
         <div class="article-content">
             <p>
-                Have you ever wondered what the exact angles your wrist, fingers, elbows, and shoulder need to form to pick up a glass of water optimally? Yeah, me neither - your brain just knows what to do, it's automatic (although thinking about that is a side-effect of graduate-level kinematics classes). A lot of that is from years of experience and instinct, but you are also getting visual feedback from your eyes and tactile feedback from your hands. For a robot, which lacks both human instinct and senses (again, it's basically a pile of rocks), every movement needs to be carefully planned out.           
+                Have you ever wondered what the exact angles your wrist, fingers, elbows, and shoulder need to form to pick up a glass of water optimally? Yeah, me neither - your brain just knows what to do, it's automatic. A lot of that is from years of experience and instinct, but you are also getting visual feedback from your eyes and tactile feedback from your hands. For a robot, which lacks both human instinct and senses, every movement needs to be carefully planned out.           
             </p>
 
             <p>
-                Kinematics is the branch of physics regarding the motion of objects — and we get to use it to define how parts of a robot move in relation to one another. In short, kinematics is math that tells a robot, "If I rotate this motor by 30 degrees, the arm will move to this exact point in space."
+                Kinematics is the branch of physics regarding the motion of objects — and we get to use it to define how parts of a robot move in relation to one another. In short, kinematics is math that tells a robot, "if you want to get over there, move yourself like this."
             </p>
 
             <div class="media-container">
@@ -125,7 +125,7 @@
                 Still with me? Now how would we program that arm to pick up pesky cups of water sitting on tables?
             </p>
             <div class="media-container" style="max-width: 400px; margin: 2rem auto;">
-                <img src="../imgs/lesson_3_arm.avif" alt="Inverse Kinematics">
+                <img src="../imgs/lesson_3_new_arm.png" alt="Inverse Kinematics">
                 <p class="caption">Your new arm that'll get you back in the factory in no time</p>
             </div>
             
@@ -140,7 +140,7 @@
 
             <div class="media-container" style="max-width: 400px; margin: 2rem auto;">
                 <img src="../imgs/lesson_3_parts_of_a_robot.jpeg" alt="parts of a robot">
-                <p class="caption">Check out the links, joints, and end-effector of this robot arm - unlike your arm, this robot has 3 links and 3 joints</p>
+                <p class="caption">Check out the 3 links, 3 joints, and end-effector of this robotic arm</p>
             </div>
 
             <p> 
@@ -163,7 +163,7 @@
             </div>
 
             <p>
-                The first part of the equation, <i>L₁cos(θ₁)</i> and <i>L₁sin(θ₁)</i> are pretty straightforward - they calculate the position of the end of Link 1. However since Link 2 is attached to the end of Link 1, we need to add both angles in the second part of the equation (<i>L₂cos(θ₁+θ₂)</i> and <i>L₂sin(θ₁+θ₂)</i>) to compensate for Link 1's position. If we had more than 2 links, we'd continue this pattern of adding the angles of the previous links to the current link's position.
+                The first parts of the equations, <i>L₁cos(θ₁)</i> and <i>L₁sin(θ₁)</i> are pretty straightforward - they calculate the position of the end of Link 1. However since Link 2 is attached to the end of Link 1, we need to add both angles in the second part of the equation (<i>L₂cos(θ₁+θ₂)</i> and <i>L₂sin(θ₁+θ₂)</i>) to compensate for Link 1's position. If we had more than 2 links, we'd continue this pattern of adding the angles of the previous links to the current link's position.
             </p>
 
             <h2>Try It Yourself!</h2>
@@ -211,11 +211,10 @@
 
             <h2>The (annnoying) Problem of Multiple Solutions</h2>
 
+            
             <p>
-                One tricky thing about kinematics is that like an SAT reading comprehension section, there are often multiple valid solutions. Imagine reaching for a cup of water — you could bend your elbow in two different ways (one normal, one awkward) and still get your hand to the cup. Even worse, if you try to reach too far — say, if the cup's across the room — the math will straight-up tell you there's no solution.
-
+                One tricky thing about kinematics is that there are often multiple valid combinations of joint angles that can get you to the same place. For instance, if you were reaching for a cup of water you could bend your elbow in two different ways (one normal, one awkward) and still get your hand to the cup. And what get's even trickier is that in some instances you have to maneuver around obstacles, which means you have to find the best solution out of many possible ones.
             </p>
-
             <p>
                 <b>Inverse kinematics</b> is like reverse-engineering a robot's movements. Instead of plugging in the angles like we did in the forward kinematics section, we're going to plug in the desired position of the end-effector and solve for the angles. This is a lot more useful than forward kinematics (even though it's a lot more complicated) because now we can think of a place we want to move the robot and solve for the angles that fit that solution.
             </p>

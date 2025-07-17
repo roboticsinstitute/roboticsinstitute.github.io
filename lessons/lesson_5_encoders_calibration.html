@@ -9,7 +9,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: #faf9f6;
             color: #292929;
             line-height: 1.6;
@@ -27,7 +27,7 @@
         }
 
         .nav-bar a {
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             color: #292929;
             text-decoration: none;
             font-size: 1.1rem;
@@ -48,7 +48,7 @@
         }
 
         .article-title {
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             font-size: 2.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
@@ -147,9 +147,9 @@
             </p>
 
             <ul style="margin-bottom: 3rem;">
-                <li><b>Limit switches:</b> One of the simplest but foolproof ways of calibrating is to have the robot move until it physically hits a switch, telling it "this is home”. Many 3D printers do this with their X and Y axes during calibration.</li>
+                <li><b>Limit switches:</b> One of the simplest but foolproof ways of calibrating is to have the robot move until it physically hits a switch, telling it "this is home". Many 3D printers do this with their X and Y axes during calibration.</li>
                 <li><b>Markers:</b> The robot moves until a sensor detects a magnetic strip or reflective tag that marks a known alignment point.</li>
-                <li><b>Manually:</b> A human moves the robot to a known position and tells the software “this is zero.” This is actually sometimes used in robotic surgery, where surgical staff will first set up the robot next to a patient, then press a button to lock it as the origin</li>
+                <li><b>Manually:</b> A human moves the robot to a known position and tells the software "this is zero." This is actually sometimes used in robotic surgery, where surgical staff will first set up the robot next to a patient, then press a button to lock it as the origin</li>
                 <li><b>Self-calibration:</b> Higher-end robots may run a script at startup to find home on their own, using a combination of incremental and absolute encoder feedback and motor resistance. For instance, a robotic gripper might open and close until it senses resistance (like a table or object) or a spike in motor current, which it uses to detect the "fully closed" position without external sensors.
                 </li>
             </ul>
@@ -236,11 +236,11 @@
             </p>
 
             <p>
-                Every time a hole passes by, the sensor detects a flash of light — kind of like blinking. By counting these flashes (or pulses), the robot can tell how far something has rotated, and how fast it’s spinning.  The more holes on the disk, the more detailed the measurement — which means more precision!
+                Every time a hole passes by, the sensor detects a flash of light — kind of like blinking. By counting these flashes (or pulses), the robot can tell how far something has rotated, and how fast it's spinning.  The more holes on the disk, the more detailed the measurement — which means more precision!
             </p>
 
             <p>
-                In incremental optical encoders, the slits around the disk are evenly spaced. That means the encoder can count how many slits have passed — but it has no idea where it started when the robot powers on (remember you have to set a “home” position first and start counting from there) .In contrast, absolute optical encoders use a more complex disk pattern where the slits vary in position or width. This unique pattern allows the encoder to instantly recognize its position at startup — just by looking at which slits are visible (it’s kind of like barcodes for angles — each position gives a different pattern of light and dark, so the encoder knows exactly where it is without having to move).
+                In incremental optical encoders, the slits around the disk are evenly spaced. That means the encoder can count how many slits have passed — but it has no idea where it started when the robot powers on (remember you have to set a "home" position first and start counting from there) .In contrast, absolute optical encoders use a more complex disk pattern where the slits vary in position or width. This unique pattern allows the encoder to instantly recognize its position at startup — just by looking at which slits are visible (it's kind of like barcodes for angles — each position gives a different pattern of light and dark, so the encoder knows exactly where it is without having to move).
             </p>
 
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
@@ -278,7 +278,7 @@
             </p>
 
             <p>
-                Unlike optical encoders, there’s no light, no tiny slits, and no worries about dust getting in the way — just a magnet and a sensor working together to read motion.
+                Unlike optical encoders, there's no light, no tiny slits, and no worries about dust getting in the way — just a magnet and a sensor working together to read motion.
             </p>
             
 
@@ -309,7 +309,7 @@
             <h2>Capacitive Encoders <i>(not super common, but growing) </i></h2>
 
             <p>
-                Capacitive encoders track motion by measuring changes in capacitance — how well two surfaces can hold an electric charge. Inside the encoder, there’s a patterned disk that spins near a fixed surface. As the disk turns, the patterns on it cause tiny changes in the electric field between the two layers. 
+                Capacitive encoders track motion by measuring changes in capacitance — how well two surfaces can hold an electric charge. Inside the encoder, there's a patterned disk that spins near a fixed surface. As the disk turns, the patterns on it cause tiny changes in the electric field between the two layers. 
             </p>
 
             <p>
@@ -348,11 +348,11 @@
             <h2>Why Calibration Actually Matters</h2>
 
             <p>
-                At this point, you’ve probably gotten the idea: calibration isn’t just a setup step — it’s the foundation for everything a robot does after that.
+                At this point, you've probably gotten the idea: calibration isn't just a setup step — it's the foundation for everything a robot does after that.
             </p>
 
             <p>
-                Without it, even the most advanced sensors and encoders are basically guessing. A robot might think it’s moving 30 degrees, but if it started from the wrong place, that movement could put it in the wrong position — or worse, into something it shouldn’t be touching.
+                Without it, even the most advanced sensors and encoders are basically guessing. A robot might think it's moving 30 degrees, but if it started from the wrong place, that movement could put it in the wrong position — or worse, into something it shouldn't be touching.
             </p>
 
             <h2>🔐 Calibration = Safety</h2>
@@ -370,7 +370,7 @@
             <h2>🧰 Calibration = Easier Maintenance</h2>
 
             <p>
-                Regular calibration can also help spot problems early. If a robot suddenly can’t reach its home position, or it hits a limit switch too early, it might mean something’s worn out or misaligned. In that way, calibration isn’t just about precision — it’s also like a built-in Dr's appointment for the robot’s mechanics.
+                Regular calibration can also help spot problems early. If a robot suddenly can't reach its home position, or it hits a limit switch too early, it might mean something's worn out or misaligned. In that way, calibration isn't just about precision — it's also like a built-in Dr's appointment for the robot's mechanics.
             </p>
             
             

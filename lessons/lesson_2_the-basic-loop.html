@@ -8,7 +8,7 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: #faf9f6;
             color: #292929;
             line-height: 1.6;
@@ -26,7 +26,7 @@
         }
 
         .nav-bar a {
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             color: #292929;
             text-decoration: none;
             font-size: 1.1rem;
@@ -47,7 +47,7 @@
         }
 
         .article-title {
-            font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             font-size: 2.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
@@ -87,6 +87,50 @@
             font-size: 0.9rem;
             color: #757575;
         }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            color: #2b6cb0;
+            cursor: help;
+            border-bottom: 1px dotted #2b6cb0;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 300px;
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -150px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -104,65 +148,52 @@
 
         <div class="article-content">
             <p>
-                While cool videos of robots doing parkour and solving Rubix cubes might make them seem intelligent, in reality they're just big dumb slabs of hardware (a pile of rocks) that's completely incapable of thinking for itself unless you carefully define every step of the process. Unlike humans, who can use critical thinking and problem-solving skills to adapt, robots rely entirely on sets of instructions to interpret their environment and act accordingly. Without explicit instructions, a robot won't know what to do, no matter how advanced it appears.
+                The internet is brimming with clips of robots doing parkour, solving Rubik's cubes, and engaging in related shenanigans. At first glance, it might seem like they're ready to take over the world. But in reality, robots are big piles of hardware that can't do much unless we spell things out for them.
             </p>
-            
+
             <div class="media-container">
                 <img src="../imgs/lesson_2_rubix.webp" alt="robot solving rubix">
                 <p class="caption">It would take me about 30 years to solve a Rubix cube by hand, but OpenAI's robot Dactyl did it in a few seconds</p>
             </div>
 
-
             <p>
-                Because of this, we really have to "algorithm-ize" the thought process behind problem solving, otherwise we'd have to tediously arrange a set of actions to respond to a given input (which could be done for smaller, simpler pieces of technology that operate in less complicated environments). Most robots accomplish this by following a simple pattern to interact with the world. This loop, called the sense-think-act cycle, is what allows robots to function in dynamic environments. Here's how it works:
+                Robots don't think like humans; they follow instructions. So to get them to do anything meaningful, we have to break down the thought process behind problem solving into step-by-step instructions, or in more technical terms, we have to 'algorithmize' the task. That's because even something as mundane as picking up a glass of water involves dozens of subtle calculations, like grip force, balance, and the motion of the liquid. Your brain handles all of this instinctively thanks to years of experience, but robots don't have intuition.
             </p>
 
             <p>
-                <b>1. Sensing:</b> A sensor, or a device that measures physical quantities (like cameras for vision, microphones for sound, or gyroscopes for balance), detects information from the environment and sends a signal to the robot.<br><br>
-                <b>2. Thinking:</b> The robot's programming interprets that signal and makes a decision based on its code. This is where algorithms, AI, and control logic come into play—determining what action to take.<br><br>
-                <b>3. Acting:</b> An output signal is sent to an actuator (a motor, servo, piston) which moves a part of the robot to execute the decision.
+                And no, slapping a GPU on your Roomba and plugging it into ChatGPT won't magically make it smart. AI is great at spotting patterns in large datasets, but in robotics we're mostly dealing with real-time sensor readings. For that, a much simpler approach does the trick.
+            </p>
+
+            <p>
+                Most robots follow a simple pattern to interact with the world. This pattern, called the sense-think-act loop, is what allows robots to function in dynamic environments. Here's how it works:
+            </p>
+
+            <p>
+                <b>Sense:</b> Sensors, or devices that measure something, gather information from the environment <br><br>
+                <b>Think:</b> With that information, the robot calculates what to do next<br><br>
+                <b>Act:</b> The robot does something in response (usually by moving something like an actuator)
             </p>
 
             <div class="media-container">
                 <img src="../imgs/lesson_2_sense_think_act_loop.png" alt="The Sense-Think-Act cycle diagram">
-                <p class="caption">This loop repeats continuously, allowing robots to react and adapt to their surroundings in real time. </p>
-            </div>
-        
-            <h2>The Human Parallel</h2>
-            <p>
-                This process may sound familiar because it's essentially how we interact with the world. Our brains process sensory input—like sight, sound, and touch—then make decisions and send signals to our muscles to move. If you touch a hot stove, for instance, the nerves in your skin immediately send a pain signal to your brain, which processes it as "SOMETHING REALLY HOT AHHH" and instructs your hand to pull away. Robots kinda do the same thing, just with a different manner of brain and muscles.
-            </p>
-            
-            <h2>The Loop in Action</h2>
-            <p>
-                Let's take a really simple robot vacuum as an example. The sensor used would be something called an infrared (IR) sensor that essentially shoots a beam of energy forward and measures the time it takes for that light to travel back. From that time and the strength of the beam of light, the distance to the nearest object can be calculated.
-
-            </p>
-
-            <p>
-                A really simple thought process can be followed: when the robot doesn't detect anything within 10 centimeters in front of the vacuum, a signal is sent to the motors powering the wheels. However, when something is detected in that range, the robot will stop, turn right, and then continue the loop.
-            </p>
-
-            <div class="media-container">
-                <img src="../imgs/lesson_2_vacuum_flowchart.png" alt="The basic loop in action" style="max-width: 80%;">
+                <p class="caption">This loop repeats continuously, allowing robots to react and adapt to their surroundings in real time.</p>
             </div>
 
             <p>
-                With this sense-think-act loop, you can basically get a very simple robot to cover your entire home given enough time (assuming there aren't any stairs)! The same basic process applies to any robot, whether it's a humanoid navigating obstacles, a robotic vacuum avoiding furniture, or a robotic arm assembling car parts - just with way more sensors, computers, and actuators.
+                This process may sound familiar because it's actually how humans interact with the world. Our brains process sensory input—like sight, sound, and touch—then make decisions and send signals to our muscles to move. If you touch a hot stove, for instance, the nerves in your skin immediately send a pain signal to your brain, which processes it as "SOMETHING REALLY HOT AHHH" and instructs your hand to pull away. Robots kinda do the same thing, just with a different manner of brain and muscles.
+            </p>
+
+            <p>
+                Let's take a robot vacuum for example. It uses something called an <span class="tooltip">infrared sensor<span class="tooltiptext">An IR sensor shoots a beam of energy forward and measures the time it takes for that light to travel back. From that time and the strength of the beam of light, the distance to the nearest object can be calculated. These sensors are really common in robotics since they're a simple and cheap method of measuring accurate distance on the fly.</span></span> to detect nearby objects. If nothing's within 10 centimeters, the robot sends a signal to it's motorized wheels to move forward. If it senses something, it stops, turns 90, and continues. And with just that logic, it will eventually clean your whole floor (assuming there aren't any stairs, you might need AI for that). The same basic process applies to any robot, whether it's a humanoid navigating obstacles or a Roomba cleaning your floor - just with way more sensors, computers, and actuators.
             </p>
 
             <div class="media-container">
                 <img src="../imgs/lesson_2roomba.gif" alt="A roomba">
                 <p class="caption">A roomba vacuuming a room using a unique but adorable puppy sensor</p>
             </div>
-            
-            <h2>Why Does This Matter?</h2>
 
             <p>
-                Understanding this loop is fundamental to robotics. Whether you're designing an autonomous drone, programming a self-driving car, or even just playing with a hobby robot, the sense-think-act cycle is always at play. Mastering it allows engineers to build smarter, more capable machines that can interact with the world in increasingly human-like ways. If you're curious, this overall loop that we've been talking about is more or less what the field of controls systems is about, which is something I'll definitely be covering more in depth later in this course.</p>
-
-            <p>
-                So the next time you see a robot doing something really cool, just remember—it's all just sensors, algorithms, and motors following the same loop over and over again - which is even more impressive because it was probably put together by a team of grad students with a $17 budget.
+                So next time you see a robot doing something cool online, don't credit the robot. Tip your hat to the grad students who translated something impossibly human into motion with a $30 budget.
             </p>
         </div>
 
