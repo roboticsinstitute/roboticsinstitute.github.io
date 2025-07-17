@@ -96,7 +96,7 @@
 
     <article class="article-container">
         <header class="article-header">
-            <h1 class="article-title">Basic Kinematics</h1>
+            <h1 class="article-title">Kinematics</h1>
             <div class="article-meta">
                 Written by Nathan Daniel • Last updated Jan 2025
             </div>
@@ -108,7 +108,7 @@
             </p>
 
             <p>
-                Kinematics is the branch of physics regarding the motion of objects — and we get to use it to define how parts of a robot move in relation to one another. In short, kinematics is math that tells a robot, "if you want to get over there, move yourself like this."
+                Kinematics is the branch of physics regarding the motion of objects, which we use to define how parts of a robot move in relation to one another. It's math that tells a robot, <i>"if you want to get over there, move yourself like this."</i>
             </p>
 
             <div class="media-container">
@@ -118,7 +118,7 @@
 
             <h2>Forward Kinematics: From Joints to Position</h2>
             <p>
-                Let's pretend we live in a dystopian cyberpunk future - neon lights, sketchy alleway mechanics, and of course a horrific factory accident that costs you an arm. Unfortunately since money's tight and universal healthcare still doesn't exist, you ended up with a pretty simple robot prosthetic replacement arm. No wrist rotation or fingers - just a budget friendly claw that can open and close.
+                Let's pretend we live in a dystopian cyberpunk future complete with neon lights, sketchy alleway mechanics, and of course a horrific factory accident that costs you an arm. Unfortunately since money's tight and universal healthcare still doesn't exist you ended up with a pretty simple robot prosthetic replacement arm. No wrist rotation or fingers - just a budget friendly claw that can open and close.
             </p>
 
             <p> 
@@ -128,28 +128,25 @@
                 <img src="../imgs/lesson_3_new_arm.png" alt="Inverse Kinematics">
                 <p class="caption">Your new arm that'll get you back in the factory in no time</p>
             </div>
-            
-            <p style="margin-bottom: 1rem;">
-                First, we need to define a few things
-            </p>
-            <ul style="margin-bottom: 3rem;">
-                <li>A <b>joint</b> is where two links of the robot come together and rotate. If your arm were a robot arm, your shoulder and elbow would be considered joints</li>
-                <li><b>Links</b> are the solid segments between joints — in your arm, your forearm and upper arm are the links</li>
-                <li>The <b>end-effector</b> is the tool attached to the end of the robot. For you, that's the gripper I mentioned. For other robots, this could be a suction cup, welding tool, or some other device — the whole point of a robot arm is usually to move a specialized tool to the right spot to complete a task</li>
-            </ul>
-
-            <div class="media-container" style="max-width: 400px; margin: 2rem auto;">
-                <img src="../imgs/lesson_3_parts_of_a_robot.jpeg" alt="parts of a robot">
-                <p class="caption">Check out the 3 links, 3 joints, and end-effector of this robotic arm</p>
-            </div>
 
             <p> 
-                <b>Forward kinematics</b> is the process of calculating where a robot's end-effector will be given the angles of its joints and the size of the robot. It's used to calculate the exact position of your "hand" based on the angles of the two joints and the lengths of the two links- perfect for planning precise movements like grabbing pesky cups of water sitting on tables.
+                <b>Forward kinematics</b> is the process of calculating where a robot's tool will be given the angles of its moving parts and the size of the robot. It's used to calculate the exact position of your "hand" based on the angles of the two moving parts and the lengths of the two arm segments, perfect for planning precise movements like grabbing pesky cups of water sitting on tables.
+            </p>
+            
+            <p style="margin-bottom: 1rem;">
+                To start programming our prosthetic, we need to define a few things. A <b>joint</b> is where two links of the robot come together and rotate. If your arm were a robot arm, your shoulder and elbow would be considered joints. These are usually depicted as circles in kinematic diagrams and drawings. <b>Links</b> are the solid segments between joints — in your arm, your forearm and upper arm are the links. These are depicted as lines between circles (joints) in diagrams. The <b>end-effector</b> is the tool attached to the end of the robot. For you, that's the gripper I mentioned. For other robots, this could be a suction cup, welding tool, or some other device — the whole point of a robot arm is usually to move a specialized tool to the right spot to complete a task. Usually, end-effectors are depicted as another joint at the end of the last link, or are ommitted from diagrams altogether (since end effectors vary from robot to robot, we only really care about where they end up in space).
+            </p>
+
+            <div class="media-container" style="max-width: 600px; margin: 2rem auto;">
+                <img src="../imgs/lesson_3_kinematics_diagram.png" alt="parts of a robot">
+            </div>
+
+            <p>
+                Now that we know what the parts of the robot are, take a look at the diagram above. This is a kinematic diagram of the robot arm I described earlier. Starting from the origin, we can trace the arm's structure: the blue dot J₁ represents the first joint (basically where your shoulder would be), followed by L1, which is the first link of the arm (your upper arm). The second joint, J₂, represents your elbow, and L2 is your forearm. Finally, the end-effector (EE) represents the gripper at the end of the arm.
             </p>
 
             <p>
-                
-                By using some trigonometry, you can predict exactly where that end-effector will end up. In fact, the equations for calculating the X and Y coordinates of your arm in space are:
+                We can predict exactly where that end-effector will end up by treating each link as a vector and using some trigonometry to find the position of the end-effector. The equations to calculate the (X,Y) coordinates of our end-effector are:
             </p>
             <div class="media-container">
                 <img src="../imgs/lesson_3_forward_equations.JPG" alt="Inverse Kinematics">
