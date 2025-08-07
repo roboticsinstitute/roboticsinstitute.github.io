@@ -351,7 +351,7 @@
 
         <div class="article-content">
             <p>
-                AI seems to be everywhere right now, driving cars, generating images, counting the number of r's in the word "strawberries". It's great for finding patterns in large datasets, but in robotics we don't really need that - in fact the only data robots use is a bunch of sensor readings. Which definitely can be a lot of data — but instead of analyzing it with a neural network, we're usually just waiting for a simple threshold or trigger to be met. That's where a <b>Finite State Machine (FSM)</b> comes in: it lets us structure a robot's behavior around clear, predictable rules, not pattern recognition.
+                AI seems to be everywhere right now: driving cars, generating images, counting the number of r's in the word "strawberries". It can be great for finding patterns in large datasets, but in robotics we're usually reading a bunch of sensor readings and waiting for different thresholds to be met. That's where <b>Finite State MachineS (FSM's)</b> come in.
             </p>
 
             <div class="media-container">
@@ -360,7 +360,7 @@
             </div>
 
             <p>
-                The next step in our "sense-think-act" education is structuring what we want the robot to do in a cohesive manner. That's where FSMs come in. We basically break a robot's behavior into states (like "moving forward" or "turning") and define the triggers that cause it to switch between them (like "obstacle detected"). 
+                A lot of the "thinking" robots need to complete tasks doesn't require machine learning or neural networks. Like most things in my life, it just needs ✨<b>structure</b>✨.
 
             </p>
             <div class="media-container">
@@ -369,12 +369,7 @@
             </div>
 
             <p>
-                A lot of the "thinking" we want robots to do to complete tasks like navigating around furniture, following a line, or opening a gripper — doesn't require machine learning or neural networks. Like most things in my life, it just needs ✨<b>structure</b>✨. That's where <b>Finite State Machines (FSMs)</b> come in.
-
-            </p>
-
-            <p>
-                An FSM doesn't learn or adapt — it just follows a set of clear rules. You break a robot's behavior into <b>states</b> (like "moving forward," "turning," or "charging") and then define <b>inputs</b> that trigger  switches between them. And depending on the state, there may be one or two <b>outputs</b> occurring before moving around to more states. FSMs don't make the robot "smart," but they <b>give structure to its decisions</b>, and that's often exactly what you need to build reliable, predictable behavior.
+                An FSM doesn't learn or adapt; it just follows a set of clear rules. You break a robot's behavior into <b>states</b> (like "moving forward," "turning," or "charging") and then define <b>inputs</b> that trigger  switches between them. And depending on the state, there may be one or two <b>outputs</b> occurring before moving around to more states. FSMs don't make the robot "smart," but they <b>give structure to its decisions</b>, and that's often exactly what you need to build reliable, predictable behavior.
 
             </p>
 
@@ -390,7 +385,7 @@
             </p>
 
             <p>
-                Now let's do a slightly more complex FSM with something I'm calling the "Illusion of Free Will Vending Machine". The IoFWVM is a basic vending machine with two options (buttons), Coke or Pepsi. When it's waiting for the user to choose, both the Coke and Pepsi buttons are lit up, signaling that it's ready. The moment you press one - say, Coke - the machine will only have the Coke button lit up as it dispenses the beverage. The same would work in reverse if you selected Pepsi. After the drink has been dispensed, the vending machine resets itself. It also doesn't accept cash; it'll only accept a card so that there isn't any need to return change to the user. Also, no tipping.
+                Now let's do a slightly more complex FSM with something I'm calling the <i>"Illusion of Free Will Vending Machine"</i>. The IoFWVM is a basic vending machine with two options: Coke or Pepsi. When it's waiting for the user to make their choice, both the Coke and Pepsi buttons are lit up, signaling that it's ready. The moment you press one - say, Coke - the machine will only have the Coke button lit up as it dispenses the beverage. The same would work in reverse if you selected Pepsi. After the drink has been dispensed, the vending machine resets itself. It also doesn't accept cash; it'll only accept a card so that there isn't any need to return change to the user.
 
             </p>
 
@@ -429,7 +424,7 @@
             </div>
 
             <p>
-                Ok seems pretty easy so far. Now let's define our inputs. I'm gonna use something called Gray Code, which is a technique of indicating which inputs or outputs are on or off at any given moment. Every input is given a bit which can have 1 of 3 values: 0, which means it's off, 1, which means it's on, and X which means it doesn't matter whether it's on or off in the current situation. So if I have 5 inputs and I want to say that input 1 is on, input 5 is off, and the rest don't matter. The corresponding Gray Code would be: 1XXX0.
+                Now let's define our inputs. I'm gonna use something called Gray Code, which is a technique of representing a value with a series of bits. Every input is given a bit which can have 1 of 3 values: 0, which means it's off, 1, which means it's on, and X which means it doesn't matter whether it's on or off in the current situation. So if I have 5 inputs and want to say that input #1 is on, input #5 is off, and the rest don't matter, the corresponding Gray Code would be: 1XXX0.
             </p>
 
             <p>
@@ -510,7 +505,7 @@
                 </table>
             </div>
             <p style="margin: 4rem 0;">
-                Alright, that was a lot of information in a short amount of time about a hypothetical vending machine. Try out this interactive tool below to see how the vending machine works and how the state, inputs, and outputs work together as you get a drink (also there's a reset button in case my JavaScript skills break your webpage, but it's not actually real in the example).
+                Alright, that was a lot of information about a hypothetical vending machine in a short amount of time. Try out this interactive tool below to see how the vending machine works and how the state, inputs, and outputs work together as you get a drink (also there's a reset button in case my JavaScript skills break your webpage, but it's not actually real in the example).
             </p>
 
             <div style="margin: 6rem 0; background: #f8f9fa; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 2rem;">
@@ -698,6 +693,9 @@
                             </table>
                         </div>
                     </div>
+                    <p style="margin-top: 4rem;">
+                        Alright, so hopefully you now have some idea of how FSM's work. This article might be a bit contrived but I'm hoping that it's a good introduction to the concept with an interesting example. FSM's are a great way to structure a robot's behavior and to track what all your actuators and sensors are doing in any given moment.
+                    </p>
                 </div>
             </div>
 

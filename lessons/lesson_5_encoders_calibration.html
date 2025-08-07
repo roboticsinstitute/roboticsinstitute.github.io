@@ -99,6 +99,51 @@
             padding: 0 2rem;
             display: block;
         }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            color: #2b6cb0;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 300px;
+            background-color: #f8f9fa;
+            color: #292929;
+            text-align: left;
+            padding: 1rem;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -150px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #f8f9fa transparent transparent transparent;
+        }
+
     </style>
 </head>
 <body>
@@ -120,60 +165,70 @@
             <h2>Calibration (making yourself at home)</h2>
 
             <p>
-                Imagine waking up in a pitch-black room with no idea of where you are. You can move your arms or legs, but without any perception, you don't know which way you're facing, how far you've moved, or where to go next. Instead you're stuck questioning which life choices ended you up in this situation.
+                Imagine waking up in a pitch black room with no concept of where you are. You can freely move your arms or legs, but don't know which way you're facing, how far you've moved, or where to go next. Instead you're stuck in place questioning which life choices ended you up in this situation.
             </p>
 
             <p>
                 That's exactly how a robot feels when it turns on (minus the existential crisis).
             </p>
 
+            <div class="media-container">
+                <img src="../imgs/lesson_5_confusion.jpg" alt="" style="max-width: 50%; border-radius: 4px;">
+            </div>
+
+
             <p>
-                Before it can start moving around, it needs a reference point. Calibration is the process of helping the robot figure out where it is in the world so that every movement it makes afterward is based on something reliable.
+                If you don't know where you are to begin with, it's hard to know where you're going. Before a robot can start moving around, it needs a reference point. <b>Calibration </b> is a process that allows the robot to know where it is in the world, usually by setting a known position as the origin, or "home". It's kind of like setting your GPS before heading out on a road trip. 
             </p>
+
+            <!-- <p>
+                Different robots use different calibration methods depending on their hardware and precision needs. Some robots use limit switches, moving until they physically hit a switch that tells them "this is home." Others use markers like magnetic strips or reflective tags that sensors can detect. Some robots are manually positioned by humans who then tell the software "this is zero" (common in robotic surgery). And higher-end robots might run self-calibration scripts that use encoder feedback and motor resistance to find their home position automatically.
+            </p> -->
 
             <div class="media-container">
                 <img src="../imgs/lesson_5_3d_printer_calibrating.gif" alt="3D printer calibration" style="max-width: 100%; border-radius: 4px;">
-                <p class="caption">A 3D printer performing part of its calibration routine</p>
+                <!-- <p class="caption">A 3D printer performing part of its calibration routine. Notice how the extruder moves across the print bed horizontally to different points, and then wobbles up and down above the print bed? What's happening there is that a sensor in the extruder tip is looking for a magnetic field (the print bed is actually a large magnet) that tells the extruder how close it is to the print surface.</p> -->
             </div>
 
             <p>
-                It's kind of like setting your GPS before heading out on a road trip. If you don't know where you are to begin with, it's hard to know where you're going. Calibration gives the robot a known reference point — usually called "home" — that all other movement is based on.
+            
+                Check out the gif above of a 3D printer performing part of its calibration routine. Notice how the extruder moves across the print bed horizontally to different points, and then sort of wobbles up and down above the print bed? What's happening is that a sensor in the extruder tip is searching for a magnetic field (the print bed is actually a large magnet) that tells the extruder how close it is to the print surface. The extruder will perform this up and down motion at different points across the print bed to make sure everything is level and ready to print.
             </p>
 
-            <h3>Calibration Strategies</h3>
+            <h3>Encoders!</h3>
 
             <p>
-                Different robots use different calibration methods depending on their hardware and precision needs:
+                Motors make things robots move, but without any sensors you'll have no idea how or where things are moving. <b>Encoders</b> are sensors that measure motion (usually degrees of rotation) and convert it into data that the robot can use to calculate fun things like distance, speed, and diretionality.
             </p>
 
-            <ul style="margin-bottom: 3rem;">
-                <li><b>Limit switches:</b> One of the simplest but foolproof ways of calibrating is to have the robot move until it physically hits a switch, telling it "this is home". Many 3D printers do this with their X and Y axes during calibration.</li>
-                <li><b>Markers:</b> The robot moves until a sensor detects a magnetic strip or reflective tag that marks a known alignment point.</li>
-                <li><b>Manually:</b> A human moves the robot to a known position and tells the software "this is zero." This is actually sometimes used in robotic surgery, where surgical staff will first set up the robot next to a patient, then press a button to lock it as the origin</li>
-                <li><b>Self-calibration:</b> Higher-end robots may run a script at startup to find home on their own, using a combination of incremental and absolute encoder feedback and motor resistance. For instance, a robotic gripper might open and close until it senses resistance (like a table or object) or a spike in motor current, which it uses to detect the "fully closed" position without external sensors.
-                </li>
-            </ul>
-
-            <h3>Encoders: How Robots Track Movement</h3>
-
-            <p>
-                Motors make things robots move, but without sensors the robot has no clue how far, how fast, or even if it moved correctly. That's where encoders come in.
-            </p>
-
-            <p>ßß
-                Encoders are devices that measure motion (most commonly rotation) and convert it into data that the robot can use. With them, we can calculate all the fun things like distance, speed, and directionality.
-
-            </p>
-
-            <p>
+            <!-- <p>
                 Some encoders are super simple and just track basic movement. Others are more advanced and can give you the exact position of a motor shaft, even after a full power-down. In either case, encoders are a critical part of the think-sense-act loop as they help the robot compare what it wanted to do with what actually happened, and adjust accordingly.
+            </p> -->
+
+            <p>
+                Encoders can work in two ways: incrementally, or absolutely. Incremental encoders will tell you how much something has moved, but only from where it started. Absolute encoders tell you exactly where you are at any given time. 
+            </p>
+
+            <div class="media-container">
+                <img src="../imgs/lesson_5_incremental_vs_absolute.webp" alt="" style="max-width: 80%; border-radius: 4px;">
+            </div>
+
+            <p>
+
+                 Check out the image above.The incremental encoder on the left has tiny, evenly spaced tick marks around the ring. If you started at "12 o'clock" facing north and started rotating clockwise, you can count the number of ticks you've passed to see how many degrees you've moved, or even calculate the speed you're traveling based on how many ticks per second you pass by. However, since each tick is evenly spaced, the encoder doesn't actually know where you started, so if you turned it off at 3:00, you'd have to perform a calibration routine to reset your "home" position
+        . 
             </p>
 
             <p>
-                Before diving into how encoders work, it's important to understand the two main ways they report information:
+                Conversely, the absolute encoder on the right has a unique pattern of tick marks that are not evenly spaced. If we also started at "12 o'clock" facing north and started rotating clockwise, the unique pattern of tick marks would tell us exactly where we were almost like a barcode for angles.
             </p>
 
-            <h3>Incrementally </h3>
+            
+            <p>
+                You may be wondering why we would ever use an incremental encoder if absolute encoders seem to be the better choice. Incremental encoders are usually cheaper, smaller, and simpler to use, and for systems that always start from a known position (like a 3D printer) they're a great choice. If you can design your system to always start from a known position, you can get a very fine resolution (thousands of ticks per revolution) from an incremental encoder at a much lower cost than an absolute one. However, in more complex systems you may want to use an absolute encoder to avoid the need for calibration, or as a backup to make sure you're always in the right place.
+            </p>
+
+            <!-- <h3>Incrementally </h3>
 
             <p>
                 Incremental encoders tell you how much something has moved — not where it started. They work by generating pulses as the motor shaft spins. If it stops moving, it stops generating pulses. Count the pulses, and you can calculate distance, speed, and direction.
@@ -223,159 +278,180 @@
 
             <p>
                 Even with absolute encoders, calibration might be used to line up physical parts (like making sure a gripper is closed when the encoder says "0°"). Robots with complex linkages or long arms may need regular calibration to keep tiny mechanical errors from building up over time. It's usually a good idea to use a combination of incremental and absolute encoders in complex robots.
+            </p> -->
+
+            <p>
+                Now let's get into how different types of incremental and absolute encoders actually measure motion!
+            </p>
+
+            <h2>Optical Encoders 👀 </h2>
+
+            <p>
+                Optical encoders shoot a beam of light through a spinning disk with tiny holes or slits around the edge (like the one earlier). As the disk rotates, the light shines through the holes and hits a sensor on the other side.
             </p>
 
             <p>
-                Now let's get into how different types of encoders actually function:
+                Every time a hole passes by, the sensor detects a flash of light (kind of like blinking). By counting these flashes, the encoder can calculate how many degrees the disk has rotated.  The more holes on the disk, the more detailed the measurement — which means more precision!
             </p>
 
-            <h2>Optical Encoders</h2>
-
-            <p>
-                Optical encoders use a beam of light and a spinning disk with tiny holes or slits around the edge. As the disk rotates, the light shines through the holes and hits a sensor on the other side.
-            </p>
-
-            <p>
-                Every time a hole passes by, the sensor detects a flash of light — kind of like blinking. By counting these flashes (or pulses), the robot can tell how far something has rotated, and how fast it's spinning.  The more holes on the disk, the more detailed the measurement — which means more precision!
-            </p>
-
-            <p>
-                In incremental optical encoders, the slits around the disk are evenly spaced. That means the encoder can count how many slits have passed — but it has no idea where it started when the robot powers on (remember you have to set a "home" position first and start counting from there) .In contrast, absolute optical encoders use a more complex disk pattern where the slits vary in position or width. This unique pattern allows the encoder to instantly recognize its position at startup — just by looking at which slits are visible (it's kind of like barcodes for angles — each position gives a different pattern of light and dark, so the encoder knows exactly where it is without having to move).
-            </p>
-
-            <div class="media-container" style="text-align: center; margin: 2rem 0;">
-                <img src="../imgs/.gif" alt="Brushed DC Motor Animation" style="max-width: 100%; max-height: 400px;">
-                <p class="caption">An incremental optical encoderr</p>
+            <div class="media-container" style="display: flex; justify-content: space-between; margin: 2rem 0;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <img src="../imgs/lesson_5_incremental_optical.gif" alt="Incremental Optical Encoder" style="max-width: 100%; height: auto;">
+                    <h4 style="text-align: center; margin-top: 1rem;">Incremental Optical Encoder</h4>
+                </div>
+                <div style="flex: 1; margin-left: 1rem;">
+                    <img src="../imgs/lesson_5_absolute_optical.gif" alt="Absolute Optical Encoder" style="max-width: 100%; height: auto;">
+                    <h4 style="text-align: center; margin-top: 1rem;">Absolute Optical Encoder</h4>
+                </div>
             </div>
 
-            <h3>Pros</h3>
-            <ul>
-                <li>Very high resolution — can detect tiny movements</li>
-                <li>Accurate and consistent in clean conditions</li>
-                <li>Commonly available as both incremental and absolute</li>
-            </ul>
+            <p>
+                The slits around the disk are evenly spaced around the incrental optical encoder disk. That means the encoder can count how many slits have passed, but it has no idea where it started when the robot powers on since all the slits are the same (remember you have to set a "home" position first and start counting from there). Absolute optical encoders use a more complex disk pattern where the slits could vary in position, width or might just have a unique pattern. In the gif above, the absolute disk on the right uses 3 rings of slits to create a unique binary pattern - when it can detect a slit, it sets a bit to 1, and when it can't detect a slit, it sets the bit to 0. This 3-bit pattern can tell you where the disk is at any given time just by looking at which slits are visible.
+            </p>
+
             
-            <h3>Cons</h3>
-            <ul>
-                <li>Sensitive to dust, dirt, and vibration — not ideal for messy environments</li>
-                <li>Can require careful alignment or shielding</li>
-                <li>Usually a bit bulkier than other types</li>
-            </ul>
+
+            <div style="display: flex; justify-content: space-between; margin: 2rem 0;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <h3>Pros</h3>
+                    <ul>
+                        <li>Very high resolution</li>
+                        <li>Accurate and consistent in clean conditions</li>
+                        <li>Commonly available as both incremental and absolute</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; margin-left: 1rem;">
+                    <h3>Cons</h3>
+                    <ul>
+                        <li>Sensitive to dust, dirt, and vibration — not ideal for messy environments</li>
+                        <li>Can require careful alignment or shielding</li>
+                        <li>Usually a bit bulkier than other types</li>
+                    </ul>
+                </div>
+            </div>
 
             <h3>Where you'll see them</h3>
             <p>
-                CNC machines and laser cutters that need high precision, Camera gimbals, inspection arms, or any robot where smooth, accurate motion really matters            
+                3D printers, CNC machines, camera gimbals, inspection arms. These are the most common types of encoders you'll see in the wild!  
             </p>
 
-            <h2>Magnetic Encoders</h2>
+            
+
+            <h2>Magnetic Encoders 🧲</h2>
 
             <p>
-                Magnetic encoders use a small spinning magnet and a nearby sensor to track motion. As the magnet rotates, the magnetic field around it changes. Sensors (usually Hall effect sensors) detect those changes and use them to figure out how far or fast something has turned — or exactly what position it's in, depending on the type.  
+                Magnetic encoders use a small spinning magnet and a <span class="tooltip">nearby sensor<span class="tooltiptext">These sensors are usually Hall-effect sensors, which are devices that produce a voltage proportional to a magnetic field. A nifty trick, but if you're designing these things you'll be throwing up gang signs trying to figure out which direction the magnetic field moves!</span></span> to track motion. As the magnet rotates, the magnetic field around it changes, which allows the sensor to detect how far or fast something has turned.  
             </p>
 
-            <p>
-                In an incremental magnetic encoder, the sensor detects regular, repeating changes in the magnetic field as the magnet spins. These changes are used to generate pulses, and the encoder counts them to track changes in rotation. In an absolute magnetic encoder, the magnet is specially shaped (often with multiple poles or a unique magnetic pattern), and the sensor can detect its exact orientation right away. 
-            </p>
-
-            <p>
+            <!-- <p>
                 Unlike optical encoders, there's no light, no tiny slits, and no worries about dust getting in the way — just a magnet and a sensor working together to read motion.
-            </p>
+            </p> -->
             
 
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
-                <img src="../imgs/.gif" alt="Brushed DC Motor Animation" style="max-width: 100%; max-height: 400px;">
-                <p class="caption">Magnetic encoderr</p>
+                <img src="../imgs/lesson_5_magnetic_encoder.png" alt="" style="max-width: 100%; max-height: 400px;">
+                <p class="caption">Unfortunately, I can't find any gifs of magnetic encoders in action. And even if I could we'd need to be wizards (or electrical engineers) to visualize how fluctuating magnetic field works.</p>
             </div>
 
-            <h3>Pros</h3>
-            <ul>
-                <li>Very durable — no exposed parts or fragile components</li>
-                <li>Compact and easy to seal against dust, dirt, and moisture </li>
-                <li>Great for harsh or outdoor movements</li>
-            </ul>
-            
-            <h3>Cons</h3>
-            <ul>
-                <li>Cheaper versions have an average lower resolution than an optical competitor</li>
-                <li>Can be affected by external magnetic fields (not a super common issue, but remember - electric currents generate magnetic fields! that needs to be considered in complex robotic systems)</li>
+            <p>
+                But in an incremental magnetic encoder, the sensor detects regular, repeating changes in the magnetic field as the magnet spins. These changes are used to generate pulses, and the encoder counts them to track changes in rotation. In an absolute magnetic encoder, the magnet is specially shaped (often with multiple poles or a unique magnetic pattern), and the sensor can detect its exact orientation right away. 
+            </p>
 
-            </ul>
+            <div style="display: flex; justify-content: space-between; margin: 2rem 0;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <h3>Pros</h3>
+                    <ul>
+                        <li>Very durable and no exposed parts</li>
+                        <li>Compact and easy to seal against dust, dirt, and moisture </li>
+                        <li>Great for harsh or outdoor movements</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; margin-left: 1rem;">
+                    <h3>Cons</h3>
+                    <ul>
+                        <li>Cheaper versions have an average lower resolution than an optical competitor</li>
+                        <li>Can be affected by external magnetic fields (not a super common issue, but electric currents do generate magnetic fields! That might need to be considered in a complex systems with a bunch of electronics)</li>
+                    </ul>
+                </div>
+            </div>
 
             <h3>Where you'll see them</h3>
             <p>
                 Robot joints, outdoor or industrial robots that operate in messy environments       
             </p>
             
-            <h2>Capacitive Encoders <i>(not super common, but growing) </i></h2>
+            <h2>Capacitive Encoders ⚡ <i>(not super common, but growing) </i></h2>
 
             <p>
-                Capacitive encoders track motion by measuring changes in capacitance — how well two surfaces can hold an electric charge. Inside the encoder, there's a patterned disk that spins near a fixed surface. As the disk turns, the patterns on it cause tiny changes in the electric field between the two layers. 
+                Capacitive encoders track motion by measuring changes in capacitance, or how well two surfaces can hold an electric charge. Inside the encoder, there's a patterned disk that spins near a fixed surface. As the disk turns, the patterns on it cause tiny changes in the electric field between the two layers. 
             </p>
-
-            <p>
-                The encoder reads those changes and uses them to figure out how far something has moved, similar to how optical or magnetic encoders work — but without relying on light or magnets.
-            </p>
-
-            <p>
-                In an incremental capacitive encoder, the spinning disk has a repeating pattern. As the pattern moves, the encoder measures regular changes in capacitance and counts them to track how far something has turned. With absolute capacitive encoders the pattern on the disk is more complex and varies around the full rotation. That unique pattern allows the encoder to instantly detect its exact position at startup, based on the specific capacitance reading at that point.
-            </p>
-            
 
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
-                <img src="../imgs/.gif" alt="Brushed DC Motor Animation" style="max-width: 100%; max-height: 400px;">
-                <p class="caption">Capacitive encoderr</p>
+                <img src="../imgs/lesson_5_capacitive_encoder.png" alt="" style="max-width: 100%; max-height: 400px;">
+                <p class="caption"></p>
             </div>
 
-            <h3>Pros</h3>
-            <ul>
-                <li>Very compact and lightweight</li>
-                <li>Resistant to electrical noise and interference (good for noisy circuits)</li>
-                <li>Sealed and protected against dust or moisture</li>
-            </ul>
+            <p>
+                You're probably starting to see the <i>pattern</i> here, but in an incremental capacitive encoder, the spinning disk has a repeating pattern. As the pattern moves, the encoder measures regular changes in capacitance and counts them to track how far something has turned. With absolute capacitive encoders, the pattern on the disk is more complex and varies around the full rotation. That unique pattern allows the encoder to instantly detect its exact position at startup, based on the specific capacitance reading at that point.
+            </p>
             
-            <h3>Cons</h3>
-            <ul>
-                <li>Not as common or widely supported in off-the-shelf robotics gear</li>
-                <li>Lower resolution in basic models compared to optical encoders</li>
 
-            </ul>
+            
+
+            <div style="display: flex; justify-content: space-between; margin: 2rem 0;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <h3>Pros</h3>
+                    <ul>
+                        <li>Very compact and lightweight</li>
+                        <li>Resistant to electrical noise and interference (good for noisy circuits)</li>
+                        <li>Sealed and protected against dust or moisture</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; margin-left: 1rem;">
+                    <h3>Cons</h3>
+                    <ul>
+                        <li>Not as common or widely supported in off-the-shelf robotics gear</li>
+                        <li>Lower resolution in basic models compared to optical encoders</li>
+                    </ul>
+                </div>
+            </div>
 
             <h3>Where you'll see them</h3>
             <p>
                 Lightweight systems where space and power are limited, portable or battery-powered robots, newer commercial servo motors with built-in capacitive feedback        
             </p>
 
-            <h2>Why Calibration Actually Matters</h2>
+            <h2>Why does this stuff actually matter?</h2>
+
+            <!-- <p>
+                At this point, you've probably gotten the idea: calibration isn't just a setup step  it's the foundation for everything a robot does after that.
+            </p> -->
 
             <p>
-                At this point, you've probably gotten the idea: calibration isn't just a setup step — it's the foundation for everything a robot does after that.
+                Without calibration or encoders, even the most advanced sensors and encoders are basically guessing where it is. A robot might think it's moving 30 degrees, but if it started from the wrong place, that movement could put it in the wrong position — or worse, into something it shouldn't be touching.
             </p>
+
+            <h3 style="text-align: center;">🔐 Calibration = Safety</h3>
 
             <p>
-                Without it, even the most advanced sensors and encoders are basically guessing. A robot might think it's moving 30 degrees, but if it started from the wrong place, that movement could put it in the wrong position — or worse, into something it shouldn't be touching.
+                In robots (and life), bad data = bad decisions. If a robot arm is even a few millimeters off, it could crash into a wall, miss its target, and damage itself, the workspace, or someone nearby. Calibration ensures the robot always has an accurate understanding of where it is so it can move safely and predictably.
             </p>
 
-            <h2>🔐 Calibration = Safety</h2>
-
-            <p>
-                In robots (and life), bad data = bad decisions. If a robot arm is even a few millimeters off, it could crash into a wall, miss its target, or worse — damage itself, the workspace, or someone nearby. Calibration ensures the robot always has an accurate understanding of where it is, so it can move safely and predictably.
-            </p>
-
-            <h2>🔁 Calibration = Repeatability</h2>
+            <h3 style="text-align: center;">🔁 Calibration = Repeatability</h3>
 
             <p>
                 One of the biggest goals in robotics is to accomplish the same task over and over with consistent results. Calibration gives the robot a reliable starting point every time it boots up, which makes repeatability possible. This is especially important in things like manufacturing, 3D printing, or lab automation, where even small inconsistencies can lead to big problems.
             </p>
 
-            <h2>🧰 Calibration = Easier Maintenance</h2>
+            <h3 style="text-align: center;">🧰 Calibration = Easier Maintenance</h3>
 
             <p>
-                Regular calibration can also help spot problems early. If a robot suddenly can't reach its home position, or it hits a limit switch too early, it might mean something's worn out or misaligned. In that way, calibration isn't just about precision — it's also like a built-in Dr's appointment for the robot's mechanics.
+                Regular calibration can also help spot problems early. If a robot suddenly can't reach its home position, or it hits a limit switch too early, it might mean something's worn out or misaligned. In that way, encoders can be used like a built-in Dr's appointment for the robot's mechanics.
             </p>
             
             
-            <p>
-                Calibration gives your robot a reference, a routine, and a reality check. Whether you're building a hobby bot or working on a full industrial system, making sure your robot starts in the right place is one of the easiest ways to make sure it ends up in the right place too!
+            <p style="margin-top: 4rem;">
+                In short, calibration & encoders give your robot a reference, a routine, and a reality check. No matter what you're doing in life, knowing where you are is usually a good place to start!
             </p>
         </div>
     </article>

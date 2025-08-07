@@ -369,18 +369,19 @@
 
         <div class="article-content">
             <p>
-                We've talked a lot about robots moving around using kinematics — calculating joint angles, positions, and trajectories. But how does that actually translate to real life? How does a robot know it's rotated exactly 30 degrees, or moved its arm to just the right spot?
+                We've talked a lot about robots moving around using kinematics — calculating joint angles, positions, and trajectories. But how does that actually translate to real life? How does a robot know it's rotated exactly 30 degrees, or moved its arm to just the right spot? That's where <b>actuators</b> and <b>encoders</b> come into play.
+
             </p>
             
             <p>
-                That's where <b>actuators</b> and <b>encoders</b> come into play.
-            </p>
-            
-            <p>
-                <b>Actuators</b> — usually motors — are the muscles of a robot. They make things move by turning joints, spinning wheels, or sliding mechanisms in and out. <b>Encoders</b> are how the robot keeps track of that motion — they measure how far and how fast something has moved. (We'll get into those in the next lesson.)
+                <b>Actuators</b> — usually motors — are the muscles of a robot. They make things move by turning joints, spinning wheels, or sliding mechanisms in and out. <b>Encoders</b> are sensors that measure how far and how fast something has moved. (We'll get into those in the next lesson.)
             </p>
 
-            <p class="extended-caption" style="text-align: center;">
+            <p>
+                You'll often see the words motor and actuator used interchangeably in robotics (including on this site), but there technically is a difference. An <b>actuator</b> is a broad term for any device that takes some form of energy — like electricity, air pressure (pneumatics), or fluid pressure (hydraulics) — and turns it into mechanical motion. A <b>motor</b> is a specific type of actuator that converts electrical energy into rotational motion. So every motor is an actuator, but not every actuator is a motor. It's a small distinction, but in casual robotics conversation most people use the terms interchangeably.
+            </p>
+
+            <!-- <p class="extended-caption" style="text-align: center;">
                 <i> You'll often see the words motor and actuator used interchangeably in robotics (including on this site), but there technically is a difference.
                 </i>
             </p>
@@ -398,7 +399,7 @@
                 <i> 
                     <b style="color: #292929;">So every motor is an actuator, but not every actuator is a motor.</b> It's a small distinction, but in casual robotics conversation most people use the terms interchangeably.
                 </i>
-            </p>
+            </p> -->
 
             <div class="media-container" style="display: flex; justify-content: space-between; gap: 2rem;">
                 <div style="flex: 1; min-height: 400px; display: flex; flex-direction: column;">
@@ -420,7 +421,7 @@
             <h3>Brushed DC Motors</h3>
 
             <p>
-                Brushed motors spin by flipping the direction of electricity through a coil of wire — kind of like flipping a magnet back and forth really fast. Tiny metal parts called brushes press against the spinning part of the motor and help switch the flow of electricity at just the right time. This constant switching keeps the motor spinning.
+                Brushed motors spin by flipping the direction of electricity through a coil of wire (kind of like flipping a magnet back and forth really fast). Tiny metal parts called brushes press against the spinning part of the motor and help switch the flow of electricity at just the right time. This constant switching keeps the motor spinning.
             </p>
 
             <p>
@@ -429,36 +430,43 @@
 
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
                 <img src="../imgs/lesson_4_brushed_dc_motors.gif" alt="Brushed DC Motor Animation" style="max-width: 100%; max-height: 400px;">
-                <p class="caption">A brushed DC motor in action - notice how the brushes (in red) maintain contact with the spinning commutator</p>
+                <p class="caption">A brushed DC motor. The brushes (dark brown things) maintain contact with the spinning commutator</p>
             </div>
 
-            <h4>Pros</h4>
-            <ul>
-                <li>Cheap and easy to control</li>
-                <li>Simple wiring and circuitry</li>
-                <li>Good for basic applications (e.g., wheels, fans, pumps)</li>
-            </ul>
-
-            <h4>Cons</h4>
-            <ul>
-                <li>Brushes wear out over time → less durable</li>
-                <li>Generates more electrical noise (sparking)</li>
-                <li>No built-in feedback (needs an encoder to be precise)</li>
-            </ul>
+            <div style="display: flex; justify-content: space-between; margin: 2rem 0;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <h4>Pros</h4>
+                    <ul>
+                        <li>Cheap and easy to control</li>
+                        <li>Simple wiring and circuitry</li>
+                        <li>Good for basic applications (e.g., wheels, fans, pumps)</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; margin-left: 1rem;">
+                    <h4>Cons</h4>
+                    <ul>
+                        <li>Brushes wear out over time → less durable</li>
+                        <li>Generates more electrical noise (sparking)</li>
+                        <li>No built-in feedback (needs an encoder to be precise)</li>
+                    </ul>
+                </div>
+            </div>
 
             <h4>Where you'll see them</h4>
             <p>
                 In toys, hobby robots, small RC cars — basically, anywhere low cost and simplicity matter more than precision.
             </p>
-
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
                 <img src="../imgs/lesson_4_rc_car.jpg" alt="RC Car" style="max-width: 100%; max-height: 275px;">
+                <p class="caption">I can't tell if this is AI generated or not, that zip-tie looks suspicious</p>
             </div>
+
+            
 
             <h3>Brushless DC Motors</h3>
 
             <p>
-                Brushless motors do the same job as brushed ones — spinning something — but without any physical contact inside to switch the current. Instead of using brushes, they rely on electronics to control the motor.
+                Brushless motors do the same job as brushed ones but without any physical contact inside to switch the current. Instead of using brushes, they rely on electronics to control the motor.
             </p>
 
             <p>
@@ -471,28 +479,32 @@
 
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
                 <img src="../imgs/lesson_4_brushless_dc_motor.webp" alt="Brushless DC Motor" style="max-width: 100%; max-height: 275px;">
-                <p class="caption">A brushless DC motor - notice how the coils are fixed in place while the magnets rotate around them</p>
+                <p class="caption">A brushless DC motor. Notice how the coils are fixed in place while the magnets rotate around them</p>
             </div>
 
-            <h4>Pros</h4>
-            <ul>
-                <li>Higher efficiency and power output</li>
-                <li>Longer lifespan (no friction from brushes)</li>
-                <li>Quieter and smoother operation</li>
-                <li>Can run at higher speeds</li>
-            </ul>
-
-            <h4>Cons</h4>
-            <ul>
-                <li>Needs a specialized motor controller</li>
-                <li>More expensive than brushed motors</li>
-            </ul>
+            <div style="display: flex; justify-content: space-between; margin: 2rem 0;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <h4>Pros</h4>
+                    <ul>
+                        <li>Higher efficiency and power output</li>
+                        <li>Longer lifespan (no friction from brushes)</li>
+                        <li>Quieter and smoother operation</li>
+                        <li>Can run at higher speeds</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; margin-left: 1rem;">
+                    <h4>Cons</h4>
+                    <ul>
+                        <li>Needs a specialized motor controller</li>
+                        <li>More expensive than brushed motors</li>
+                    </ul>
+                </div>
+            </div>
 
             <h4>Where you'll see them</h4>
             <p>
                 Drones, electric vehicles, high-speed robotics, CNC machines
             </p>
-
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
                 <img src="../imgs/lesson_4_drone.jpg" alt="drone" style="max-width: 100%; max-height: 275px;">
             </div>
@@ -500,15 +512,11 @@
             <h3>Stepper Motors</h3>
 
             <p>
-                Stepper motors rotate in small, precise steps — like a clock ticking forward a fixed amount each time. Inside the motor are multiple coils (electromagnets) arranged in a circle. By turning these coils on and off in a specific order, the motor's center (the rotor) rotates a little bit at a time.
+                Stepper motors rotate in small, precise steps like a clock ticking forward a fixed amount each time. Inside the motor are multiple coils (electromagnets) arranged in a circle. By turning these coils on and off in a specific order, the motor's center (the rotor) rotates a little bit at a time.
             </p>
 
             <p>
-                Each "step" is a tiny rotation — often something like 1.8° — and by counting those steps, you can control exactly how far the motor turns. No sensors needed, just careful counting.
-            </p>
-
-            <p>
-                Think of it like walking up stairs: one step at a time, always the same size, and always in the right direction — as long as you don't trip.
+                Each "step" is a tiny rotation — often something like 1.8° — and by counting those steps, you can control exactly how far the motor turns. No sensors needed, just careful counting. Think of it like walking up stairs: one step at a time, always the same size, and always in the right direction — as long as you don't trip.
             </p>
 
             <p>
@@ -517,28 +525,32 @@
 
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
                 <img src="../imgs/lesson_4_stepper_motor.gif" alt="Stepper Motor Animation" style="max-width: 100%; max-height: 400px;">
-                <p class="caption">A stepper motor in action - notice how it moves in distinct, precise steps</p>
+                <p class="caption">A stepper motor moves in distinct, precise steps</p>
             </div>
 
-            <h4>Pros</h4>
-            <ul>
-                <li>Very precise position control without feedback (open-loop)</li>
-                <li>Easy to control position and speed</li>
-                <li>Great for repeatable movements</li>
-            </ul>
-
-            <h4>Cons</h4>
-            <ul>
-                <li>If there's an opposing load (force acting against motor) the steps can get messed up</li>
-                <li>Not very efficient - these bad boys can get hot</li>
-                <li>Torque drops off at higher speeds</li>
-            </ul>
+            <div style="display: flex; justify-content: space-between; margin: 2rem 0;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <h4>Pros</h4>
+                    <ul>
+                        <li>Very precise position control without feedback (open-loop)</li>
+                        <li>Easy to control position and speed</li>
+                        <li>Great for repeatable movements</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; margin-left: 1rem;">
+                    <h4>Cons</h4>
+                    <ul>
+                        <li>If there's an opposing load (force acting against motor) the steps can get messed up</li>
+                        <li>Not very efficient - these bad boys can get hot</li>
+                        <li>Torque drops off at higher speeds</li>
+                    </ul>
+                </div>
+            </div>
 
             <h4>Where you'll see them</h4>
             <p>
                 3D printers, laser cutters, camera sliders, pick-and-place arms
             </p>
-
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
                 <img src="../imgs/lesson_4_3d_printer.webp" alt="drone" style="max-width: 100%; max-height: 275px;">
             </div>
@@ -546,7 +558,7 @@
             <h3>Servo Motors</h3>
 
             <p>
-                A servo motor is basically a small DC motor that's been upgraded with a gear system, a position sensor, and its own built-in control circuit. You just tell it what angle to go to and it figures out how to get there and stay there.
+                A servo motor is basically a small DC motor that's been upgraded with a gear system, a position sensor, and its own built-in control circuit. You just tell it what angle to go to and it figures out how to get there.
             </p>
 
             <p>
@@ -554,11 +566,11 @@
             </p>
 
             <p>
-                Most people are familiar with hobby servos — the small, rectangular ones you plug into an Arduino and control with a single wire. These are simple, affordable, and perfect for projects like small robot arms or RC car steering. But in industrial systems, servo motors can look more like fancy brushless motors with external controllers and high-resolution feedback. They're designed for much higher torque, speed, and precision — often paired with gearboxes and used in robotic arms, CNC machines, and automation lines.
+                Most people are familiar with hobby servos, the small, rectangular ones you plug into an Arduino and control with a single wire. These are simple, affordable, and perfect for projects like small robot arms or RC car steering. But in industrial systems, servo motors can look more like fancy brushless motors with external controllers and high-resolution feedback. They're designed for much higher torque, speed, and precision, often paired with gearboxes and used in robotic arms, CNC machines, and automation lines.
             </p>
 
             <p>
-                It's kind of like comparing a toy drone to a commercial quadcopter — they work on the same idea, but one is designed for play, and the other is made to perform.
+                It's kind of like comparing a toy drone to a commercial quadcopter. They work on the same idea, but one is designed for play, and the other is made to perform.
             </p>
 
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
@@ -566,23 +578,39 @@
                 <p class="caption">Notice the square wave function (oscillating between 0 and +V) that controls the servo motor's position</p>
             </div>
 
-            <h4>Pros</h4>
-            <ul>
-                <li>Simple degree angle control <span class="tooltip">(usually 0-180 degrees)<span class="tooltiptext">anti radian gang</span></span></li>
-                <li>Easy to use with microcontrollers (just send an angle)</li>
-                <li>Self-contained with feedback loop</li>
-            </ul>
+            <div style="display: flex; justify-content: space-between; margin: 2rem 0;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <h4>Pros</h4>
+                    <ul>
+                        <li>Simple degree angle control <span class="tooltip">(usually 0-180 degrees)<span class="tooltiptext">anti radian gang</span></span></li>
+                        <li>Easy to use with microcontrollers (just send an angle)</li>
+                        <li>Self-contained with feedback loop</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; margin-left: 1rem;">
+                    <h4>Cons</h4>
+                    <ul>
+                        <li>Limited range of motion</li>
+                        <li>Typically not very powerful</li>
+                        <li>Most are analog (lower <span class="tooltip">resolution<span class="tooltiptext">Resolution is a new (but important) vocab word - we'll explain this more in a future lesson! But for now, low resolution means that servo motors respond to position changes in rough steps, not fine-grained detail. So while they're great for basic positioning, they're not ideal for super-precise movements.</span></span>)</li>
+                    </ul>
+                </div>
+            </div>
 
-            <h4>Cons</h4>
-            <ul>
-                <li>Limited range of motion</li>
-                <li>Typically not very powerful</li>
-                <li>Most are analog (lower <span class="tooltip">resolution<span class="tooltiptext">Resolution is a new (but important) vocab word - we'll explain this more in a future lesson! But for now, low resolution means that servo motors respond to position changes in rough steps, not fine-grained detail. So while they're great for basic positioning, they're not ideal for super-precise movements.</span></span>)</li>
-            </ul>
-
+            <h4>Where you'll see them</h4>
+           
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
                 <img src="../imgs/lesson_4_industrial_servo.jpg" alt="industrial servo" style="max-width: 100%; max-height: 275px;">
             </div>
+            
+            <p>
+                <b>Hobby Applications:</b> DIY robot arms, inexpensive camera rigs, model aircraft control surfaces
+            </p>
+
+            <p>
+                <b>Industrial Applications:</b> Manufacturing automation, CNC machines, precision positioning systems, professional camera systems
+            </p>
+
             
 
             <h3> Linear Actuators</h3>
@@ -592,94 +620,97 @@
             </p>
             
             <p>
-                Most linear actuators are actually powered by other motors (usually stepper or servo) which provide the precision needed to move to a specific distance and stop reliably. So the linear actuator isn't really a standalone motor type — it's more like a mechanical extension that transforms rotary motion into linear motion.
+                Most linear actuators are actually powered by other motors (usually stepper or servo) which provide the precision needed to move to a specific distance and stop reliably. So the linear actuator isn't really a standalone motor type; it's more like a mechanical extension that transforms rotary motion into linear motion.
             </p>
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
                 <img src="../imgs/lesson_4_linear_actuator.gif" alt="Linear Actuator" style="max-width: 100%; max-height: 400px;">
                 <p class="caption">Notice the rotation of the bearing in the front - it's the motor that's actually driving the linear motion</p>
             </div>
 
-            <h4>Pros</h4>
-            <ul>
-                <li>Great for moving things in a straight line without needing complex linkages</li>
-                <li>Precise and repeatable — especially when used with stepper or servo motors</li>
-                <li>Ideal for controlled, limited-range motion like gripping, lifting, or sliding</li>
-            </ul>
-
-            <h4>Cons</h4>
-            <ul>
-                <li>Slower than spinning motors</li>
-                <li>More mechanical components = more complexity and wear over time</li>
-            </ul>
+            <div style="display: flex; justify-content: space-between; margin: 2rem 0;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <h4>Pros</h4>
+                    <ul>
+                        <li>Great for moving things in a straight line without needing complex linkages</li>
+                        <li>Precise and repeatable — especially when used with stepper or servo motors</li>
+                        <li>Ideal for controlled, limited-range motion like gripping, lifting, or sliding</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; margin-left: 1rem;">
+                    <h4>Cons</h4>
+                    <ul>
+                        <li>Slower than spinning motors</li>
+                        <li>More mechanical components = more complexity and wear over time</li>
+                    </ul>
+                </div>
+            </div>
 
             <h4>Where you'll see them</h4>
             <p>
                 Z-axes in 3D printers/ CNC machines, Sliding camera rigs, automated rails
             </p>
+            <div class="media-container" style="text-align: center; margin: 2rem 0;">
+                <img src="../imgs/lesson_4_linear_actuator_camera_rig.webp" alt="Linear Actuator" style="max-width: 100%; max-height: 400px;">
+            </div>
             
             
             <h3>Harmonic Drive</h3>
 
             <p>
-                Full disclosure - harmonic drive isn't a motor — it's a special type of gearbox often used with motors in precision robotics. I added them to this article because they work really well in robots (and I think they're neat). Unlike regular gear systems, harmonic drives can deliver extremely accurate motion, very high gear reduction, and almost zero backlash (no wiggle or slop in movement).
+                Full disclosure: harmonic drive isn't a motor — it's a special type of gearbox often used with motors in precision robotics. I added them to this article because they work really well in robots (and I think they're neat). Unlike regular gear systems, harmonic drives can deliver extremely accurate motion, very high gear reduction, and almost zero <span class="tooltip">backlash<span class="tooltiptext">Backlash is a small gap or looseness between mechanical parts (in this case, the teeth of gears) that causes a delay when changing direction. It’s like turning something and having it not move right away because of a tiny bit of slack.</span></span>.
             </p>
 
             <p>
-                Instead of using rigid gears, harmonic drives use a flexible metal component (called a flexspline) that deforms slightly to engage with gear teeth in a unique way. This allows for very smooth, precise rotation, even under heavy load.
+                Instead of using rigid gears, harmonic drives use a flexible metal component (called a flexspline) that deforms slightly to engage with gear teeth in a unique way. This allows for very smooth, precise rotation, even under heavy load. Harmonic drives are most often paired with brushless DC motors, frameless motors, or servo motors, especially in robotic arms, humanoid joints, and surgical or aerospace robotics.
+
             </p>
 
-            <p>
-                It's like trading your standard bike gears for a high-end, zero-play gear system — every tiny movement counts, and nothing slips.
-            </p>
-
-            <p>
-                Harmonic drives are most often paired with brushless DC motors, frameless motors, or servo motors, especially in robotic arms, humanoid joints, and surgical or aerospace robotics.
-            </p>
 
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
                 <img src="../imgs/lesson_4_harmonic_drive.gif" alt="Harmonic Drive Animation" style="max-width: 100%; max-height: 400px;">
                 <p class="caption">A harmonic drive in action - notice how the flexible component (flexspline) interacts with the gear teeth</p>
             </div>
 
-            <h4>Pros</h4>
-            <ul>
-                <li>Insanely accurate positioning (perfect for robot arms)</li>
-                <li>Compact and lightweight for the amount of torque they deliver</li>
-                <li>EXPLAINBACKLASH - No backlash, which is ideal for surgical robots, space robots, or anything that needs pinpoint repeatability</li>
-            </ul>
-
-            <h4>Cons</h4>
-            <ul>
-                <li>Real expensive</li>
-                <li>Complex to manufacture and integrate</li>
-                <li>Slower rotational speeds (but high torque)</li>
-            </ul>
+            <div style="display: flex; justify-content: space-between; margin: 2rem 0;">
+                <div style="flex: 1; margin-right: 1rem;">
+                    <h4>Pros</h4>
+                    <ul>
+                        <li>Highly accurate positioning </li>
+                        <li>Compact and lightweight for the amount of torque they deliver</li>
+                        <li>No backlash, which is ideal for surgical robots, space robots, or anything that needs pinpoint repeatability</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; margin-left: 1rem;">
+                    <h4>Cons</h4>
+                    <ul>
+                        <li>Real expensive</li>
+                        <li>Complex to manufacture and integrate</li>
+                        <li>Slower rotational speeds (compensated by high torque)</li>
+                    </ul>
+                </div>
+            </div>
 
             <h4>Where you'll see them</h4>
             <p>
                 Industrial robotic arms, Space and satellite mechanisms, Surgical robots, Humanoid robots
             </p>
-
             <div class="media-container" style="text-align: center; margin: 2rem 0;">
                 <img src="../imgs/lesson_4_mako.jpg" alt="MAKO" style="max-width: 100%; max-height: 400px;">
                 <p class="caption">The MAKO is a surgical robot used for hip and knee replacements - it uses harmonic drive gearboxes that remduce backlash and increaes the precision of the robot's movements, which is vital for delicate surgeries.</p>
             </div>
 
+            
+
+
+            
+
 
             <p>
-                At this point, you've got a solid overview of how robots actually move. Whether it's spinning a wheel, rotating a joint, or sliding a gripper in a straight line, every motion comes from some kind of actuator.
+                Alright I threw a bunch of motor types at you but don't worry - you're not expected to memorize all of these (I still google them when I need to win an argument). The best way to learn more is to just start building stuff with motors and see how they work in practice. Start with a simple Arduino project with a servo or stepper motor and see how it works!
             </p>
 
             <p>
-                From basic brushed motors and plug-and-play servos to ultra-precise systems harmonic drives, each has its own tradeoffs in terms of speed, torque, precision, complexity, and cost — which is why there's no "one-size-fits-all" motor in robotics. The right tool depends entirely on what your robot is trying to do.
-            </p>
-
-            <p>
-                If you're building your first project, start simple. A basic servo or stepper motor will take you a long way. As you move into more advanced builds — robotic arms, mobile platforms, or surgical-grade precision — you'll start seeing why the other options matter.
-            </p>
-
-            <p>
-                In the next lesson, we'll dig into encoders — the sensors that tell the robot what just happened after the motors start moving. Because even the strongest robot muscles aren't much use without the ability to feel or see how far they've gone.
+                In the next lesson, we'll dig into encoders (the sensors that tell the robot where it is when and while a motor is moving).
             </p>
         </div>
     </article>
