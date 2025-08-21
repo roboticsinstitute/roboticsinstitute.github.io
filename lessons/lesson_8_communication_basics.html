@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communication Basics | The Robotics Institute</title>
+    <!-- Copy all the styles from intro-to-robotics.html -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #faf9f6;
+            color: #292929;
+            line-height: 1.6;
+        }
+
+        .nav-bar {
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .nav-bar a {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: #292929;
+            text-decoration: none;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 80px auto 0;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-title {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            color: #292929;
+        }
+
+        .article-meta {
+            color: #666;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #292929;
+        }
+
+        .article-content p {
+            margin-bottom: 3rem;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            font-weight: 500;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .image-item {
+            text-align: center;
+        }
+
+        .image-item img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .short-caption {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .extended-caption {
+            text-align: center;
+            margin: 1rem 0 2rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .image-text-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+            align-items: center;
+        }
+
+        .image-text-container.reverse {
+            direction: rtl;
+        }
+
+        .image-text-container.reverse > * {
+            direction: ltr;
+        }
+
+        .side-image {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .media-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .media-container img,
+        .media-container video {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .caption {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="../index.html">← Back to Home</a>
+    </nav>
+
+    <article class="article-container">
+        <header class="article-header">
+            <h1 class="article-title">Communication Basics</h1>
+            <div class="article-meta">
+                Written by Nathan Daniel • Last updated Jan 2025
+            </div>
+        </header>
+
+        <div class="article-content">
+            <p>
+                Welcome to Lesson 8! In this lesson, we'll explore the fundamentals of communication in robotics systems. Communication is what allows different parts of a robot to work together, from sensors sending data to the brain, to the brain sending commands to actuators.
+            </p>
+
+            <p>
+                Whether you're building a simple robot that follows a line or a complex autonomous vehicle, understanding how to make components talk to each other is essential. We'll cover the basics of serial communication, protocols, and how to troubleshoot common communication issues.
+            </p>
+
+            <h3>What You'll Learn</h3>
+            <p>
+                By the end of this lesson, you'll understand:
+            </p>
+            <ul>
+                <li>Basic communication protocols (UART, I2C, SPI)</li>
+                <li>How to read sensor data from different devices</li>
+                <li>Common communication troubleshooting techniques</li>
+                <li>Best practices for reliable robot communication</li>
+            </ul>
+
+            <p>
+                This lesson builds on the control theory concepts from Lesson 7, as communication is what enables feedback loops to work in real-time. Let's dive in!
+            </p>
+        </div>
+    </article>
+</body>
+</html>

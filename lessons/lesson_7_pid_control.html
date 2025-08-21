@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PID Control | The Robotics Institute</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: #faf9f6;
+      color: #292929;
+      line-height: 1.6;
+    }
+
+    .nav-bar {
+      padding: 1rem 2rem;
+      background-color: #ffffff;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-sizing: border-box;
+      border-bottom: 1px solid #e6e6e6;
+    }
+
+    .nav-bar a {
+      color: #292929;
+      text-decoration: none;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .article-container {
+      max-width: 800px;
+      margin: 80px auto 0;
+      padding: 2rem;
+      background-color: #ffffff;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .article-header {
+      margin-bottom: 3rem;
+    }
+
+    .article-title {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+      color: #292929;
+    }
+
+    .article-meta {
+      color: #757575;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .article-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #292929;
+    }
+
+    .article-content p {
+      margin-bottom: 3rem;
+    }
+
+    .article-content h3 {
+      font-size: 1.4rem;
+      margin: 2rem 0 1rem;
+      font-weight: 500;
+    }
+
+    .media-container {
+      margin: 2rem 0;
+      width: 100%;
+    }
+
+    .media-container img,
+    .media-container video {
+      width: 100%;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+
+    .caption {
+      font-size: 0.9rem;
+      color: #a0a0a0;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    pre {
+      background-color: #151A1F;
+      padding: 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+
+    code {
+      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      color: #2b6cb0;
+      cursor: help;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 300px;
+      background-color: #f8f9fa;
+      color: #292929;
+      text-align: left;
+      padding: 1rem;
+      border-radius: 6px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -150px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #f8f9fa transparent transparent transparent;
+    }
+
+    /* Enhanced tooltips for performance metrics */
+    .tooltip.enhanced .tooltiptext {
+      width: 320px;
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      color: #2c3e50;
+      padding: 1.2rem;
+      border-radius: 12px;
+      z-index: 1000;
+      bottom: 130%;
+      margin-left: -160px;
+      transform: translateY(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border: 1px solid rgba(43, 108, 176, 0.1);
+      font-weight: 400;
+    }
+
+    .tooltip.enhanced:hover .tooltiptext {
+      transform: translateY(0);
+    }
+
+    .tooltip.enhanced .tooltiptext::after {
+      margin-left: -8px;
+      border-width: 8px;
+      border-color: #ffffff transparent transparent transparent;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .tooltip.enhanced .tooltiptext strong {
+      color: #2b6cb0;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .article-container {
+        padding: 1.5rem;
+      }
+
+      .article-title {
+        font-size: 2rem;
+      }
+
+      .article-content {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav-bar">
+    <a href="../index.html">← Back to Home</a>
+  </nav>
+
+  <article class="article-container">
+    <header class="article-header">
+      <h1 class="article-title">PID Control</h1>
+      <div class="article-meta">
+        Written by Nathan Daniel • Last updated Jan 2025
+      </div>
+    </header>
+
+    <div class="article-content">
+      <p>
+        I've poked fun at AI a couple of times in these articles mostly because I think it's funny that tech people
+        treat generative models as the magic fix-all tool for literally everything. But what these vibe coders and B2B
+        SaaS enjoyers might not realize that <span class="tooltip" style="cursor:help;">we've had our own version of
+          "AI"<span class="tooltiptext"><strong>don't be annoying about this</strong>, AI is a nonlinear model being
+            forward propagated, which is also what control theory is used!</span></span> for nearly 200 years called
+        <b>control theory.</b>
+
+      </p>
+
+      <p>
+        Unlike modern AI which shines when rules aren’t known ahead of time (recognizing objects, understanding
+        languages, or counting the number of r’s in the word strawberries), control theory is designed for the physical
+        world where the rules <i>are</i> well-defined. Motors, temperatures, and mechanical systems are part of
+        well-defined, physics-driven problems where the inputs, outputs, and desired behaviors are already known. And
+        for real-world problems, you do want fast, predictable, repeatable math as opposed to querying something to a
+        data center in Alaska and praying that it doesn’t hallucinate.
+      </p>
+
+      <div class="media-container" style="text-align: center;">
+        <img src="../imgs/lesson_7_robot_guitar.jpg" alt="robot playing guitar" style="width: 60%; max-width: 300px;">
+      </div>
+
+      <p>
+        Even if we manufactured robots on a well-oiled assembly line, no two would come out exactly the same. Tiny
+        differences in friction, weight, or alignment mean they’ll all behave a little differently, and in some
+        environments, even the slightest error can have serious consequences. Just like tuning a guitar before you play,
+        we need to “tune” each robot before it moves if we want it to hit the right notes. One of the most common tools
+        for that job is something called a PID controller.
+      </p>
+
+      <p>
+        A <b>PID controller</b> is a feedback system that helps a robot stay on track when it's trying to move
+        in any form - like rotating a joint, holding an arm steady, or following a line on the floor. PID stands
+        for <i>Proportional-Integral-Derivative</i>, and if that phrase triggers traumatic memories from calculus, don't
+        worry! In practice, it's a lot simpler than it sounds! Essentially, anytime you try to move to a certain
+        position, a PID controller is constantly using the following 3 'metrics' to get there in a more efficient way:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 3rem 0;">
+        <div
+          style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border: 4px solid #007bff; text-align: center;">
+          <h3 style="margin: 0 0 1rem 0; color: #007bff; font-size: 2rem;">P</h3>
+          <p style="margin: 0; font-size: 0.9rem;"><b>how wrong you are right now</b></p>
+        </div>
+        <div
+          style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border: 4px solid #28a745; text-align: center;">
+          <h3 style="margin: 0 0 1rem 0; color: #28a745; font-size: 2rem;">I</h3>
+          <p style="margin: 0; font-size: 0.9rem;"><b>how long you've been wrong</b></p>
+        </div>
+        <div
+          style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border: 4px solid #dc3545; text-align: center;">
+          <h3 style="margin: 0 0 1rem 0; color: #dc3545; font-size: 2rem;">D</h3>
+          <p style="margin: 0; font-size: 0.9rem;"><b>if you're about to be more wrong</b></p>
+        </div>
+      </div>
+
+      <h2>Let's Chill Out</h2>
+      <p>
+        It's a lot easier to visualize control systems with an everyday item, and we don't even need to use an example
+        with a robot or one that involves motion. Take a crappy A/C unit you
+        snatched off Facebook Marketplace for $40. It does its best to blast cold air into your room until the
+        room hits the temperature you set, but it's not great. So let's design a PID controller to keep your
+        room cool without the $6,000 electric bill.
+      </p>
+      <div class="media-container" style="text-align: center;">
+        <img src="../imgs/lesson_7_ac_unit.jpg" alt="ac unit" style="width: 60%; max-width: 900px;">
+      </div>
+      <p>
+        From that simple example, we can already define some terms if this was a real control system. The
+        <b>plant</b> (what we're controlling) is your room. The <b>setpoint</b> is the temperature you want
+        (say, 70°F). The <b>process variable</b> is the actual room temperature right now (around 74°F). The
+        <b>control output</b> is what the A/C can do: blow cold air to bring the temperature down.
+      </p>
+
+      <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 2rem 0;">
+        <ul style="margin: 0; padding-left: 1.5rem;">
+          <li style="margin-bottom: 1rem;"><strong>Your setpoint, r(t)</strong> = desired room temperature (70°F)</li>
+          <li style="margin-bottom: 1rem;"><strong>Process variable, y(t)</strong> = actual room temperature (74°F)</li>
+          <li style="margin-bottom: 1rem;"><strong>Error, e(t) = y(t) − r(t)</strong> = how far off you are. So at
+            <i>time</i> = 0, it wouid be 74 - 70 = 4°F
+          </li>
+          <li style="margin-bottom: 1rem;"><strong>Control output, u(t)</strong> = A/C effort. This will usually be a
+            decimal between 0 - 1, as a ‘duty cycle’ or % power</li>
+          <li style="margin-bottom: 1rem;"><strong>Plant, G(s)</strong> = room thermal response (air + walls)</li>
+          <li style="margin-bottom: 1rem;"><strong>Disturbance, d(t)</strong> = heat from sun, people, appliances, open
+            door, etc. Disturbance is really just any other variables we don’t technically account for, but plan for.
+          </li>
+          <li style="margin-bottom: 1rem;"><strong>K<sub>p</sub></strong> = <span class="tooltip"
+              style="cursor:help;">proportional gain<span class="tooltiptext"><strong>K<sub>p</sub></strong> also stands
+                for <b>proportional coefficient</b>. Mathematicians famously can't spell and thought that the word
+                'coefficients' starts with a 'K'</span></span>. This determines how strongly the controller reacts to
+            the current error. Think of K<sub>p</sub> as the "muscle" of your controller.</li>
+          <li style="margin-bottom: 1rem;"><strong>K<sub>i</sub></strong> = integral gain. Determines how strongly the
+            controller reacts to the accumulated (past) error. Think of K<sub>i</sub> as the "memory" of your
+            controller.</li>
+          <li style="margin-bottom: 1rem;"><strong>K<sub>d</sub></strong> = derivative gain. Determines how strongly the
+            controller reacts to the predicted future error (based on rate of change). Think of K<sub>d</sub> as the
+            "brakes" of your controller.</li>
+        </ul>
+
+        <p style="margin-top: 1.5rem; font-size: 0.95rem; color: #666; font-style: italic; text-align: center;">
+          <strong>Note:</strong> You'll notice that everything has an (t) attached to it - this just means that all of
+          our variables are a function of time. Time also happens to be a great metric for how well our controller is
+          working!
+        </p>
+      </div>
+
+      <p>Now, everything comes together in a neat equation like so:</p>
+      <div style="text-align: center; margin: 2rem 0;">
+        <div
+          style="font-family: 'Times New Roman', serif; font-size: 1.3rem; line-height: 1.8; color: #202124; font-style: italic;">
+          u(t) = K<sub>p</sub>e(t) + K<sub>i</sub>∫<sub>0</sub><sup>t</sup>e(τ)dτ + K<sub>d</sub>de(t)/dt
+        </div>
+      </div>
+
+      <p>
+        … but the important thing is really this picture below:
+      </p>
+
+
+      <div class="media-container" style="text-align: center;">
+        <img src="../imgs/lesson_7_block_diagram.png" alt="PID control block diagram"
+          style="width: 100%; max-width: 700px;">
+      </div>
+
+      <p>
+        This is a <b>block diagram</b>, and aside from being a diagram containing blocks is also a schematic that
+        represents a control system in a more digestible form. We start on the left with our setpoint, or input (70°F)
+        entering the diagram on the left. That passes through the controller, which uses our variables to determine what
+        small change our A/C should make. At the end on the right, if our setpoint hasn’t been met yet, the loop
+        restarts and passes through the controller again, making tiny adjustments until the room has cooled down to the
+        desired temperature. The key takeaway here is that the controller doesn’t get it ‘right’ on the first attempt. A
+        PID controller iterates constantly by correcting and adjusting itself until our process is finished.
+      </p>
+
+      <h2>A/C PID Simulator</h2>
+      <p>
+        Before hopping straight into this incredible simulator, I did simplify the model a bit so that you can see
+        the direct effects of each gain on the system. Under the hood I switched to a slightly richer A/C room with
+        walls (two thermal masses = gentle second-order plant), so the system is a bit more realistic. <b>Try messing
+          around with each of the three gains to see how they affect the system in real time!</b>
+      </p>
+
+      <div style="background: #f8f9fa; padding: 2rem; border-radius: 12px; margin: 2rem 0; border: 1px solid #e1e5e9;">
+        <h3 style="margin: 0 0 1.5rem 0; color: #292929; font-weight: 700; text-align: left;">Control Parameters</h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+          <!-- Kp Slider -->
+          <div>
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2b6cb0;">Proportional Gain
+              (K<sub>p</sub>)</label>
+            <div id="kp-value"
+              style="text-align: center; margin-bottom: 0.5rem; font-weight: 600; color: #2b6cb0; font-size: 1.1rem;">
+              1.10</div>
+            <input type="range" id="kp-slider" min="0" max="4" step="0.05" value="1.10" style="width: 100%;">
+            <div
+              style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+              <span>0</span><span>4.0</span>
+            </div>
+          </div>
+
+          <!-- Ki Slider -->
+          <div>
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #28a745;">Integral Gain
+              (K<sub>i</sub>)</label>
+            <div id="ki-value"
+              style="text-align: center; margin-bottom: 0.5rem; font-weight: 600; color: #28a745; font-size: 1.1rem;">
+              0.08</div>
+            <input type="range" id="ki-slider" min="0" max="0.40" step="0.005" value="0.08" style="width: 100%;">
+            <div
+              style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+              <span>0</span><span>0.40</span>
+            </div>
+          </div>
+
+          <!-- Kd Slider -->
+          <div>
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #dc3545;">Derivative Gain
+              (K<sub>d</sub>)</label>
+            <div id="kd-value"
+              style="text-align: center; margin-bottom: 0.5rem; font-weight: 600; color: #dc3545; font-size: 1.1rem;">
+              0.35</div>
+            <input type="range" id="kd-slider" min="0" max="2.0" step="0.05" value="0.35" style="width: 100%;">
+            <div
+              style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+              <span>0</span><span>2.0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS -->
+        <div style="margin-top:12px;">
+          <h3 style="margin:.2rem 0 .6rem 0; color: #292929; font-weight: 700; text-align: left;">System Response</h3>
+          <div style="display: flex; justify-content: center; gap: 1.5rem;">
+            <div style="text-align: center;">
+              <h4 style="margin:.2rem 0;text-align:center;">Air Temperature vs Time</h4>
+              <canvas id="temp-chart" width="520" height="320"
+                style="background:white;border:2px solid #d1d5db;border-radius:8px;"></canvas>
+            </div>
+            <div style="text-align: center;">
+              <h4 style="margin:.2rem 0;text-align:center;">Control Effort (0–100%)</h4>
+              <canvas id="control-chart" width="520" height="320"
+                style="background:white;border:2px solid #d1d5db;border-radius:8px;"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div style="margin-top:12px">
+          <h3 style="margin:0 0 8px 0; color: #292929; font-weight: 700; text-align: left;">Performance Metrics <span
+              style="font-size: 0.8rem; font-weight: 400; color: #666; font-style: italic;">(hover over these to see
+              what they mean!)</span></h3>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+            <div class="tooltip enhanced" style="cursor:help;">
+              <div style="background:white;border:1px solid #e1e5e9;border-radius:8px;padding:.8rem;text-align:center;">
+                <div style="font-size:.9rem;color:#666;">Rise Time (10→90%)</div>
+                <div id="rise-time" style="font-weight:700;">–</div>
+              </div>
+              <span class="tooltiptext">
+                <strong>Rise Time </strong>is how quickly you feel the change starting to happen. Specifically, how long
+                it takes the temperature to go from 10% to 90% of the way to the setpoint.
+              </span>
+            </div>
+            <div class="tooltip enhanced" style="cursor:help;">
+              <div style="background:white;border:1px solid #e1e5e9;border-radius:8px;padding:.8rem;text-align:center;">
+                <div style="font-size:.9rem;color:#666;">Overshoot</div>
+                <div id="overshoot" style="font-weight:700;">–</div>
+              </div>
+              <span class="tooltiptext">
+                <strong>Overshoot</strong> is how much the system goes past the target before correcting itself. How
+                much the temperature goes below the setpoint before settling. If your A/C cools the room down to 68°F
+                before it realizes you only wanted 70°F, that extra 2°F below target is overshoot.
+              </span>
+            </div>
+            <div class="tooltip enhanced" style="cursor:help;">
+              <div style="background:white;border:1px solid #e1e5e9;border-radius:8px;padding:.8rem;text-align:center;">
+                <div style="font-size:.9rem;color:#666;">Settling (±0.5°F)</div>
+                <div id="settling-time" style="font-weight:700;">–</div>
+              </div>
+              <span class="tooltiptext">
+                <strong>Settling Time</strong> is how long until the system "calms down" and stays close enough to the
+                target (within ±0.5°F of the setpoint).
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>Tuning Gone Wrong</h2>
+      <p>
+        Usually, tuning a PID controller isn't as easy as I made it out to be. If the A/C's "PID brain" isn't tuned
+        correctly, things could get messy:
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+        <!-- Too Much Gain Column -->
+        <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 1.5rem;">
+          <h4
+            style="margin: 0 0 1rem 0; color: #856404; font-size: 1.8rem; text-align: center; line-height: 1; display: flex; align-items: center; justify-content: center; height: 2.5rem;">
+            Too Much Gain</h4>
+
+          <div style="margin-bottom: 1rem;">
+            <div style="font-weight: 600; color: #856404; margin-bottom: 0.5rem;">Too much P</div>
+            <div style="font-size: 0.95rem; color: #5a4a00;">The A/C keeps overreacting. The room overshoots hot and
+              cold, cycling on and off constantly.</div>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <div style="font-weight: 600; color: #856404; margin-bottom: 0.5rem;">Too much I</div>
+            <div style="font-size: 0.95rem; color: #5a4a00;">Corrections are sluggish, and by the time the room catches
+              up, it overshoots and keeps bouncing.</div>
+          </div>
+
+          <div>
+            <div style="font-weight: 600; color: #856404; margin-bottom: 0.5rem;">Too much D</div>
+            <div style="font-size: 0.95rem; color: #5a4a00;">The system gets twitchy, reacting to every little change
+              like background noise. The A/C seems jittery.</div>
+          </div>
+        </div>
+
+        <!-- Too Little Gain Column -->
+        <div style="background: #d1ecf1; border: 2px solid #17a2b8; border-radius: 12px; padding: 1.5rem;">
+          <h4
+            style="margin: 0 0 1rem 0; color: #0c5460; font-size: 1rem; text-align: center; line-height: 1; display: flex; align-items: center; justify-content: center; height: 2.5rem;">
+            Too Little Gain</h4>
+
+          <div style="margin-bottom: 1rem;">
+            <div style="font-weight: 600; color: #0c5460; margin-bottom: 0.5rem;">Too little P</div>
+            <div style="font-size: 0.95rem; color: #0a4149;">The A/C barely reacts. Even when the room is 10°F too hot,
+              the system only makes a weak correction, so it takes forever to cool down (if it ever does).</div>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <div style="font-weight: 600; color: #0c5460; margin-bottom: 0.5rem;">Too little I</div>
+            <div style="font-size: 0.95rem; color: #0a4149;">The system never fixes its "bias." If the room stalls at
+              62°F when you want 60°F, nothing ever pushes it that last bit closer.</div>
+          </div>
+
+          <div>
+            <div style="font-weight: 600; color: #0c5460; margin-bottom: 0.5rem;">Too little D</div>
+            <div style="font-size: 0.95rem; color: #0a4149;">The controller can't anticipate changes. When the room
+              cools quickly, nothing slows it down, so overshoot is more likely.</div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Once you've got the gains in the ballpark, you'll notice the overall shape of how the room approaches the target
+        can look very different:
+      </p>
+
+      <div class="media-container" style="text-align: center;">
+        <img src="../imgs/lesson_7_damps.webp" alt="Different damping behaviors in PID control"
+          style="width: 100%; max-width: 700px;">
+      </div>
+
+
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0;">
+        <!-- Underdamped -->
+        <div
+          style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 12px; padding: 1.5rem; text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📈</div>
+          <h4 style="margin: 0 0 1rem 0; color: #dc2626; font-size: 1.2rem;">Underdamped</h4>
+          <p style="margin: 0; font-size: 0.95rem; color: #7f1d1d; line-height: 1.5;">
+            The A/C is too aggressive. The room temp overshoots below 70°F, then bounces above, then below again. It's
+            unstable, like a shower that keeps swinging between freezing and boiling.
+          </p>
+        </div>
+
+        <!-- Overdamped -->
+        <div
+          style="background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 12px; padding: 1.5rem; text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🐌</div>
+          <h4 style="margin: 0 0 1rem 0; color: #0369a1; font-size: 1.2rem;">Overdamped</h4>
+          <p style="margin: 0; font-size: 0.95rem; color: #0c4a6e; line-height: 1.5;">
+            The A/C is too cautious. The room crawls toward 70°F so slowly that it feels like it never gets there.
+            Stable, but painfully sluggish.
+          </p>
+        </div>
+
+        <!-- Critically Damped -->
+        <div
+          style="background: #f0fdf4; border: 2px solid #22c55e; border-radius: 12px; padding: 1.5rem; text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎯</div>
+          <h4 style="margin: 0 0 1rem 0; color: #16a34a; font-size: 1.2rem;">Critically Damped</h4>
+          <p style="margin: 0; font-size: 0.95rem; color: #15803d; line-height: 1.5;">
+            The Goldilocks zone. The room cools down quickly without overshooting and settles smoothly right on 70°F.
+          </p>
+        </div>
+      </div>
+
+      <h2>Cool math, but what is the point of all this? </h2>
+      <p>
+        Embarrassingly, this is one of my favorite subjects in robotics, but I still went through two semesters of
+        control theory in college without really understanding one simple question - what is a controller? In my head
+        (and likely yours right now), it was just a bunch of math, graphs, and variables that magically got plugged into
+        a circuit board.
+
+      </p>
+      <p>
+        It wasn't until I had an internship designing PID controllers in Python for a robot when everything clicked -
+        it's pretty much a <code> while()</code> loop. If you're not a software person, that means it's just a loop
+        that runs thousands of times with incremental changes until what you want to happen, well, happens. And tuning
+        is just the process of making that process more efficient. Yes, there's a lot of math that goes into this, but
+        at its core PID control means using live feedback to do something better.
+      </p>
+
+      <p>
+        Even if you're not a software person, take a gander at this code block. It's a bare-bones version of a PID loop
+        used to command a motor to a certain rpm (revolutions per minute, a common way to describe motor speed). It's
+        pretty similar to what you might see in a real robot control script!
+      </p>
+
+      <pre
+        style="background: #000000; border-radius: 8px; padding: 1.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid #333;"><code style="color: #ffffff; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.95rem; line-height: 1.6;">
+<span style="color: #808080;"># initializing the value of each gain</span>
+<span style="color: #ffffff;">Kp</span> = <span style="color: #ff69b4;">0.4</span>
+<span style="color: #ffffff;">Ki</span> = <span style="color: #ff69b4;">0.1</span>
+<span style="color: #ffffff;">Kd</span> = <span style="color: #ff69b4;">0.05</span>
+
+<span style="color: #ffffff;">target</span> = <span style="color: #ff69b4;">1000.0</span>   <span style="color: #808080;"># desired RPM (setpoint, or your target speed)</span>
+<!-- <span style="color: #808080;"># these 2 variables track accumulated error and rate of change for integral/derivative terms</span> -->
+<span style="color: #ffffff;">integral</span> = <span style="color: #ff69b4;">0.0</span>
+<span style="color: #ffffff;">prev_error</span> = <span style="color: #ff69b4;">0.0</span>
+
+<span style="color: #0066cc;">while</span> <span style="color: #0066cc;">True</span>:
+    <span style="color: #808080;"># 1. Measure process variable, or current speed</span>
+    <span style="color: #ffffff;">current</span> = <span style="color: #ffffff;">read_rpm</span>()
+    
+    <span style="color: #808080;"># 2. Calculate error</span>
+    <span style="color: #ffffff;">error</span> = <span style="color: #ffffff;">target</span> - <span style="color: #ffffff;">current</span>
+    
+    <span style="color: #808080;"># 3. ID terms</span>
+    <span style="color: #ffffff;">integral</span> += <span style="color: #ffffff;">error</span>
+    <span style="color: #ffffff;">derivative</span> = <span style="color: #ffffff;">error</span> - <span style="color: #ffffff;">prev_error</span>
+    
+    <span style="color: #808080;"># 4. Calculate control effort</span>
+    <span style="color: #ffffff;">output</span> = <span style="color: #ffffff;">Kp</span>*<span style="color: #ffffff;">error</span> + <span style="color: #ffffff;">Ki</span>*<span style="color: #ffffff;">integral</span> + <span style="color: #ffffff;">Kd</span>*<span style="color: #ffffff;">derivative</span>
+    
+    <span style="color: #808080;"># 5. Apply to motor</span>
+    <span style="color: #ffffff;">set_motor</span>(<span style="color: #ffffff;">output</span>)
+    
+    <span style="color: #808080;"># 6. Save state for next loop</span>
+    <span style="color: #ffffff;">prev_error</span> = <span style="color: #ffffff;">error</span></code></pre>
+    
+    <p>
+      PID is pretty great, but real systems are never perfect. Disturbances sneak in, like sunlight heating your room, a
+      door opening, or a gust of wind hitting a drone. A PID controller can correct for these, but only after they’ve
+      already happened. It reacts, it doesn’t anticipate.
+    </p>
+
+    <p>
+      The future of control theory might blend feedback loops with self-learning systems to fill in some of the gaps,
+      but at the end of the day PID is an integral part of robotics and physical systems that won’t be going anywhere.
+      In future lessons, we’ll learn about more complex types of controllers that try to predict the future of our
+      system in interesting ways.
+
+    </p>
+  
+  </div>
+
+
+
+    
+  </article>
+
+  <script>
+    // ---------- Utilities ----------
+    const $ = id => document.getElementById(id);
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+    const fmtTime = x => isFinite(x) ? x.toFixed(2) + " s" : "–";
+    const fmtDeg = x => (Math.abs(x) < 0.005) ? "0.00 °F" : x.toFixed(2) + " °F";
+
+    function niceNum(x, round) {
+      const exp = Math.floor(Math.log10(x));
+      const f = x / Math.pow(10, exp);
+      let nf;
+      if (round) nf = (f < 1.5) ? 1 : (f < 3) ? 2 : (f < 7) ? 5 : 10;
+      else nf = (f <= 1) ? 1 : (f <= 2) ? 2 : (f <= 5) ? 5 : 10;
+      return nf * Math.pow(10, exp);
+    }
+    function niceTicks(min, max, count = 5) {
+      if (min === max) { min -= 1; max += 1; }
+      const range = niceNum(max - min, false);
+      const step = niceNum(range / (count - 1), true);
+      const start = Math.floor(min / step) * step;
+      const end = Math.ceil(max / step) * step;
+      const ticks = [];
+      for (let v = start; v <= end + 1e-12; v += step) ticks.push(+v.toFixed(10));
+      return { ticks, start, end, step };
+    }
+
+    // ---------- Drawing ----------
+    function drawAxesWithTicks(ctx, W, H, xPxTicks, xLabel, yPxTicks, yLabel) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = '#e1e5e9'; ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(50, 10); ctx.lineTo(50, H - 30); ctx.lineTo(W - 10, H - 30);
+      ctx.stroke();
+
+      ctx.font = '11px Arial'; ctx.fillStyle = '#666';
+      // grid
+      ctx.strokeStyle = '#f0f0f0';
+      xPxTicks.forEach(xp => { ctx.beginPath(); ctx.moveTo(xp, 10); ctx.lineTo(xp, H - 30); ctx.stroke(); });
+      yPxTicks.forEach(yp => { ctx.beginPath(); ctx.moveTo(50, yp); ctx.lineTo(W - 10, yp); ctx.stroke(); });
+      // ticks
+      ctx.strokeStyle = '#999';
+      xPxTicks.forEach(xp => { ctx.beginPath(); ctx.moveTo(xp, H - 30); ctx.lineTo(xp, H - 25); ctx.stroke(); });
+      yPxTicks.forEach(yp => { ctx.beginPath(); ctx.moveTo(45, yp); ctx.lineTo(50, yp); ctx.stroke(); });
+
+      // labels
+      ctx.fillStyle = '#333'; ctx.font = '12px Arial'; ctx.textAlign = 'center';
+      ctx.fillText(xLabel, W / 2, H - 2);
+      ctx.save(); ctx.translate(15, H / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(yLabel, 0, 0); ctx.restore();
+    }
+
+    function drawTempChart(canvas, t, y, sp) {
+      const ctx = canvas.getContext('2d'), W = canvas.width, H = canvas.height;
+      const L = 50, R = 10, Tm = 10, B = 30;
+
+      const tmax = t[t.length - 1] || 1;
+      const xMap = tt => L + (tt / tmax) * (W - L - R);
+
+      const yminD = Math.min(...y, sp), ymaxD = Math.max(...y, sp);
+      const pad = 0.05 * (ymaxD - yminD || 1);
+      const ymin = yminD - pad, ymax = ymaxD + pad;
+      const yMap = yy => (H - B) - ((yy - ymin) / (ymax - ymin)) * (H - Tm - B);
+
+      const xCount = 6, xStep = tmax / (xCount - 1);
+      const xPxTicks = Array.from({ length: xCount }, (_, i) => xMap(i * xStep));
+      const { ticks: yVals } = niceTicks(ymin, ymax, 5);
+      const yPxTicks = yVals.map(v => yMap(v));
+
+      drawAxesWithTicks(ctx, W, H, xPxTicks, 'Time (s)', yPxTicks, 'Air Temp (°F)');
+
+      ctx.fillStyle = '#666'; ctx.font = '11px Arial'; ctx.textAlign = 'center';
+      xPxTicks.forEach((xp, i) => ctx.fillText((i * xStep).toFixed(0), xp, H - 10));
+      ctx.textAlign = 'right';
+      yVals.forEach((yv, i) => ctx.fillText(yv.toFixed(0), 45, yPxTicks[i] + 3));
+
+      // setpoint line
+      ctx.setLineDash([6, 6]); ctx.strokeStyle = '#28a745'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(L, yMap(sp)); ctx.lineTo(W - R, yMap(sp)); ctx.stroke(); ctx.setLineDash([]);
+
+      // curve
+      ctx.strokeStyle = '#dc3545'; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i < y.length; i++) {
+        const xx = xMap(t[i]), yy = yMap(y[i]);
+        if (i === 0) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy);
+      }
+      ctx.stroke();
+    }
+
+    function drawCtrlChart(canvas, t, u) {
+      const ctx = canvas.getContext('2d'), W = canvas.width, H = canvas.height;
+      const L = 50, R = 10, Tm = 10, B = 30;
+      const tmax = t[t.length - 1] || 1;
+      const xMap = tt => L + (tt / tmax) * (W - L - R);
+      const yMap = uu => (H - B) - (uu * (H - Tm - B)); // uu in [0,1]
+
+      const xCount = 6, xStep = tmax / (xCount - 1);
+      const xPxTicks = Array.from({ length: xCount }, (_, i) => xMap(i * xStep));
+      const yVals = [0, .25, .5, .75, 1.0];
+      const yPxTicks = yVals.map(v => yMap(v));
+
+      drawAxesWithTicks(ctx, W, H, xPxTicks, 'Time (s)', yPxTicks, 'Control Effort (%)');
+
+      ctx.fillStyle = '#666'; ctx.font = '11px Arial'; ctx.textAlign = 'center';
+      xPxTicks.forEach((xp, i) => ctx.fillText((i * xStep).toFixed(0), xp, H - 10));
+      ctx.textAlign = 'right';
+      yVals.forEach((yv, i) => ctx.fillText(String(Math.round(yv * 100)), 45, yPxTicks[i] + 3));
+
+      ctx.strokeStyle = '#2b6cb0'; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i < u.length; i++) {
+        const xx = xMap(t[i]), yy = yMap(u[i]);
+        if (i === 0) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy);
+      }
+      ctx.stroke();
+    }
+
+    // ---------- Metrics ----------
+    const crossed = (y1, y2, target) => (y1 >= target && y2 <= target) || (y1 <= target && y2 >= target);
+
+    function computeMetrics(t, y, sp) {
+      const y0 = y[0];
+      const y10 = y0 + 0.10 * (sp - y0);
+      const y90 = y0 + 0.90 * (sp - y0);
+
+      let t10 = NaN, t90 = NaN;
+      for (let i = 1; i < y.length; i++) {
+        if (Number.isNaN(t10) && crossed(y[i - 1], y[i], y10)) t10 = t[i];
+        if (Number.isNaN(t90) && crossed(y[i - 1], y[i], y90)) t90 = t[i];
+      }
+      const rise = (isFinite(t10) && isFinite(t90)) ? Math.abs(t90 - t10) : Infinity;
+
+      const minY = Math.min(...y);
+      const overshoot = (minY < sp) ? (sp - minY) : 0;
+
+      const tol = 0.5;
+      let settle = Infinity;
+      let suffixAllWithin = true;
+      for (let i = y.length - 1; i >= 0; i--) {
+        if (Math.abs(y[i] - sp) > tol) suffixAllWithin = false;
+        if (suffixAllWithin) settle = t[i];
+      }
+      return { rise, overshoot, settle };
+    }
+
+    // ---------- Simulation (A/C with walls; second-order) ----------
+    // Hidden "plant" parameters chosen to make damping changes visible via Kp/Ki/Kd.
+    const HIDDEN = {
+      Tamb: 78,       // ambient °F
+      Tair0: 74,      // initial air temp
+      Twall0: 76,     // initial wall temp (usually warmer than air)
+      Tset: 70,       // setpoint °F (close to start)
+      tau_a: 120,     // air ↔ ambient time constant (s)
+      tau_w: 300,     // wall ↔ ambient time constant (s)
+      tau_aw: 90,     // air ↔ wall coupling (s)
+      Kcool: 0.18,    // cooling effectiveness → °F/s at u=1
+      dt: 0.1,        // integration step for fast-forward
+      TMAX: 600       // simulation horizon (s)
+    };
+
+    // PID on air temp error; anti-windup; clamp u∈[0,1]
+    function simulate(kp, ki, kd) {
+      const { Tamb, Tair0, Twall0, Tset, tau_a, tau_w, tau_aw, Kcool, dt, TMAX } = HIDDEN;
+
+      let t = 0, Ta = Tair0, Tw = Twall0;
+      let ePrev = Ta - Tset;
+      let I = 0;
+      let u = 0;
+
+      const times = [0], yAir = [Ta], efforts = [u];
+
+      const stepMag = Math.max(1e-6, Math.abs(Tair0 - Tset));
+
+      while (t < TMAX) {
+        const e = Ta - Tset;
+        const eN = e / stepMag;
+        const dN = ((e - ePrev) / dt) / stepMag;
+        const Itr = I + eN * dt;
+
+        const u_raw = kp * eN + ki * Itr + kd * dN;
+        const u_cmd = clamp(u_raw, 0, 1);
+        const pushingHigh = (u_cmd === 1 && u_raw > 1);
+        const pushingLow = (u_cmd === 0 && u_raw < 0);
+        I = (pushingHigh || pushingLow) ? I : Itr;
+        u = u_cmd;
+
+        // Plant dynamics
+        const dTa = ((Tw - Ta) / tau_aw + (Tamb - Ta) / tau_a - Kcool * u) * dt;
+        const dTw = ((Tamb - Tw) / tau_w + (Ta - Tw) / tau_aw) * dt;
+
+        Ta += dTa; Tw += dTw;
+        t += dt;
+
+        times.push(t); yAir.push(Ta); efforts.push(u);
+        ePrev = e;
+      }
+      return { t: times, y: yAir, u: efforts, sp: Tset };
+    }
+
+    // ---------- Wiring ----------
+    const sliders = [['kp-slider', 'kp-value'], ['ki-slider', 'ki-value'], ['kd-slider', 'kd-value']];
+    sliders.forEach(([id, val]) => {
+      $(id).addEventListener('input', () => {
+        const v = parseFloat($(id).value);
+        $(val).textContent = v.toFixed((id === 'ki-slider') ? 3 : 2);
+        runAll();
+      });
+    });
+
+    function runAll() {
+      const kp = parseFloat($('kp-slider').value);
+      const ki = parseFloat($('ki-slider').value);
+      const kd = parseFloat($('kd-slider').value);
+
+      const { t, y, u, sp } = simulate(kp, ki, kd);
+
+      const m = computeMetrics(t, y, sp);
+      $('rise-time').textContent = fmtTime(m.rise);
+      $('overshoot').textContent = fmtDeg(m.overshoot);
+      $('settling-time').textContent = fmtTime(m.settle);
+
+      drawTempChart($('temp-chart'), t, y, sp);
+      drawCtrlChart($('control-chart'), t, u);
+    }
+
+    // initial text + first run
+    sliders.forEach(([id, val]) => {
+      const v = parseFloat($(id).value);
+      $(val).textContent = v.toFixed((id === 'ki-slider') ? 3 : 2);
+    });
+    runAll();
+  </script>
+</body>
+
+</html>
