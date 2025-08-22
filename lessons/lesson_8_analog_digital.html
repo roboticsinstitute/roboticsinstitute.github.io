@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Communication Basics | The Robotics Institute</title>
+    <title>Analog and Digital | The Robotics Institute</title>
     <!-- Copy all the styles from intro-to-robotics.html -->
     <style>
         body {
@@ -233,48 +233,25 @@
 
         /* Interactive Tool Styles */
         .interactive-tool {
-            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-            border: 2px solid #4a5568;
-            border-radius: 12px;
+            background: #ffffff;
+            border: 3px solid #000000;
+            border-radius: 8px;
             padding: 2rem;
             margin: 3rem 0;
-            box-shadow: 
-                0 8px 32px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
         }
 
-        .interactive-tool::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #00d4ff, #0099cc, #00d4ff);
-            background-size: 200% 100%;
-            animation: scan-line 3s ease-in-out infinite;
-        }
-
-        @keyframes scan-line {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
         .interactive-tool h4 {
-            color: #00d4ff;
+            color: #000000;
             font-size: 1.4rem;
             margin-bottom: 1rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
-            font-family: 'Courier New', monospace;
         }
 
         .tool-description {
-            color: #e2e8f0;
+            color: #4a5568;
             font-size: 1rem;
             margin-bottom: 1.5rem;
             line-height: 1.6;
@@ -287,19 +264,16 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding: 1.5rem;
-            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            background: #f7fafc;
             border-radius: 8px;
-            border: 1px solid #718096;
-            box-shadow: 
-                0 4px 16px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .tool-controls label {
             font-weight: 500;
-            color: #ffffff;
+            color: #4a5568;
             font-size: 0.95rem;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
 
         .slider {
@@ -354,7 +328,7 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.5rem 1rem;
-            background-color: #2b6cb0;
+            background-color: #6b7280;
             color: white;
             border: none;
             border-radius: 6px;
@@ -364,15 +338,15 @@
         }
 
         .pause-btn:hover {
-            background-color: #1e40af;
+            background-color: #4b5563;
         }
 
         .pause-btn.paused {
-            background-color: #38a169;
+            background-color: #059669;
         }
 
         .pause-btn.paused:hover {
-            background-color: #2f855a;
+            background-color: #047857;
         }
 
         .pause-btn .play-icon {
@@ -391,51 +365,35 @@
             text-align: center;
             margin: 1.5rem 0;
             padding: 1.5rem;
-            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            background: #ffffff;
             border-radius: 8px;
-            border: 2px solid #4a5568;
-            box-shadow: 
-                0 4px 16px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             position: relative;
         }
 
-        .canvas-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #00d4ff, #0099cc, #00d4ff);
-            border-radius: 8px 8px 0 0;
-        }
-
         .canvas-container canvas {
-            border: 2px solid #4a5568;
+            border: 1px solid #e2e8f0;
             border-radius: 6px;
             max-width: 100%;
             height: auto;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: #ffffff;
         }
 
         .tool-explanation {
-            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-            border: 1px solid #718096;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 1.5rem;
             margin-top: 1.5rem;
-            box-shadow: 
-                0 4px 16px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .tool-explanation p {
             margin-bottom: 1rem;
-            color: #ffffff;
+            color: #4a5568;
             line-height: 1.7;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
 
         .tool-explanation ul {
@@ -450,43 +408,26 @@
         }
 
         .tool-explanation strong {
-            color: #00d4ff;
-            text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+            color: #000000;
+            font-weight: 600;
         }
 
         /* What is it literally section */
         .what-is-it-section {
-            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-            border: 1px solid #718096;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 2rem;
             margin: 2rem 0 0 0;
-            box-shadow: 
-                0 4px 16px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             position: relative;
         }
 
-        .what-is-it-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #00d4ff, #0099cc, #00d4ff);
-            border-radius: 8px 8px 0 0;
-        }
-
         .what-is-it-section h4 {
-            color: #00d4ff;
+            color: #000000;
             font-size: 1.3rem;
             margin-bottom: 1.5rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
-            font-family: 'Courier New', monospace;
         }
 
         .what-is-it-section .image-text-container {
@@ -505,11 +446,10 @@
         }
 
         .what-is-it-section .text-side p {
-            color: #ffffff;
+            color: #4a5568;
             font-size: 1rem;
             line-height: 1.7;
             margin: 0;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
 
         /* Canvas Legend */
@@ -519,51 +459,39 @@
             gap: 1.5rem;
             margin: 1.5rem 0;
             padding: 1.5rem;
-            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            background: #ffffff;
             border-radius: 8px;
-            border: 1px solid #718096;
-            box-shadow: 
-                0 4px 16px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             flex-wrap: wrap;
             align-items: center;
         }
 
         .legend-box {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0.75rem;
-            background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: #ffffff;
             border-radius: 6px;
             border: 1px solid #cbd5e0;
-            box-shadow: 
-                0 2px 8px rgba(0,0,0,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.8);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             position: relative;
             flex-shrink: 0;
             min-width: 0;
+            max-width: 300px;
         }
 
-        .legend-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #00d4ff, #0099cc);
-            border-radius: 6px 6px 0 0;
-        }
+
 
         .legend-box:hover {
             transform: translateY(-2px);
-            box-shadow: 
-                0 4px 16px rgba(0,0,0,0.15),
-                inset 0 1px 0 rgba(255,255,255,0.9);
-            border-color: #00d4ff;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            border-color: #6b7280;
         }
+
+
 
         .legend-color {
             width: 16px;
@@ -572,16 +500,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-top: 2px;
         }
 
         .legend-text {
             color: #4a5568;
             font-size: 0.85rem;
-            line-height: 1.2;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 120px;
+            line-height: 1.3;
+            white-space: normal;
+            overflow: visible;
+            text-align: left;
+            flex: 1;
+            min-width: 0;
         }
 
         /* Responsive design for smaller screens */
@@ -630,7 +560,7 @@
 
     <article class="article-container">
         <header class="article-header">
-            <h1 class="article-title">Communication Basics</h1>
+            <h1 class="article-title">Analog and Digital</h1>
             <div class="article-meta">
                 Written by Nathan Daniel • Last updated Jan 2025
             </div>
@@ -773,8 +703,8 @@
                     <div class="legend-box blue">
                         <div class="legend-color">
                             <svg width="16" height="16" viewBox="0 0 16 16">
-                                <rect x="2" y="4" width="4" height="8" fill="#2b6cb0"/>
-                                <rect x="10" y="4" width="4" height="8" fill="#2b6cb0"/>
+                                                <rect x="2" y="4" width="4" height="8" fill="#2b6cb0"/>
+                <rect x="10" y="4" width="4" height="8" fill="#2b6cb0"/>
                             </svg>
                         </div>
                         <div class="legend-text">
@@ -796,8 +726,30 @@
                 <div class="canvas-container">
                     <canvas id="dac-canvas" width="600" height="300"></canvas>
                 </div>
+
+                <!-- What is it literally section -->
+                <div class="what-is-it-section">
+                    <h4>What is it literally?</h4>
+                    <div class="image-text-container">
+                        <div class="text-side">
+                            <p>
+                                A DAC is also usually a tiny chip made of transistors, capacitors, and <span class="tooltip">resistor ladders<span class="tooltiptext">A network of resistors (things that measure resistance) arranged like the rungs of a ladder that divides voltage into precise steps, often used inside DACs to turn digital numbers into proportional voltages.</span></span>. Like an ADC, it might be a standalone component you wire up or built directly into your robot's microcontroller. Inside, these parts work together to take digital numbers and "smooth" them back into real-world voltages, converting binary steps to a continuous signal.
+                            </p>
+                        </div>
+                        <div class="image-side">
+                            <img src="../imgs/lesson_8_dac.png" alt="DAC circuit diagram" class="side-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="conclusion-section">
+                <p>
+                    Just like in spoken languages, simply knowing the words isn’t enough. You also need grammar and rules so the conversation doesn’t turn into random shouting (though that can be fun sometimes). In robotics, those rules are called protocols, and they’re what keep the brain, muscles, and sensors all in sync. We’ll dive into those in the next lesson! 
+                </p>
             </div>
         </div>
+
     </article>
 
     <script>
@@ -1062,7 +1014,7 @@
                     }
                     
                     // Draw bit labels
-                    ctx.fillStyle = '#ffffff';
+                    ctx.fillStyle = '#000000';
                     ctx.font = '14px Arial';
                     ctx.textAlign = 'center';
                     ctx.fillText(bit, x + bitWidth / 2, centerY + 5);
