@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspaces | The Robotics Institute</title>
+    <!-- Copy all the styles from intro-to-robotics.html -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #faf9f6;
+            color: #292929;
+            line-height: 1.6;
+        }
+
+        .nav-bar {
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .nav-bar a {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: #292929;
+            text-decoration: none;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .article-container {
+            max-width: 800px;
+            margin: 80px auto 0;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-title {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            color: #292929;
+        }
+
+        .article-meta {
+            color: #666;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #292929;
+        }
+
+        .article-content p {
+            margin-bottom: 3rem;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            font-weight: 500;
+        }
+
+        /* Media elements styling */
+        .media-container {
+            margin: 2rem 0;
+            width: 100%;
+        }
+
+        .media-container img {
+            width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .media-container video {
+            width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .caption {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            color: #2b6cb0;
+            cursor: help;
+        }
+
+        .tooltiptext {
+            visibility: hidden;
+            width: 300px;
+            background-color: #2d3748;
+            color: #ffffff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 0.75rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -150px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .article-container {
+                margin: 60px auto 0;
+                padding: 1rem;
+            }
+
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-content {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav-bar">
+        <a href="../index.html">← Back to Home</a>
+    </nav>
+
+    <article class="article-container">
+        <header class="article-header">
+            <h1 class="article-title">Workspaces</h1>
+            <div class="article-meta">
+                Written by Nathan Daniel • Last updated Jan 2025
+            </div>
+        </header>
+
+        <div class="article-content">
+            
+
+            <p>
+                Let’s switch gears from signals and jump back into kinematics. Previously, we looked at <b>forward kinematics</b> (plug in the angles for each joint, get the position of your robot) and <b>inverse kinematics</b> (pick a position to go to, and solve for the angles). But we skipped a pretty vital question: where can my robot actually get to?
+            </p>
+
+            <p>
+                You can tell a 2-link robot arm to grab a cup across the room, but if it’s arms don’t reach then that’s never really going to happen (unless you give it wheels). That’s where the idea of a workspace comes in.
+            </p>
+
+            <p>
+                A robot’s <b>workspace</b> is like it’s “bubble” of reach, or it’s personal space. If your legs were glued to the floor in one spot and you swung your arms wildly around in every direction, the physical volume of air you can sweep out is your workspace. Anything outside of it its completely unreachable.
+            </p>
+
+            <div style="text-align: center; margin: 2rem 0;">
+                <img src="../imgs/lesson_10_workspace_6_link.png" alt="Workspace" style="width: 100%; max-width: 400px;">
+                <p class="caption">Workspaces rarely end up looking like normal shapes. This arm has 6 links and a wristed end effector, which gives it a crescent with random holes punched out looking shape</p>
+            </div>
+
+            <p>
+                It's a lot simpler to talk about workspaces in 2-D rather than 3-D. If we had a simple, 2-link planar robot arm, it's workspace would look like a donut. The outer ring of the donut is the limit of how far the robot can reach when both arms are extended fully out. And the inner ring of the donut is how close it can get to itself by moving the arms towards it's base.
+            </p>
+            <div class="media-container" style="text-align: center;">
+                <img src="../imgs/lesson_10_basic_workspace.png" alt="Workspace of a 2-link planar robot arm" style="width: 100%; max-width: 300px;">
+                <!-- <p class="caption">The workspace of a 2-link planar robot arm. The outer edge is the maximum stretch with both links straight out. The inner edge is the closest you can get with both links folded all the way in.
+               </p> -->
+            </div>
+            <p>
+                Mathematically, the farthest point the end-effector can ever reach is when both links are fully stretched out in the same direction:
+            </p>
+            
+            <div style="text-align: center; margin: 2rem 0;">
+                <b>R<sub>max</sub> = L<sub>1</sub> + L<sub>2</sub></b>
+            </div>
+
+            <p>
+                where L<sub>1</sub> and L<sub>2</sub> are the link lengths.
+            </p>
+
+            <p>
+                The closest the end-effector can get to the base is when the links fold back on themselves, canceling each other out:
+            </p>
+
+            <div style="text-align: center; margin: 2rem 0;">
+                <b>R<sub>min</sub> = |L<sub>1</sub> - L<sub>2</sub>|</b>
+            </div>
+
+            <p>
+                We can now summarize the 2-link robot's reachable workspace with this formula:
+            </p>
+
+            <div style="text-align: center; margin: 2rem 0;">
+                <b>R<sub>min</sub> ≤ √(x² + y²) ≤ R<sub>max</sub></b>
+            </div>
+
+            <p>
+                Of course, real robots don’t have joints that spin endlessly. Your elbow doesn’t do a 720° either (at least I really hope it doesn’t). The less your joints can move, the smaller your range of motion, and the workspace shrinks. That’s why real robots need to have carefully designed joint ranges. If they’re too restrictive, and they can’t reach much. If they’re too loose, you risk collisions and might have actually overdesigned your robot.
+             </p>
+
+             <p>
+                In practice, workspaces aren’t just math bubbles. Robots live in environments with obstacles. A table, a wall, or the robot’s own body can carve “holes” in the workspace where the arm could go, but shouldn’t.
+             </p>
+
+
+            <p>
+                Let's play around with the workspace math we've just learned. Adjust the link lengths and joint limits to see how they affect the workspace. Pay attention to how the inner and outer edges change as you move the sliders for length, and how the workspace area in between changes with the joint limits!
+            </p>
+
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 12px; margin: 2rem 0; border: 1px solid #e9ecef;">
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-bottom: 2rem;">
+                    <!-- Controls Panel -->
+                    <div>
+                        <h3 style="margin-top: 0; color: #495057;">Robot Parameters</h3>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="l1-slider" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
+                                L₁ (Link 1): <span id="l1-value">100</span> cm
+                            </label>
+                            <input type="range" id="l1-slider" min="50" max="200" value="100" 
+                                   style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="l2-slider" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
+                                L₂ (Link 2): <span id="l2-value">80</span> cm
+                            </label>
+                            <input type="range" id="l2-slider" min="30" max="150" value="80" 
+                                   style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="joint1-min" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
+                                Joint 1 Min: <span id="joint1-min-value">-180</span>°
+                            </label>
+                            <input type="range" id="joint1-min" min="-180" max="0" value="-180" 
+                                   style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="joint1-max" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
+                                Joint 1 Max: <span id="joint1-max-value">180</span>°
+                            </label>
+                            <input type="range" id="joint1-max" min="0" max="180" value="180" 
+                                   style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="joint2-min" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
+                                Joint 2 Min: <span id="joint2-min-value">-90</span>°
+                            </label>
+                            <input type="range" id="joint2-min" min="-180" max="0" value="-90" 
+                                   style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label for="joint2-max" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
+                                Joint 2 Max: <span id="joint2-max-value">90</span>°
+                            </label>
+                            <input type="range" id="joint2-max" min="0" max="180" value="90" 
+                                   style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                        </div>
+
+
+
+                    </div>
+
+                    <!-- Canvas -->
+                    <div>
+                        <canvas id="workspace-canvas" width="400" height="400" 
+                                style="border: 1px solid #ddd; border-radius: 8px; background: white; max-width: 100%;">
+                        </canvas>
+                        <div style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; color: #666;">
+                            <div>Scale: 1 box = 1 square cm</div>
+                            <div style="margin-top: 0.5rem;">
+                                <span style="color: #4caf50;">■</span> Reachable workspace &nbsp;
+                                <span style="color: #2196f3;">■</span> Robot arm
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 1.5rem; padding: 1rem; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3;">
+                            <div style="font-weight: 500; margin-bottom: 0.5rem;">Workspace Info:</div>
+                            <div id="workspace-info" style="font-size: 0.9rem; line-height: 1.4;">
+                                R<sub>max</sub> = 180 cm<br>
+                                R<sub>min</sub> = 20 cm
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>The Taskspace</h2>
+            
+            <p>
+                A workspace is everywhere a robot could possibly reach, but that doesn’t necessarily mean it can do anything useful everywhere in that space. Imagine being able to stretch your arm far enough to touch your keyboard, but not being able to type because your wrist is bent at an awkward angle. It’s technically reachable, but not practical. A robot’s <b>taskspace</b> is the smaller slice of the workspace that actually matters for the job at hand.
+
+            </p>
+
+            <p>
+                Unfortunately, there isn’t a one-size-fits-all method to calculate a robot’s taskspace, since it entirely depends on the specific job a robot’s trying to do. The task region needs to be described in geometric terms by the person designing the robot. For example, a pick-and-place robot’s taskspace might be represented as a set of squares or cubes in 3D space where objects need to be picked and dropped. If the robot is painting a wall, the taskspace could be a vertical rectangle. And in the case of a surgical robot, the taskspace might shrink down to a small cube within the patient’s body volume.
+            </p>
+
+            <p>
+                Once that task region is geometrically defined, we can calculate the robot’s <b>reachable taskspace</b> by checking which points in the workspace overlap with the task region.
+            </p>
+            
+             <div class="media-container" style="text-align: center;">
+                 <img src="../imgs/lesson_10_taskspace_vs_workspace.png" alt="Taskspace vs workspace comparison" style="width: 100%; max-width: 600px;">
+                 <p class="caption">Notice how the reachable taskspace is a smaller subset of the workspace when you add a tool. Also I stole this image from a cool Youtube video, check it out here: <a href="https://www.youtube.com/watch?v=BNMfVGFTl5g" target="_blank" style="color: #2b6cb0; text-decoration: underline;">https://www.youtube.com/watch?v=BNMfVGFTl5g</a></p>
+             </div>
+
+             <h2> 3-Link Painting Robot</h2>
+
+             <p>
+                 Let's put this into practice with a 3-link robot arm that needs to paint a wall. Adjust the robot's parameters (and the wall's size and position if you want a challenge) and see if it can reach the entire taskspace!
+             </p>
+
+             <div style="background: #f8f9fa; padding: 2rem; border-radius: 12px; margin: 2rem 0; border: 1px solid #e9ecef;">
+                 <!-- Canvas on top -->
+                 <div style="text-align: center; margin-bottom: 2rem;">
+                     <canvas id="workspace-canvas-3d" width="600" height="400" 
+                             style="border: 1px solid #ddd; border-radius: 8px; background: white; max-width: 100%;">
+                     </canvas>
+                     <div style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; color: #666;">
+                         <!-- <div>Quadrant 1 View (x ≥ 0, y ≥ 0) - World: [0, 20] × [0, 20]</div> -->
+                         <div style="margin-top: 0.5rem;" id="legend">
+                             <span style="color: #2196f3;">■</span> Taskspace (Wall) &nbsp;
+                             <span style="color: #f44336;">■</span> Reachable Taskspace &nbsp;
+                             <span style="color: #4caf50;">■</span> Robot Arm
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- Controls below - Cleaner Layout -->
+                 <div style="display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                     <!-- Left: Link Lengths -->
+                     <div style="flex: 1; min-width: 200px;">
+                         <h3 style="margin-top: 0; color: #495057; margin-bottom: 1rem; font-size: 1.1rem;">Link Lengths</h3>
+                         
+                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                             <div>
+                                 <label for="l1-3d-slider" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem;">
+                                     L₁: <span id="l1-3d-value">8</span>
+                                 </label>
+                                 <input type="range" id="l1-3d-slider" min="2" max="20" value="8" 
+                                        style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                             </div>
+
+                             <div>
+                                 <label for="l2-3d-slider" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem;">
+                                     L₂: <span id="l2-3d-value">6</span>
+                                 </label>
+                                 <input type="range" id="l2-3d-slider" min="2" max="20" value="6" 
+                                        style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                             </div>
+
+                             <div>
+                                 <label for="l3-3d-slider" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem;">
+                                     L₃: <span id="l3-3d-value">4</span>
+                                 </label>
+                                 <input type="range" id="l3-3d-slider" min="2" max="20" value="4" 
+                                        style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                             </div>
+                         </div>
+                     </div>
+
+                     <!-- Center: Joint Limits -->
+                     <div style="flex: 1; min-width: 200px;">
+                         <h3 style="margin-top: 0; color: #495057; margin-bottom: 1rem; font-size: 1.1rem;">Joint Limits</h3>
+                         
+                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                             <div>
+                                 <label for="alpha1-3d-slider" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem;">
+                                     Max α₁: <span id="alpha1-3d-value">45</span>°
+                                 </label>
+                                 <input type="range" id="alpha1-3d-slider" min="0" max="90" value="45" 
+                                        style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                             </div>
+
+                             <div>
+                                 <label for="alpha2-3d-slider" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem;">
+                                     Max α₂: <span id="alpha2-3d-value">60</span>°
+                                 </label>
+                                 <input type="range" id="alpha2-3d-slider" min="0" max="90" value="60" 
+                                        style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                             </div>
+
+                             <div>
+                                 <label for="alpha3-3d-slider" style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem;">
+                                     Max α₃: <span id="alpha3-3d-value">75</span>°
+                                 </label>
+                                 <input type="range" id="alpha3-3d-slider" min="0" max="90" value="75" 
+                                        style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                             </div>
+                         </div>
+                     </div>
+
+                     <!-- Right: Wall & Controls -->
+                     <div style="flex: 0 0 200px;">
+                         <h3 style="margin-top: 0; color: #495057; margin-bottom: 1rem; font-size: 1.1rem;">Wall & Controls</h3>
+                         
+                         <div style="margin-bottom: 1rem;">
+                             <div style="margin-bottom: 0.5rem;">
+                                 <label for="wall-x-slider" style="display: block; margin-bottom: 0.3rem; font-weight: 500; font-size: 0.8rem;">
+                                     Distance: <span id="wall-x-value">12</span>
+                                 </label>
+                                 <input type="range" id="wall-x-slider" min="6" max="18" value="12" 
+                                        style="width: 100%; height: 4px; border-radius: 3px; background: #ddd; outline: none;">
+                             </div>
+                             <div style="margin-bottom: 1rem;">
+                                 <label for="wall-h-slider" style="display: block; margin-bottom: 0.3rem; font-weight: 500; font-size: 0.8rem;">
+                                     Height: <span id="wall-h-value">16</span>
+                                 </label>
+                                 <input type="range" id="wall-h-slider" min="6" max="18" value="16" 
+                                        style="width: 100%; height: 4px; border-radius: 3px; background: #ddd; outline: none;">
+                             </div>
+                         </div>
+
+                         <button id="calculate-taskspace-btn" 
+                                 style="width: 100%; padding: 0.8rem; background: #4caf50; color: white; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; margin-bottom: 1rem;">
+                             🎨 Paint Wall
+                         </button>
+
+                         <button id="reset-btn" 
+                                 style="width: 100%; padding: 0.8rem; background: #ff9800; color: white; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; margin-bottom: 1rem;">
+                             🔄 Reset
+                         </button>
+
+                         <div id="taskspace-result" style="padding: 0.8rem; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3; font-size: 0.8rem; line-height: 1.4; display: none;">
+                             <div style="font-weight: 500; margin-bottom: 0.5rem;">Results:</div>
+                             <div id="taskspace-percentage"></div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        
+             
+            <p>
+                     Workspaces and taskspaces might seem simple in practice, but the geometry can get pretty complicated when you start working in 3D. However, there are a ton of great tools out there for robot designers that'll help you calculate the spaces you're looking for. Although I make fun of it all the time, MATLAB has a pretty great <a href="https://www.mathworks.com/help/robotics/ref/generaterobotworkspace.html" target="_blank" style="color: #2b6cb0; text-decoration: underline;">built-in function</a> to help visualize your robot's workspace.
+            </p>
+
+            <p>
+                Stay tuned for the next kinematics lesson where we’ll dive into how robots move precisely through their workspace, and what they do if they get stuck.
+            </p>
+        
+            </div>
+
+        
+    </article>
+
+    <script>
+        // Workspace visualization tool
+        const canvas = document.getElementById('workspace-canvas');
+        const ctx = canvas.getContext('2d');
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        // Get all slider elements
+        const l1Slider = document.getElementById('l1-slider');
+        const l2Slider = document.getElementById('l2-slider');
+        const joint1MinSlider = document.getElementById('joint1-min');
+        const joint1MaxSlider = document.getElementById('joint1-max');
+        const joint2MinSlider = document.getElementById('joint2-min');
+        const joint2MaxSlider = document.getElementById('joint2-max');
+
+        // Get all value display elements
+        const l1Value = document.getElementById('l1-value');
+        const l2Value = document.getElementById('l2-value');
+        const joint1MinValue = document.getElementById('joint1-min-value');
+        const joint1MaxValue = document.getElementById('joint1-max-value');
+        const joint2MinValue = document.getElementById('joint2-min-value');
+        const joint2MaxValue = document.getElementById('joint2-max-value');
+
+        const workspaceInfo = document.getElementById('workspace-info');
+
+        function updateValues() {
+            l1Value.textContent = l1Slider.value;
+            l2Value.textContent = l2Slider.value;
+            joint1MinValue.textContent = joint1MinSlider.value;
+            joint1MaxValue.textContent = joint1MaxSlider.value;
+            joint2MinValue.textContent = joint2MinSlider.value;
+            joint2MaxValue.textContent = joint2MaxSlider.value;
+        }
+
+        function calculateWorkspace() {
+            const l1 = parseInt(l1Slider.value);
+            const l2 = parseInt(l2Slider.value);
+            const rMax = l1 + l2;
+            const rMin = Math.abs(l1 - l2);
+            
+            workspaceInfo.innerHTML = `R<sub>max</sub> = ${rMax} cm<br>R<sub>min</sub> = ${rMin} cm`;
+            
+            return { l1, l2, rMax, rMin };
+        }
+
+        function isPointInWorkspace(x, y, l1, l2, rMin, rMax) {
+            const r = Math.sqrt(x*x + y*y);
+            if (r < rMin || r > rMax) return false;
+            
+            // Check joint angle constraints
+            const theta1 = Math.atan2(y, x);
+            const theta1Deg = theta1 * 180 / Math.PI;
+            const joint1Min = parseInt(joint1MinSlider.value);
+            const joint1Max = parseInt(joint1MaxSlider.value);
+            
+            if (theta1Deg < joint1Min || theta1Deg > joint1Max) return false;
+            
+            // For simplicity, we'll assume joint 2 constraints are satisfied
+            // In a real implementation, you'd need to solve inverse kinematics
+            return true;
+        }
+
+        function drawWorkspace() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const { l1, l2, rMax, rMin } = calculateWorkspace();
+            
+            // Draw workspace
+            ctx.fillStyle = '#4caf50';
+            ctx.globalAlpha = 0.3;
+            
+            for (let x = -200; x <= 200; x += 2) {
+                for (let y = -200; y <= 200; y += 2) {
+                    if (isPointInWorkspace(x, y, l1, l2, rMin, rMax)) {
+                        ctx.fillRect(centerX + x, centerY - y, 2, 2);
+                    }
+                }
+            }
+            
+            ctx.globalAlpha = 1;
+            
+            // Draw grid (10cm intervals for readability)
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 0.5;
+            
+            // Vertical grid lines (every 10cm)
+            for (let x = 0; x <= canvas.width; x += 10) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            
+            // Horizontal grid lines (every 10cm)
+            for (let y = 0; y <= canvas.height; y += 10) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            
+            // Draw axes
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, canvas.height);
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(canvas.width, centerY);
+            ctx.stroke();
+            
+            // Draw circles for R_min and R_max
+            ctx.strokeStyle = '#4caf50';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, rMin, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, rMax, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Draw robot arm
+            drawRobotArm(l1, l2);
+        }
+
+        function drawRobotArm(l1, l2) {
+            // Draw robot arm in a default configuration (45 degrees for both joints)
+            const theta1 = Math.PI / 4; // 45 degrees
+            const theta2 = Math.PI / 4; // 45 degrees
+            
+            // Calculate joint positions
+            const x1 = l1 * Math.cos(theta1);
+            const y1 = l1 * Math.sin(theta1);
+            const x2 = x1 + l2 * Math.cos(theta1 + theta2);
+            const y2 = y1 + l2 * Math.sin(theta1 + theta2);
+            
+            // Convert to canvas coordinates
+            const baseX = centerX;
+            const baseY = centerY;
+            const joint1X = centerX + x1;
+            const joint1Y = centerY - y1;
+            const endX = centerX + x2;
+            const endY = centerY - y2;
+            
+            // Draw links
+            ctx.strokeStyle = '#2196f3';
+            ctx.lineWidth = 8;
+            ctx.lineCap = 'round';
+            
+            // Link 1
+            ctx.beginPath();
+            ctx.moveTo(baseX, baseY);
+            ctx.lineTo(joint1X, joint1Y);
+            ctx.stroke();
+            
+            // Link 2
+            ctx.beginPath();
+            ctx.moveTo(joint1X, joint1Y);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
+            
+            // Draw joints
+            ctx.fillStyle = '#1976d2';
+            ctx.beginPath();
+            ctx.arc(baseX, baseY, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.fillStyle = '#1976d2';
+            ctx.beginPath();
+            ctx.arc(joint1X, joint1Y, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw end effector
+            ctx.fillStyle = '#d32f2f';
+            ctx.beginPath();
+            ctx.arc(endX, endY, 4, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        // Add event listeners
+        [l1Slider, l2Slider, joint1MinSlider, joint1MaxSlider, joint2MinSlider, joint2MaxSlider].forEach(slider => {
+            slider.addEventListener('input', () => {
+                updateValues();
+                drawWorkspace();
+            });
+        });
+
+        // Initialize
+        updateValues();
+        drawWorkspace();
+
+        // 3-Link Robot Painter Tool
+        const canvas3d = document.getElementById('workspace-canvas-3d');
+        const ctx3d = canvas3d.getContext('2d');
+        
+        // ---- World <-> Canvas mapping (Quadrant I: x>=0,y>=0) ----
+        const WORLD_MAX = 20;
+        const PAD = 30;                        // padding for axes
+        function scale3d() {
+          // keep square aspect based on the smaller canvas edge, centered
+          const usableW = canvas3d.width  - 2*PAD;
+          const usableH = canvas3d.height - 2*PAD;
+          const minSize = Math.min(usableW, usableH);
+          return minSize / WORLD_MAX;  // pixels per world-unit
+        }
+        function wc(x, y) {
+          // world -> canvas (origin bottom-left, centered)
+          const s = scale3d();
+          const usableW = canvas3d.width - 2*PAD;
+          const usableH = canvas3d.height - 2*PAD;
+          const minSize = Math.min(usableW, usableH);
+          const offsetX = (usableW - minSize) / 2;
+          const offsetY = (usableH - minSize) / 2;
+          const cx0 = PAD + offsetX;
+          const cy0 = canvas3d.height - PAD - offsetY;
+          return { cx: cx0 + x*s, cy: cy0 - y*s };
+        }
+
+        function drawAxesAndGrid3d() {
+          const s = scale3d();
+          ctx3d.clearRect(0, 0, canvas3d.width, canvas3d.height);
+
+          // Grid
+          ctx3d.strokeStyle = '#e0e0e0';
+          ctx3d.lineWidth = 0.5;
+          for (let x = 0; x <= WORLD_MAX; x += 1) {
+            const a = wc(x, 0), b = wc(x, WORLD_MAX);
+            ctx3d.beginPath(); ctx3d.moveTo(a.cx, a.cy); ctx3d.lineTo(b.cx, b.cy); ctx3d.stroke();
+          }
+          for (let y = 0; y <= WORLD_MAX; y += 1) {
+            const a = wc(0, y), b = wc(WORLD_MAX, y);
+            ctx3d.beginPath(); ctx3d.moveTo(a.cx, a.cy); ctx3d.lineTo(b.cx, b.cy); ctx3d.stroke();
+          }
+
+          // Axes
+          ctx3d.strokeStyle = '#666'; ctx3d.lineWidth = 2;
+          const ox = wc(0,0), x20 = wc(WORLD_MAX,0), y20 = wc(0,WORLD_MAX);
+          ctx3d.beginPath(); ctx3d.moveTo(ox.cx, ox.cy); ctx3d.lineTo(x20.cx, x20.cy); ctx3d.stroke();
+          ctx3d.beginPath(); ctx3d.moveTo(ox.cx, ox.cy); ctx3d.lineTo(y20.cx, y20.cy); ctx3d.stroke();
+        }
+
+        // Get 3D tool elements
+        const l1Slider3d = document.getElementById('l1-3d-slider');
+        const l2Slider3d = document.getElementById('l2-3d-slider');
+        const l3Slider3d = document.getElementById('l3-3d-slider');
+        const alpha1Slider3d = document.getElementById('alpha1-3d-slider');
+        const alpha2Slider3d = document.getElementById('alpha2-3d-slider');
+        const alpha3Slider3d = document.getElementById('alpha3-3d-slider');
+        const wallXSlider3d = document.getElementById('wall-x-slider');
+        const wallHSlider3d = document.getElementById('wall-h-slider');
+        const calculateBtn = document.getElementById('calculate-taskspace-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const taskspaceResult = document.getElementById('taskspace-result');
+        const taskspacePercentage = document.getElementById('taskspace-percentage');
+        const legend = document.getElementById('legend');
+
+        // Value displays
+        const l1Value3d = document.getElementById('l1-3d-value');
+        const l2Value3d = document.getElementById('l2-3d-value');
+        const l3Value3d = document.getElementById('l3-3d-value');
+        const alpha1Value3d = document.getElementById('alpha1-3d-value');
+        const alpha2Value3d = document.getElementById('alpha2-3d-value');
+        const alpha3Value3d = document.getElementById('alpha3-3d-value');
+        const wallXValue3d = document.getElementById('wall-x-value');
+        const wallHValue3d = document.getElementById('wall-h-value');
+
+        // Wall parameters
+        const WALL_THICKNESS = 2.0; // Make wall thicker for realistic calculation
+
+        let feasibleTaskspace = [];
+        let isAnimating = false;
+        let paintingPoints = [];
+        let currentPaintingIndex = 0;
+        let animationId = null;
+
+        function updateValues3d() {
+            l1Value3d.textContent = l1Slider3d.value;
+            l2Value3d.textContent = l2Slider3d.value;
+            l3Value3d.textContent = l3Slider3d.value;
+            alpha1Value3d.textContent = alpha1Slider3d.value;
+            alpha2Value3d.textContent = alpha2Slider3d.value;
+            alpha3Value3d.textContent = alpha3Slider3d.value;
+            wallXValue3d.textContent = wallXSlider3d.value;
+            wallHValue3d.textContent = wallHSlider3d.value;
+        }
+
+        function forwardKinematics3d() {
+            const l1 = parseInt(l1Slider3d.value);
+            const l2 = parseInt(l2Slider3d.value);
+            const l3 = parseInt(l3Slider3d.value);
+            const alpha1 = (parseInt(alpha1Slider3d.value) * Math.PI) / 180;
+            const alpha2 = (parseInt(alpha2Slider3d.value) * Math.PI) / 180;
+            const alpha3 = (parseInt(alpha3Slider3d.value) * Math.PI) / 180;
+
+            const x1 = l1 * Math.cos(alpha1);
+            const y1 = l1 * Math.sin(alpha1);
+            const x2 = x1 + l2 * Math.cos(alpha2);
+            const y2 = y1 + l2 * Math.sin(alpha2);
+            const x3 = x2 + l3 * Math.cos(alpha3);
+            const y3 = y2 + l3 * Math.sin(alpha3);
+
+            return { x1, y1, x2, y2, x3, y3 };
+        }
+
+        function isPointInWorkspace3d(x, y) {
+            const l1 = parseInt(l1Slider3d.value);
+            const l2 = parseInt(l2Slider3d.value);
+            const l3 = parseInt(l3Slider3d.value);
+            
+            // 3-link workspace bounds
+            const rMax = l1 + l2 + l3;
+            const lSum = l1 + l2 + l3;
+            const lMax = Math.max(l1, l2, l3);
+            const rMin = Math.max(0, lMax - (lSum - lMax));
+
+            const r = Math.sqrt(x*x + y*y);
+            if (r < rMin || r > rMax) return false;
+
+            // For quadrant 1, we only need to check if x >= 0 and y >= 0
+            if (x < 0 || y < 0) return false;
+
+            return true;
+        }
+
+        function isPointInTaskspace(x, y) {
+            const wallX = parseInt(wallXSlider3d.value);
+            const wallH = parseInt(wallHSlider3d.value);
+            return x >= wallX && x <= wallX + WALL_THICKNESS && y >= 0 && y <= wallH;
+        }
+
+        function drawWorkspace3d() {
+            drawAxesAndGrid3d();
+
+            // Draw workspace only when painting
+            if (feasibleTaskspace.length > 0) {
+                ctx3d.fillStyle = '#4a148c'; // Even darker purple
+                ctx3d.globalAlpha = 0.6;
+                for (let x = 0; x <= WORLD_MAX; x += 0.2) {
+                    for (let y = 0; y <= WORLD_MAX; y += 0.2) {
+                        if (isPointInWorkspace3d(x, y)) {
+                            const p = wc(x, y);
+                            ctx3d.fillRect(p.cx, p.cy, 1, 1);
+                        }
+                    }
+                }
+                ctx3d.globalAlpha = 1;
+            }
+
+            // Always draw taskspace (wall)
+            const wallX = parseInt(wallXSlider3d.value);
+            const wallH = parseInt(wallHSlider3d.value);
+            const p1 = wc(wallX, 0);
+            const p2 = wc(wallX + WALL_THICKNESS, wallH);
+
+            ctx3d.fillStyle = '#2196f3';
+            ctx3d.globalAlpha = 0.5;
+            ctx3d.fillRect(p1.cx, p2.cy, p2.cx - p1.cx, p1.cy - p2.cy);
+            ctx3d.globalAlpha = 1;
+
+            // Draw wall outline
+            ctx3d.strokeStyle = '#1976d2';
+            ctx3d.lineWidth = 2;
+            ctx3d.strokeRect(p1.cx, p2.cy, p2.cx - p1.cx, p1.cy - p2.cy);
+
+            // Draw feasible taskspace if calculated
+            if (feasibleTaskspace.length > 0) {
+                ctx3d.fillStyle = '#f44336';
+                ctx3d.globalAlpha = 0.7;
+                feasibleTaskspace.forEach(point => {
+                    const p = wc(point.x, point.y);
+                    ctx3d.fillRect(p.cx, p.cy, 2, 2);
+                });
+                ctx3d.globalAlpha = 1;
+            }
+
+            // Draw robot arm
+            drawRobotArm3d();
+        }
+
+        function drawRobotArm3d() {
+            const { x1, y1, x2, y2, x3, y3 } = forwardKinematics3d();
+
+            // Convert to canvas coordinates
+            const base = wc(0, 0);
+            const joint1 = wc(x1, y1);
+            const joint2 = wc(x2, y2);
+            const end = wc(x3, y3);
+
+            // Draw links
+            ctx3d.strokeStyle = '#4caf50';
+            ctx3d.lineWidth = 6;
+            ctx3d.lineCap = 'round';
+
+            // Link 1
+            ctx3d.beginPath();
+            ctx3d.moveTo(base.cx, base.cy);
+            ctx3d.lineTo(joint1.cx, joint1.cy);
+            ctx3d.stroke();
+
+            // Link 2
+            ctx3d.beginPath();
+            ctx3d.moveTo(joint1.cx, joint1.cy);
+            ctx3d.lineTo(joint2.cx, joint2.cy);
+            ctx3d.stroke();
+
+            // Link 3
+            ctx3d.beginPath();
+            ctx3d.moveTo(joint2.cx, joint2.cy);
+            ctx3d.lineTo(end.cx, end.cy);
+            ctx3d.stroke();
+
+            // Draw joints
+            ctx3d.fillStyle = '#2e7d32';
+            ctx3d.beginPath();
+            ctx3d.arc(base.cx, base.cy, 5, 0, 2 * Math.PI);
+            ctx3d.fill();
+
+            ctx3d.fillStyle = '#2e7d32';
+            ctx3d.beginPath();
+            ctx3d.arc(joint1.cx, joint1.cy, 5, 0, 2 * Math.PI);
+            ctx3d.fill();
+
+            ctx3d.fillStyle = '#2e7d32';
+            ctx3d.beginPath();
+            ctx3d.arc(joint2.cx, joint2.cy, 5, 0, 2 * Math.PI);
+            ctx3d.fill();
+
+            // Draw end effector with paintbrush emoji (flipped 180 degrees)
+            ctx3d.font = '16px Arial';
+            ctx3d.textAlign = 'center';
+            ctx3d.textBaseline = 'middle';
+            ctx3d.save();
+            ctx3d.translate(end.cx, end.cy);
+            ctx3d.rotate(Math.PI); // 180 degree rotation
+            ctx3d.fillText('🖌️', 0, 0);
+            ctx3d.restore();
+        }
+
+
+        function calculateFeasibleTaskspace() {
+            feasibleTaskspace = [];
+            paintingPoints = [];
+            const step = 0.1;
+            const wallX = parseInt(wallXSlider3d.value);
+            const wallH = parseInt(wallHSlider3d.value);
+
+            for (let x = wallX; x <= wallX + WALL_THICKNESS; x += step) {
+                for (let y = 0; y <= wallH; y += step) {
+                    if (isPointInWorkspace3d(x, y)) {
+                        feasibleTaskspace.push({ x, y });
+                        paintingPoints.push({ x, y });
+                    }
+                }
+            }
+
+            // Calculate total taskspace area more accurately
+            const totalTaskspaceArea = WALL_THICKNESS * wallH;
+            
+            // Calculate feasible area more accurately
+            // Each sampled point represents a small square of area step^2
+            const feasibleArea = feasibleTaskspace.length * (step * step);
+            
+            // Calculate percentage with better precision
+            const rawPercentage = (feasibleArea / totalTaskspaceArea) * 100;
+            const percentage = Math.min(100, Math.round(rawPercentage * 10) / 10); // Round to 1 decimal place
+            
+            // Debug: log the calculation
+            console.log(`Wall thickness: ${WALL_THICKNESS}, Wall height: ${wallH}`);
+            console.log(`Total taskspace area: ${totalTaskspaceArea}`);
+            console.log(`Feasible points: ${feasibleTaskspace.length}`);
+            console.log(`Step size: ${step}`);
+            console.log(`Area per point: ${step * step}`);
+            console.log(`Feasible area: ${feasibleArea}`);
+            console.log(`Raw percentage: ${rawPercentage}%`);
+            console.log(`Rounded percentage: ${percentage}%`);
+
+            taskspacePercentage.innerHTML = percentage === 100 
+                ? '<span style="color: #4caf50;">🎉 Congrats! You managed to hit the whole taskspace!</span>'
+                : `<span style="color: #f44336;">You can hit ${percentage}% of the taskspace</span>`;
+
+            taskspaceResult.style.display = 'block';
+            
+            // Add workspace to legend
+            legend.innerHTML = '<span style="color: #4a148c;">■</span> Workspace &nbsp;' +
+                              '<span style="color: #2196f3;">■</span> Taskspace (Wall) &nbsp;' +
+                              '<span style="color: #f44336;">■</span> Reachable Taskspace &nbsp;' +
+                              '<span style="color: #4caf50;">■</span> Robot Arm';
+            
+            // Start painting animation
+            startPaintingAnimation();
+            
+            // Start robot arm painting animation
+            startRobotPaintingAnimation();
+        }
+
+        function startPaintingAnimation() {
+            if (isAnimating) return;
+            
+            isAnimating = true;
+            currentPaintingIndex = 0;
+            
+            // Clear previous animation
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            
+            // Start painting animation
+            animatePainting();
+        }
+
+        function animatePainting() {
+            if (currentPaintingIndex >= paintingPoints.length) {
+                isAnimating = false;
+                drawWorkspace3d(); // Final draw with all painted points
+                return;
+            }
+            
+            // Paint a few points at a time for smooth animation
+            const pointsPerFrame = Math.max(1, Math.floor(paintingPoints.length / 60));
+            const endIndex = Math.min(currentPaintingIndex + pointsPerFrame, paintingPoints.length);
+            
+            // Update the feasible taskspace with painted points
+            feasibleTaskspace = paintingPoints.slice(0, endIndex);
+            
+            drawWorkspace3d();
+            currentPaintingIndex = endIndex;
+            
+            // Continue animation
+            animationId = requestAnimationFrame(animatePainting);
+        }
+
+        function startRobotPaintingAnimation() {
+            // Animation disabled - just show the workspace and results
+            if (feasibleTaskspace.length === 0) return;
+            
+            // Show workspace when painting starts
+            drawWorkspace3d();
+        }
+
+
+        // Reset function
+        function resetToDefaults() {
+            l1Slider3d.value = 8;
+            l2Slider3d.value = 6;
+            l3Slider3d.value = 4;
+            alpha1Slider3d.value = 45;
+            alpha2Slider3d.value = 60;
+            alpha3Slider3d.value = 75;
+            wallXSlider3d.value = 12;
+            wallHSlider3d.value = 16;
+            
+            feasibleTaskspace = [];
+            paintingPoints = [];
+            currentPaintingIndex = 0;
+            isAnimating = false;
+            
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            
+            taskspaceResult.style.display = 'none';
+            legend.innerHTML = '<span style="color: #2196f3;">■</span> Taskspace (Wall) &nbsp;' +
+                              '<span style="color: #f44336;">■</span> Reachable Taskspace &nbsp;' +
+                              '<span style="color: #4caf50;">■</span> Robot Arm';
+            
+            updateValues3d();
+            drawWorkspace3d();
+        }
+
+        // Event listeners
+        [l1Slider3d, l2Slider3d, l3Slider3d, alpha1Slider3d, alpha2Slider3d, alpha3Slider3d, wallXSlider3d, wallHSlider3d].forEach(element => {
+            element.addEventListener('input', () => {
+                updateValues3d();
+                drawWorkspace3d();
+            });
+        });
+
+        calculateBtn.addEventListener('click', () => {
+            calculateFeasibleTaskspace();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            resetToDefaults();
+        });
+
+        // Initialize 3D tool
+        updateValues3d();
+        drawWorkspace3d();
+    </script>
+</body>
+
+</html>

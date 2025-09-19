@@ -169,100 +169,201 @@
         </header>
 
         <div class="article-content">
+            <div class="media-container" style="text-align: center;">
+                <img src="../imgs/lesson_9_robot_phone.jpg" alt="robot phone"
+                    style="width: 100%; max-width: 400px;">
+            </div>
+            
             <p>
-                So far, we’ve learned that robots “speak” in two basic languages: <b>analog</b> (smooth, continuous
-                signals) and <b>digital</b> (clean on/off steps). But without any proper rules, all these voltage
-                signals would sound like a cacophony of random shouting.
+                So far we’ve learned that bits & bytes are our alphabet, analog/digital signals are our words, and data buses are the methods of transport. But we’re still not ready to start conversations without any rules.
             </p>
 
 
             <p>
-                <b>Communication protocols</b> are analogous to grammar and etiquette of these electronic conversations.
-                They’re extremely useful in getting all of our signals in a neatly ordered system with reliable
-                exchanged data. Within robotics, these 3 protocols are used most frequently (so I’m dubbing them ‘the
-                big 3’):
+                <b>Communication protocols</b> are basically grammar to our language of signals. They’re the rules of the road for the signal world, deciding who gets to speak when, how messages are packaged, and how each device knows which ones are meant for it. 
 
             </p>
 
 
 
-            <h3>The Big 3 Protocols</h3>
+            <p>
+                Modern robots and systems almost always use serial communication (transmitting bit by bit sequentially over a wire). That’s why the protocols we use are called <b>serial protocols</b>, and they come in a few different flavors that are useful in different situations.
 
-            <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin: 3rem 0;">
-                <!-- I²C -->
-                <div
-                    style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2rem; border-radius: 12px; border-left: 6px solid #8b5cf6; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div
-                            style="background: #8b5cf6; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">
-                            I²</div>
-                        <div>
-                            <h4 style="margin: 0; color: #8b5cf6; font-size: 1.4rem;">Inter-Integrated Circuit</h4>
-                            <p style="margin: 0; color: #6c757d; font-size: 0.9rem;">Master-Slave Architecture</p>
-                        </div>
-                    </div>
-                    <p style="margin: 0 0 1rem 0; font-size: 1rem; color: #495057; line-height: 1.6;">
-                        Simple, two wires, lots of devices can join in, but only one is in control (the master device).
-                        Great for short-distance chatter inside a robot.
-                    </p>
-                    <div
-                        style="background: #f3f4f6; padding: 1rem; border-radius: 8px; border-left: 4px solid #8b5cf6;">
-                        <p style="margin: 0; font-size: 0.9rem; color: #7c3aed; font-style: italic;">
-                            💬 <strong>Analogy:</strong> Like an office intercom where the boss calls out "Employee #3,
-                            what's your status?" and only that employee answers. Honestly sounds like a toxic work
-                            environment.
+            </p>
+
+            <h2>UART</h2>
+            <p>
+                <b>UART, </b>or Universal Asynchronous Receiver-Transmitter, is a type of serial protocol consisting of 2 wires: one for sending data, and the other for receiving data between two devices. Those two agree on a baude rate, which is the speed of the signal being transmitted. UART is pretty convenient when you only have two devices to chat like a laptop talking to an Arduino, but it doesn’t scale as well as other protocols when we introduce more devices. 
+            </p>
+
+
+            <div class="media-container" style="text-align: center;">
+                <div style="display: flex; gap: 2rem; align-items: center; justify-content: center; flex-wrap: wrap; margin: 2rem 0;">
+                    <!-- Musicians Image -->
+                    <div style="flex: 1; min-width: 300px; max-width: 400px;">
+                        <img src="../imgs/lesson_9_two_musicians.jpeg" alt="2 musicians" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <p style="font-size: 0.85em; color: #666; margin-top: 8px; font-style: italic;">
+                            Two musicians vibing
                         </p>
                     </div>
-                </div>
-
-                <!-- SPI -->
-                <div
-                    style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2rem; border-radius: 12px; border-left: 6px solid #f59e0b; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div
-                            style="background: #f59e0b; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">
-                            SPI</div>
-                        <div>
-                            <h4 style="margin: 0; color: #f59e0b; font-size: 1.4rem;">Serial Peripheral Interface</h4>
-                            <p style="margin: 0; color: #6c757d; font-size: 0.9rem;">Point-to-Point Communication</p>
-                        </div>
+                    
+                    <!-- Connecting Arrow -->
+                    <div style="display: flex; align-items: center; justify-content: center; color: #8b5cf6; font-size: 1.5rem; font-weight: bold;">
+                        →
                     </div>
-                    <p style="margin: 0 0 1rem 0; font-size: 1rem; color: #495057; line-height: 1.6;">
-                        Fast, direct, usually one-on-one between the brain and a sensor or chip.
-                    </p>
-                    <div
-                        style="background: #fffbeb; padding: 1rem; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                        <p style="margin: 0; font-size: 0.9rem; color: #d97706; font-style: italic;">
-                            📡 <strong>Analogy:</strong> Think of SPI as a walkie-talkie between two devices.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- CAN Bus -->
-                <div
-                    style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2rem; border-radius: 12px; border-left: 6px solid #10b981; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div
-                            style="background: #10b981; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">
-                            CAN</div>
-                        <div>
-                            <h4 style="margin: 0; color: #10b981; font-size: 1.4rem;">Controller Area Network</h4>
-                            <p style="margin: 0; color: #6c757d; font-size: 0.9rem;">Multi-Device Network</p>
-                        </div>
-                    </div>
-                    <p style="margin: 0 0 1rem 0; font-size: 1rem; color: #495057; line-height: 1.6;">
-                        Designed for cars and robots where many devices (motors, brakes, sensors) all need to talk at
-                        once without chaos.
-                    </p>
-                    <div
-                        style="background: #ecfdf5; padding: 1rem; border-radius: 8px; border-left: 4px solid #10b981;">
-                        <p style="margin: 0; font-size: 0.9rem; color: #059669; font-style: italic;">
-                            💬 <strong>Analogy:</strong> Like a big group chat between friends.
+                    
+                    <!-- UART Diagram -->
+                    <div style="flex: 1; min-width: 300px; max-width: 400px;">
+                        <img src="../imgs/lesson_9_uart.webp" alt="UART protocol diagram" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <p style="font-size: 0.85em; color: #666; margin-top: 8px; font-style: italic;">
+                           UART protocol
                         </p>
                     </div>
                 </div>
                 
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #8b5cf6; margin-top: 1.5rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    <p style="font-size: 0.95em; color: #495057; margin: 0; line-height: 1.6; font-style: italic;">
+                        I like to think of UART as 2 people jamming out casually. No sheet music, no conductor, just agreeing beforehand on the tempo. As long as both stick to the same speed, the song stays in sync. But if you add a 3rd person things might get complicated.
+                    </p>
+                </div>
             </div>
+
+
+            <h2>Digital Clocks</h2>
+            <p>
+                The next serial protocols I’ll talk about are <i>synchronous</i>, meaning they have things called <b>digital clocks</b> in them. Clocks provide a steady timing signal that all devices on the bus follow so that everyone agrees when to send or read each bit. So instead of constantly being on alert for data, devices can ‘check in’ at certain clock ticks to make communication more reliable and efficient.
+            </p>
+
+            <div class="media-container" style="text-align: center;">
+                <img src="../imgs/lesson_9_digital_clock.jpg" alt="digital clock" style="width: 100%; max-width: 750px;">
+            </div>
+
+            <p>
+                Digital clocks work by sending a repeating square wave going from low (0) to high (1) at a set frequency, usually at the rate of millions or billions of times per second. Each time the signal goes from low to high, or from high to low, is what’s called the <b>rising</b> or <b>falling edge</b>, respectively. Each edge is the ‘tick’ that lets devices know ‘<i>shoot now I should check in and either read or write a bit</i>’. It's like a metronome where each <i>click</i> is a signal for each instrument to know when to play each note.
+            </p>
+
+            <h2>I²C</h2>
+            <p>
+                I²C (Inter-Integrated Circuit) is a serial protocol that also only uses two wires, but unlike UART, one wire is a clock (SCL) and the other is for data (SDA). One device acts as the master, generating the clock and controlling when communication happens.. Every other device on the bus has a unique address, so the master knows exactly who it's talking to. I²C is pretty handy since you can connect a bunch of different devices and only need to use 2 wires (being neat and tidy is really helpful in complex systems). However the more devices you add, the slower I2C gets as the bus starts to get crowded. I²C is pretty commonly used for sensors and small peripheral devices in robots where efficiency matters more than raw speed.
+            </p>
+
+            <div class="media-container" style="text-align: center;">
+                <div style="display: flex; gap: 2rem; align-items: center; justify-content: center; flex-wrap: wrap; margin: 2rem 0;">
+                    <!-- Conductor Image -->
+                    <div style="flex: 1; min-width: 300px; max-width: 400px;">
+                        <img src="../imgs/lesson_9_conductor.jpg" alt="conductor with choir" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <p style="font-size: 0.85em; color: #666; margin-top: 8px; font-style: italic;">
+                            A conductor & choir
+                        </p>
+                    </div>
+                    
+                    <!-- Connecting Arrow -->
+                    <div style="display: flex; align-items: center; justify-content: center; color: #f59e0b; font-size: 1.5rem; font-weight: bold;">
+                        →
+                    </div>
+                    
+                    <!-- I²C Diagram -->
+                    <div style="flex: 1; min-width: 300px; max-width: 400px;">
+                        <img src="../imgs/lesson_9_i2c.jpg" alt="I²C protocol diagram" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <p style="font-size: 0.85em; color: #666; margin-top: 8px; font-style: italic;">
+                            I²C protocol
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #f59e0b; margin-top: 1.5rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    <p style="font-size: 0.95em; color: #495057; margin: 0; line-height: 1.6; font-style: italic;">
+                        Continuing the musical metaphor, I²C is basically a choir with a conductor. Everyone shares the same sheet music stand (the two wires), but only sing when the conductor points to them. It's neat and efficient, but as we add more and more vocalists, the conductor has to work harder to keep everyone on beat.
+                    </p>
+                </div>
+            </div>
+
+            <h2>SPI</h2>
+
+            <p>
+                SPI (Serial Peripheral Interface) takes things to the next level. It uses a shared clock with two data lines, plus a special "attention" line for each device known as chip select. This way, the master can decide who it wants to talk to without anyone chiming in. SPI is fast and reliable and it's not necessarily a digital burden to add more devices, but it does require your to add more wires which can get messy if you're not careful.
+            </p>
+
+            <div class="media-container" style="text-align: center;">
+                <div style="display: flex; gap: 2rem; align-items: center; justify-content: center; flex-wrap: wrap; margin: 2rem 0;">
+                    <!-- Rock Band Image -->
+                    <div style="flex: 1; min-width: 300px; max-width: 400px;">
+                        <img src="../imgs/lesson_9_rock_band.jpg" alt="rock band performing" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <p style="font-size: 0.85em; color: #666; margin-top: 8px; font-style: italic;">
+                            Rock band with in-ear monitors
+                        </p>
+                    </div>
+                    
+                    <!-- Connecting Arrow -->
+                    <div style="display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.5rem; font-weight: bold;">
+                        →
+                    </div>
+                    
+                    <!-- SPI Diagram -->
+                    <div style="flex: 1; min-width: 300px; max-width: 400px;">
+                        <img src="../imgs/lesson_9_spi.png" alt="SPI protocol diagram" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <p style="font-size: 0.85em; color: #666; margin-top: 8px; font-style: italic;">
+                            SPI protocol
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #10b981; margin-top: 1.5rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    <p style="font-size: 0.95em; color: #495057; margin: 0; line-height: 1.6; font-style: italic;">
+                        SPI is a rock band. The drummer keeps time (the clock) and each musician wears their own in-ear monitor (chip select). The bandleader (master) can cue each instrument directly, and the result is fast, crystal-clear coordination. But the downside is there are cables running everywhere on stage that the lead guitarist will definitely trip on during his duckwalk.
+                    </p>
+                </div>
+            </div>
+
+            <h2>The Future of Comms</h2>
+
+            <p>
+                UART, I2C, and SPI have been around for decades, long before robots started packing sensors, high-speed cameras, and advanced processors. They still work very well for simple low-level tasks (and are still used for that purpose in robots), but they weren’t really designed for the complexity that modern robots demand.
+            </p>
+
+            <p>
+                Newer protocols used with robots are built with scalability and real-time performance in mind, which is an absolute essential when a robot has multiple subsystems all talking at once.
+            </p>
+
+            <h2>CAN</h2>
+
+            <p>
+                <b>CAN (Controller Area Network)</b> is a serial protocol that was originally designed for cars, but now it’s used in a plethora of robots (and robot cars, yes). Instead of one master being in charge, any device on the bus can start talking when it needs to. If two try to talk at the same time, there’s a built-in priority system that decides who gets the floor without crashing the whole conversation. It’s not the fastest protocol, but it is perfect for environments where safety matters more than speed.
+            </p>
+
+            <p>
+                I couldn’t really think of a musical metaphor here, but CAN is like a group chat where everyone can message at once, but the chat app makes sure only one person’s message shows up at a time. If two people start typing together, the one with higher priority gets sent first, and the other ‘politely’ waits. It keeps things orderly (and makes your friends think before they text)
+            </p>
+
+            <div class="media-container" style="text-align: center;">
+                <img src="../imgs/lesson_9_can.png" alt="CAN protocol diagram" style="width: 100%; max-width: 750px;">
+            </div>
+
+            <h2>EtherCAT</h2>
+
+            <p>
+                <b>EtherCAT (Ethernet for Control Automation Technology)</b> is an industrial-grade serial protocol built for speed. It’s essentially using Ethernet (which in of itself is a type of serial protocol) to connect all your devices together for excellent real-time performance. Data travels together in a long chain of devices, with each device picking which data it needs while sending off the rest in a continuous flow.
+
+            </p>
+
+            <img src="../imgs/lesson_9_ethercat.jpg" alt="EtherCAT protocol diagram" style="width: 100%; max-width: 750px;">
+            
+
+            <h2>ROS 2</h2>
+
+            <p>
+                Oh boy it’s time to get into <b>ROS 2 (Robot Operating System 2)</b>. ROS 2 isn’t a traditional wire-level protocol like the others, it’s actually a software framework that was designed for developers making robots. ROS2 uses a communication standard called the Data Distribution Service (DDS), which lets different parts of a robot publish (send) and subscribe (receive) messages. It’s open-source, scalable, and designed for modern robots with sensors, processors, and actuators, all of which need to share data without stepping on each other’s toes. We’ll definitely dive more into ROS2 in future lessons - most companies making robots use either or have something similar to it.
+            </p>
+
+            <img src="../imgs/lesson_9_ros2.gif" alt="ROS 2 protocol diagram" style="width: 100%; max-width: 750px;">
+
+
+            <h2>yeah that was a lot</h2>
+
+            <p>
+                This lesson sorta turned out to be just me listing all these protocols and what they're good for. In reality, all of these protocols deserve a lot more than a few sentences, but we'll have lessons dedicated to each of them in the future. It's important to know how they basically function, but using them is a whole other story.
+            </p>
+            
         </div>
     </article>
 </body>
